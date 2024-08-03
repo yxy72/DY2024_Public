@@ -1,0 +1,2 @@
+python init_mysql.py "127.0.0.1" "root" "Abc123()"
+python init_kg.py "bolt://127.0.0.1:7687" "neo4j" "Abc123()"
