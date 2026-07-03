@@ -350,13 +350,13 @@
 </template>
 
 <script lang="ts" setup>
+import * as XLSX from 'xlsx'
 import * as global from '@/utils/global'
 import { onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue';
 import { useStore } from 'vuex';
 import { ElMessage, UploadProps, UploadRawFile } from "element-plus";
 import { json } from 'neo4j-driver-core';
 import * as echarts from 'echarts';
-import * as XLSX from "xlsx";
 type EChartsType = echarts.EChartsType;
 
 const store = useStore()
@@ -566,7 +566,6 @@ function importfile(obj:any,size:number|undefined,fileName:string,kind:string = 
     for (let i = 0; i < length; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
-    const XLSX = require("xlsx");
     const wb = XLSX.read(binary, {
       type: "binary",
     });

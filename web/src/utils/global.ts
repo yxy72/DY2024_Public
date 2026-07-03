@@ -4,6 +4,7 @@ import { ElMessage } from 'element-plus';
 import { useStore } from "vuex";
 import NeoVis from "neovis.js/dist/neovis.js";
 import store from '../store'
+import * as base64js from 'base64-js'
 
 export const setToken = (token:any,days:number=7)=>{
   Cookies.set('token',token,{ expires: Number(days) })
@@ -151,7 +152,6 @@ export const graphInit = async(tips:boolean = false) => {
       let g = store.state.kg.graph
       let s = store.state.server
       let c = store.state.config
-      var base64js = require('base64-js')
       if(res.status == store.state.server.successResponse){
         g.url = res.obj.url;
         g.nodeClasses = res.obj.nodes;

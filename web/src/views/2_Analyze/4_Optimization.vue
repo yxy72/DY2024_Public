@@ -373,7 +373,6 @@ function importfile(obj:any) {
     for (let i = 0; i < length; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
-    const XLSX = require("xlsx");
     const wb = XLSX.read(binary, {
       type: "binary",
     });
@@ -503,7 +502,6 @@ function importfile_cmp(obj:any) {
     for (let i = 0; i < length; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
-    const XLSX = require("xlsx");
     const wb = XLSX.read(binary, {
       type: "binary",
     });

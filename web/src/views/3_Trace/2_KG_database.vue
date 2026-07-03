@@ -422,6 +422,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import * as base64js from 'base64-js'
 import { reactive,watch } from "vue";
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useStore } from "vuex";
@@ -431,7 +432,6 @@ import { useRouter,useRoute } from "vue-router";
 import { httpPost } from "@/utils/global";
 import * as XLSX from "xlsx";
 import router from "@/router";
-var base64js = require('base64-js')
 const store = useStore();
 
 let d = reactive(store.state.kg.graph);

@@ -280,14 +280,13 @@
   </div>
 </template>
 <script setup lang="ts">
+import * as XLSX from 'xlsx'
 import { ref, reactive,watch  } from "vue";
 import { ElMessage, genFileId, UploadInstance, UploadProps, UploadRawFile,TableV2FixedDir } from "element-plus";
 import { useRouter,useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { onMounted, onUnmounted } from "@vue/runtime-core";
 import * as global from "@/utils/global"
-import * as XLSX from "xlsx";
-import { tr } from "element-plus/es/locale";
 
 let calReady = ref(false);
 const $router = useRouter();
@@ -496,7 +495,6 @@ function importfile(obj:any) {
     for (let i = 0; i < length; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
-    const XLSX = require("xlsx");
     const wb = XLSX.read(binary, {
       type: "binary",
     });

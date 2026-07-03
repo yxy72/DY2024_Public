@@ -4,7 +4,7 @@
       <div class="loginWindow"  >
         <div class="lW1">
           <div >
-            <el-image style="width:36px;margin-right: 20px;" :src="require('@/assets/images/titleImg.png')"></el-image>
+            <el-image style="width:36px;margin-right: 20px;" :src="titleImg"></el-image>
           </div>
           <div class="loginTitle">
             XX产品质量知识分析与管理系统
@@ -121,6 +121,8 @@ import * as global from "@/utils/global"
 import { reactive } from "vue";
 import { ElMessage } from 'element-plus';
 import type { FormInstance} from 'element-plus'
+
+const titleImg = new URL('../assets/images/titleImg.png', import.meta.url).href
 
 const $router = useRouter();
 const store = useStore();

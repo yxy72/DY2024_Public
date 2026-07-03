@@ -113,7 +113,7 @@
               </div>
 
               <div  style="overflow: scroll;height: calc(100% - 50px);background: ;width: 100%;">
-                <el-image :src="require('@/assets/images/page_train/img4.png')" fit="" />
+                <el-image :src="networkImg" fit="" />
               </div>
 
             </div>
@@ -210,6 +210,7 @@ import { useStore } from 'vuex'
 import { onMounted, onUnmounted } from '@vue/runtime-core';
 import { httpPost } from '@/utils/global';
 
+const networkImg = new URL('../../assets/images/page_train/img4.png', import.meta.url).href
 
 const $router = useRouter()
 const store = useStore();

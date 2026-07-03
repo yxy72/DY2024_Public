@@ -135,6 +135,10 @@ router.beforeEach((to, from, next) => {
               next(`/login`);
               ElMessage.info("请重新登录")
             }
+          },
+          () => {
+            store.state.status.login = false;
+            next(`/login`);
           }
         )
   }

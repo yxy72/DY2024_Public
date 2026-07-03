@@ -55,12 +55,12 @@
 </template>
 
 <script setup lang="ts"> 
+import * as XLSX from 'xlsx'
 import { EChartsType } from "echarts";
 import * as echarts from 'echarts';
 import { ElMessage, UploadProps } from "element-plus";
 import {onMounted, onUnmounted, reactive,ref } from "vue";
 import { useStore } from "vuex";
-import * as XLSX from "xlsx";
 
 const store = useStore();
 let d = reactive(store.state.tools.visualize);
@@ -104,7 +104,6 @@ function importfile(obj:any) {
     for (let i = 0; i < length; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
-    const XLSX = require("xlsx");
     const wb = XLSX.read(binary, {
       type: "binary",
     });

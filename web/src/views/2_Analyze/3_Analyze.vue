@@ -87,7 +87,6 @@ import { onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue';
 import { useStore } from 'vuex';
 import { ElMessage} from "element-plus";
 import * as echarts from 'echarts';
-import { el } from 'element-plus/es/locale';
 type EChartsType = echarts.EChartsType;
 const store = useStore()
 let d = reactive(store.state.analyze.analyze);
