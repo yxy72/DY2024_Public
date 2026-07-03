@@ -221,7 +221,9 @@ export const graphInit = async(tips:boolean = false) => {
   console.log("GRAPH DONE")
 }
 export const webSocketInit = () => {
-  store.state.server.socket = new WebSocket("ws"+store.state.server.address.slice(4)+"/connect/"+store.state.status.loginUserName+"/")
+  const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
+  const socketBaseUrl = `${protocol}://${window.location.host}${store.state.server.socketBasePath}`
+  store.state.server.socket = new WebSocket(socketBaseUrl + "/connect/" + store.state.status.loginUserName + "/")
   store.state.server.socket.onmessage = function(event:any){
     let res = JSON.parse(event.data)
     if(res.type=="cnn"){

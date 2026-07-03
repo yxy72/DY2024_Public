@@ -47,7 +47,7 @@
                   <div class="cell-item"><i class="iconfont"> &#xe615; </i> 预处理方式</div>
                 </template>
                 <!-- <el-tag size="small"><div style="fontSize:10px" >已处理</div></el-tag> -->
-                {{d.preProcess[d.preProcess.map(function(e) { return e.val; }).indexOf(d.preProcessVal)].val}}
+                {{d.preProcess[d.preProcess.map(function(e: { val: any; }) { return e.val; }).indexOf(d.preProcessVal)].val}}
 
               </el-descriptions-item>
 
