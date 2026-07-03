@@ -8,16 +8,10 @@ from app import models
 import json
 import hashlib
 import jwt
-import numpy as np
 
 from django.conf import settings
-from PIL import Image
 
-from utils.CNN import preData,Model,calModelLayers,queryModel,Predict
-from utils.Embed import CalTrans
-import utils.KnowledgeGraph as KG
-from utils.Global import QM_Result
-from utils.PSO import PSO_RUN
+from utils.pre_data import preData
 import configs
 
 needLogin = True
@@ -44,6 +38,8 @@ def dev(req):
 
 # 设置头像
 def postUserAvatar(req):
+    from PIL import Image
+
     if(needLogin):
         if ("Token" not in dict(req.headers)):
             return JsonResponse({"status":"failed"})
@@ -66,6 +62,8 @@ def postUserAvatar(req):
 
 # 此处前端为el-upload自动上传
 def postModelView(req):
+    from utils.CNN import queryModel
+
     # print(dict(req.headers))
     username = req.headers['Username']
     target = req.headers['Model-Target']
@@ -294,6 +292,8 @@ def changeUser(req):
 # USERMODELS = {}
 # 训练模型
 def train(req):
+    from utils.CNN import Model
+
     data = json.loads(req.body)
     model = Model(data["sendData"]["xData"],data["sendData"]["yData"],data["parameters"],data["preProcess"],data["username"])
     # print('='*80)
@@ -303,6 +303,8 @@ def train(req):
     return JsonResponse({"status":status,"name":name,"url":url})
 
 def optimizeView(req):
+    from utils.PSO import PSO_RUN
+
     data = json.loads(req.body)
     username = data["username"]
     parameters = data["parameters"]
@@ -331,6 +333,8 @@ def optimizeView(req):
 
 
 def calModelLayer(req):
+    from utils.CNN import calModelLayers
+
     data = json.loads(req.body)
     dimX = data["dimX"]
     dimY = data["dimY"]
@@ -339,6 +343,7 @@ def calModelLayer(req):
 
 # 获取模型信息
 def queryModelInfo(req):
+    from utils.CNN import queryModel
 
     target = json.loads(req.body)["username"]
     type = json.loads(req.body)["type"]
@@ -376,6 +381,8 @@ def queryModelInfo(req):
 
 # 预测数据
 def predictView(req):
+    from utils.CNN import Predict
+
     target = json.loads(req.body)
     username = target["username"]
     data = target["data"]
@@ -390,6 +397,8 @@ def predictView(req):
 
 
 def embedView(req):
+    from utils.Embed import CalTrans
+
     target = json.loads(req.body)
     username = target["username"]
     entities = target["entities"]
@@ -403,6 +412,8 @@ def embedView(req):
     return JsonResponse({"status":serverSuccessResponse,"result":{"EmbedE":EmbedE,"EmbedR":EmbedR,"E_label":E_label,"R_label":R_label}})
 
 def kgInitView(req):
+    import utils.KnowledgeGraph as KG
+
     
     # address = ""
     # if("address" in target):
@@ -414,16 +425,22 @@ def kgInitView(req):
         return JsonResponse({"status":"failed","obj":{"url":obj["url"]}})
 
 def kgQueryView(req):
+    import utils.KnowledgeGraph as KG
+
     target = json.loads(req.body)
     return JsonResponse({"status":serverSuccessResponse,"list":KG.query(target["label"])})
         
 def kgExportView(req):
+    import utils.KnowledgeGraph as KG
+
     success,obj = KG.getAllTriples()
     if(success):
         return JsonResponse({"status":success,"obj":obj})
     else:
         return JsonResponse({"status":success})
 def kgSendView(req):
+    import utils.KnowledgeGraph as KG
+
     tar = json.loads(req.body)
 
 
@@ -445,9 +462,10 @@ def setKGIPView(req):
 
 
 
-from utils.Analyze import CRNN,LSTM
 # CRNN & LSTM
 def analyzeTrainView(req):
+    from utils.Analyze import CRNN,LSTM
+
     target = json.loads(req.body)
     username = target['username']
     data = target['data']
@@ -466,6 +484,8 @@ def analyzeTrainView(req):
     return JsonResponse({"status":status,"res":{"name":name,"url":url}})
 
 def analyzePredictView(req):
+    from utils.Analyze import CRNN,LSTM
+
     target = json.loads(req.body)
     username = target['username']
     data = target['data']
@@ -477,8 +497,9 @@ def analyzePredictView(req):
     (status,res) = model.predict(data)
     return JsonResponse({"status":status,"res":res})
 
-from utils.Quality import QM
 def getAnalyzeView(req):
+    from utils.Quality import QM
+
     # model_onPredicting = models.Option.objects.filter(option="model_onPredicting").first().value
     # model_onPredicted = models.Option.objects.filter(option="model_onPredicted").first().value
     # if(model_onPredicted == "false"):
@@ -515,6 +536,8 @@ def QM_GET_ITEMS_VIEW(req):
 
 # 按照QM.uid获得QM模型图表数据
 def QM_GET_CHART_VIEW(req):
+    import utils.KnowledgeGraph as KG
+
     uid = json.loads(req.body)['uid']
     if(models.QualityItem.objects.filter(uid=uid).count()==0):
         return JsonResponse({"status":"failed"})
@@ -671,6 +694,7 @@ def ClearLoginView(req):
 
 # 设置QM[uid]预测数据的模型<不常用>
 def QM_POST_MODEL_VIEW(req):
+    import utils.KnowledgeGraph as KG
 
     # 普通用户没有访问权限。
     if ("Api-Token" not in dict(req.headers)):
@@ -754,6 +778,8 @@ def QM_POST_MODEL_VIEW(req):
    
     return JsonResponse({"status":OMSuccessStr,"KG-status":KG_status,"code":failedCode[0]})
 def QM_DELETE_MODEL_VIEW(req):
+    import utils.KnowledgeGraph as KG
+
     # 普通用户没有访问权限。
     if ("Api-Token" not in dict(req.headers)):
         return HttpResponse("没有操作权限。")
@@ -812,6 +838,9 @@ def predictDataView(req):
 
 # 上传质量待预测数据
 def QM_POST_DATA_VIEW(req):
+    import numpy as np
+    from utils.Quality import QM
+
     # 普通用户没有访问权限。
     if ("Api-Token" not in dict(req.headers)):
         return HttpResponse("没有操作权限。")
