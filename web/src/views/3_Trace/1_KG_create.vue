@@ -260,7 +260,7 @@
       <div class="dialogRow2">2. 表格<div style="color: darkred;">应含</div>表头。</div>
       <el-divider style="margin-top: 15px;margin-bottom: 20px;"><div style="color: gray;">示例</div></el-divider>
       <div style="display: flex;justify-content: center;flex-wrap: wrap;">
-        <el-image :src="store.state.server.address+'/src/images/pages/page_cnn_datasetSample.png'"></el-image>
+        <el-image :src="getServerStaticUrl('/src/images/pages/page_cnn_datasetSample.png', store.state.server.address, store.state.mock.enabled)"></el-image>
         <div style="font-size: 16px;margin-top: 5px;">特征或标签列：8，样本数：9</div>
       </div> 
     </el-dialog>-->
@@ -275,6 +275,7 @@ import NeoVis from 'neovis.js/dist/neovis.js';
 import * as global from '@/utils/global'
 import * as XLSX from 'xlsx'
 import type { UploadProps} from 'element-plus'
+import { getServerStaticUrl } from '@/utils/staticAssets'
 
 
 

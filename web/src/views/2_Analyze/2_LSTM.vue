@@ -318,11 +318,11 @@
         <el-divider style="margin-top: 15px;margin-bottom: 20px;"><div style="color: gray;">示例</div></el-divider>
         <div class="centerrow">
           <div class="centercolumn" style="width: 38.2%;">
-            <el-image :src="store.state.server.address+'/src/images/pages/sample1_crnn_predict.png'"></el-image>
+            <el-image :src="getServerStaticUrl('/src/images/pages/sample1_crnn_predict.png', store.state.server.address, store.state.mock.enabled)"></el-image>
             <div style="font-size: 16px;margin-top: 5px;">输入维度 = 10，样本数量 = 2</div>
           </div>
           <div class="centercolumn" style="width: 61.8%;">
-            <el-image :src="store.state.server.address+'/src/images/pages/sample2_crnn_predict.png'"></el-image>
+            <el-image :src="getServerStaticUrl('/src/images/pages/sample2_crnn_predict.png', store.state.server.address, store.state.mock.enabled)"></el-image>
             <div style="font-size: 16px;margin-top: 5px;">输入维度 = 10，样本数量 = 3</div>
           </div>
         </div>
@@ -335,11 +335,11 @@
         <el-divider style="margin-top: 15px;margin-bottom: 20px;"><div style="color: gray;">示例</div></el-divider>
         <div class="centerrow" style="background-color: ;">
           <div class="centercolumn" style="width: 50%; background: ;">
-            <el-image  :src="store.state.server.address+'/src/images/pages/sample1_crnn_train.png'"></el-image>
+            <el-image :src="getServerStaticUrl('/src/images/pages/sample1_crnn_train.png', store.state.server.address, store.state.mock.enabled)"></el-image>
             <div style="font-size: 16px;margin-top: 5px;">单行数据集，序列长度 = 5</div>
           </div>
           <div class="centercolumn" style="width: 50%;">
-            <el-image :src="store.state.server.address+'/src/images/pages/sample2_crnn_train.png'"></el-image>
+            <el-image :src="getServerStaticUrl('/src/images/pages/sample2_crnn_train.png', store.state.server.address, store.state.mock.enabled)"></el-image>
             <div style="font-size: 16px;margin-top: 5px;">单列数据集，序列长度 = 5</div>
           </div>
         </div>
@@ -357,6 +357,7 @@ import { useStore } from 'vuex';
 import { ElMessage, UploadProps, UploadRawFile } from "element-plus";
 import { json } from 'neo4j-driver-core';
 import * as echarts from 'echarts';
+import { getServerStaticUrl } from '@/utils/staticAssets'
 type EChartsType = echarts.EChartsType;
 
 const store = useStore()

@@ -330,7 +330,7 @@
         <div class="dialogRow">请确保参数顺序与训练分类模型时的参数顺序一致。</div>
         <el-divider style="margin-top: 15px;margin-bottom: 20px;"><div style="color: gray;">示例</div></el-divider>
         <div style="display: flex;justify-content: center;flex-wrap: wrap;">
-          <el-image :src="store.state.server.address+'/src/images/pages/page_optimization_samp.png'"></el-image>
+          <el-image :src="getServerStaticUrl('/src/images/pages/page_optimization_samp.png', store.state.server.address, store.state.mock.enabled)"></el-image>
         </div>
       </el-dialog>
     </div>
@@ -343,6 +343,7 @@ import { onBeforeMount, onMounted, onUnmounted, reactive, ref,computed } from 'v
 import { useStore } from 'vuex';
 import { ElMessage,TableV2FixedDir} from "element-plus";
 import * as echarts from 'echarts';
+import { getServerStaticUrl } from '@/utils/staticAssets'
 type EChartsType = echarts.EChartsType;
 const store = useStore()
 import type { UploadProps,UploadInstance,TableV2Instance,RowClassNameGetter} from 'element-plus'
