@@ -37,8 +37,8 @@
             </el-form>
 
             <el-dialog v-model="about" @closed="about=false" align-center title="关于" width="30%" center>
-              <div>版本：1.5（已去密） &nbsp; | &nbsp; 服务器版本：1.5</div>
-              <div>发布时间：2024年8月1日19:00</div>
+              <div>版本：1.6（快照） &nbsp; | &nbsp; 服务器版本：-</div>
+              <div>发布时间：2026年7月</div>
             </el-dialog>
 
 
