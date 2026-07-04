@@ -2,6 +2,10 @@ name: CI/CD Tutorial
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - staging
+      - master
 
 jobs:
   install-web:
