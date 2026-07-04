@@ -24,3 +24,4 @@ pnpm-debug.log*
 .venv/
 __pycache__/
 server/static/models/
+web/dist/

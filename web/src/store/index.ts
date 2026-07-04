@@ -5,7 +5,7 @@ import { mockStorageKey } from '@/const'
 export default createStore({
   state: {
     mock:{
-      enabled: localStorage.getItem(mockStorageKey) === "true" ? true : false,
+      enabled: localStorage.getItem(mockStorageKey) !== "false",
     },
    
     router:{

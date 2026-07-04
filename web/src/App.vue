@@ -52,7 +52,7 @@
           <el-avatar
           shape="square"
           :size="24"
-          :src="store.state.server.address + store.state.status.loginUserAvatarUrl"
+          :src="getAvatarUrl(store.state.status.loginUserAvatarUrl, store.state.server.address, store.state.mock.enabled)"
           @click="$router.replace({ path: store.state.router.page_config_user });"
           style="cursor: pointer;"
         />
@@ -156,6 +156,7 @@ import { useStore } from "vuex";
 import { reactive,ref } from "vue";
 import { onBeforeMount, onMounted, onUnmounted } from "@vue/runtime-core";
 import { mockStorageKey } from './const';
+import { getAvatarUrl } from '@/utils/avatar';
 
 
 const $router = useRouter();
@@ -189,15 +190,16 @@ const changeStyle = ()=>{
 }
 
 async function restoreMockMode(){
-  if(localStorage.getItem(mockStorageKey) != "true")
+  if(localStorage.getItem(mockStorageKey) === "false")
     return
 
   try{
     store.state.mock.enabled = true
+    localStorage.setItem(mockStorageKey, "true")
     await hydrateStoreFromMockSnapshot(store)
   }catch(e){
     store.state.mock.enabled = false
-    localStorage.removeItem(mockStorageKey)
+    localStorage.setItem(mockStorageKey, "false")
     console.error(e)
   }
 }
@@ -205,7 +207,7 @@ async function restoreMockMode(){
 async function toggleMockMode(){
   if(store.state.mock.enabled){
     store.state.mock.enabled = false
-    localStorage.removeItem(mockStorageKey)
+    localStorage.setItem(mockStorageKey, "false")
     global.removeToken()
     if(store.state.server.socket && typeof store.state.server.socket.close == "function")
       store.state.server.socket.close()
@@ -235,7 +237,7 @@ async function toggleMockMode(){
     })
   }catch(e){
     store.state.mock.enabled = false
-    localStorage.removeItem(mockStorageKey)
+    localStorage.setItem(mockStorageKey, "false")
     console.error(e)
     ElMessage.error("Mock snapshot load failed")
   }

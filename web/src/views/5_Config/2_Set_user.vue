@@ -153,6 +153,7 @@ import type { FormInstance} from 'element-plus'
 import { ElNotification } from 'element-plus'
 import { genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+import { getAvatarUrl } from '@/utils/avatar';
 
 
 const $router = useRouter();
@@ -168,7 +169,7 @@ let userInfo = reactive({
   password_old:"",
   password_new:"",
   password_confirm:"",
-  avatarUrl:(store.state.server.address + store.state.status.loginUserAvatarUrl),
+  avatarUrl:getAvatarUrl(store.state.status.loginUserAvatarUrl, store.state.server.address, store.state.mock.enabled),
 })
 let registInfo = reactive({
   username:"",
