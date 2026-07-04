@@ -12,7 +12,7 @@
           <div>
             <el-icon size="22"><WarningFilled /></el-icon>
             <span>演示版本</span>
-            由于性能限制，服务器仅提供读操作。（已去密）
+            页面数据全部预加载。（已去密）
 
             </div>
         </div>
@@ -47,6 +47,11 @@ import { onMounted, onUnmounted } from 'vue';
 import { ref } from 'vue';
 import { getTime } from "@/utils/global"
 
+const predictImg = new URL('../assets/images/page_start/predict.png', import.meta.url).href
+const predict2Img = new URL('../assets/images/page_start/predict2.png', import.meta.url).href
+const predict3Img = new URL('../assets/images/page_start/predict3.png', import.meta.url).href
+const toolImg = new URL('../assets/images/page_start/tool.png', import.meta.url).href
+
 const $router = useRouter();
 const store = useStore();
 let nowtime = ref("")
@@ -54,7 +59,7 @@ const Navigation = [
   {
     name:"质量预测",
     style:"color:rgb(89,126,247)",
-    src:require("@/assets/images/page_start/predict.png"),
+    src: predictImg,
     btn:[
       { Name:"训练一个模型...", Click: ()=>{ $router.push({ path: store.state.router.page_predict_import_data }); }},
       { Name:"预测数据...", Click: ()=>{ $router.push({ path: store.state.router.page_predict_predict }); }},
@@ -62,7 +67,7 @@ const Navigation = [
   },{
     name:"知识图谱",
     style:"color:#0fae57",
-    src:require("@/assets/images/page_start/predict2.png"),
+    src: predict2Img,
     btn:[
       { Name:"灰色关联分析...", Click: ()=>{ $router.push({ path: store.state.router.page_kg_create }); }},
       { Name:"知识图谱交互...", Click: ()=>{ $router.push({ path: store.state.router.page_kg_display }); }},
@@ -71,7 +76,7 @@ const Navigation = [
   },{
     name:"数据分析",
     style:"color:#ff7226",
-    src:require("@/assets/images/page_start/predict3.png"),
+    src: predict3Img,
     btn:[
       { Name:"CRNN分析...", Click: ()=>{ $router.push({ path: store.state.router.page_analyze_crnn }) }},
       { Name:"LSTM分析...", Click: ()=>{ $router.push({ path: store.state.router.page_analyze_lstm }) }},
@@ -81,7 +86,7 @@ const Navigation = [
   },{
     name:"实用工具",
     style:"color:#409EFF",
-    src:require("@/assets/images/page_start/tool.png"),
+    src: toolImg,
     btn:[
       { Name:"数据预处理...", Click: ()=>{ $router.push({ path: store.state.router.page_tool_preprocess });  }},
       { Name:"表格可视化...", Click: ()=>{ $router.push({ path: store.state.router.page_tool_visualize });  }},

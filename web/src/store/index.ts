@@ -1,8 +1,12 @@
 ﻿import { createStore } from 'vuex'
 import * as global from "@/utils/global"
+import { mockStorageKey } from '@/const'
 
 export default createStore({
   state: {
+    mock:{
+      enabled: localStorage.getItem(mockStorageKey) === "true" ? true : false,
+    },
    
     router:{
         
@@ -38,7 +42,8 @@ export default createStore({
       //address:'http://121.42.227.110:8888',
       // address:'http://192.168.1.111:8888',
       // address:'http://192.168.51.226:8888',
-      address:'http://127.0.0.1:8888',
+      address:'/api',
+      socketBasePath:'/ws',
       // 使用lamba表达式就无效？为什么？
       // 后记：因为箭头函数没有this。
       getIP:function(){ return global.getIP(this.address)[0]},

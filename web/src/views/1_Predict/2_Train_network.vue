@@ -47,7 +47,7 @@
                   <div class="cell-item"><i class="iconfont"> &#xe615; </i> 预处理方式</div>
                 </template>
                 <!-- <el-tag size="small"><div style="fontSize:10px" >已处理</div></el-tag> -->
-                {{d.preProcess[d.preProcess.map(function(e) { return e.val; }).indexOf(d.preProcessVal)].val}}
+                {{d.preProcess[d.preProcess.map(function(e: { val: any; }) { return e.val; }).indexOf(d.preProcessVal)].val}}
 
               </el-descriptions-item>
 
@@ -113,7 +113,7 @@
               </div>
 
               <div  style="overflow: scroll;height: calc(100% - 50px);background: ;width: 100%;">
-                <el-image :src="require('@/assets/images/page_train/img4.png')" fit="" />
+                <el-image :src="networkImg" fit="" />
               </div>
 
             </div>
@@ -210,6 +210,7 @@ import { useStore } from 'vuex'
 import { onMounted, onUnmounted } from '@vue/runtime-core';
 import { httpPost } from '@/utils/global';
 
+const networkImg = new URL('../../assets/images/page_train/img4.png', import.meta.url).href
 
 const $router = useRouter()
 const store = useStore();

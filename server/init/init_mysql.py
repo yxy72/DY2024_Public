@@ -1,4 +1,4 @@
-import MySQLdb
+import pymysql as MySQLdb # mock
 import numpy as np
 import os
 import tensorflow as tf
@@ -16,19 +16,18 @@ delete = [
 if __name__ == "__main__":
 
 
-    if(len(sys.argv[:])!=5):
-        print("ERROR: parameters should be 4: type this: \n python init_mysql.py 'ip' port 'mysqlUser' 'mysqlPwd'")
+    if len(sys.argv) not in (4, 5):
+        print("ERROR: type this: \n python init_mysql.py 'ip' port 'mysqlUser' ['mysqlPwd']")
         exit(0)
-    # 运行 python init_mysql.py "127.0.0.1" 3306 "root" "password"
 
+    mysql_pwd = sys.argv[4] if len(sys.argv) == 5 else ""
 
 
     connection = MySQLdb.connect(
         host = sys.argv[1],
         port = int(sys.argv[2]),
         user = sys.argv[3],
-        # passwd="650960",
-        passwd = sys.argv[4],
+        passwd = mysql_pwd,
         db="dy",
         charset="utf8",
     )

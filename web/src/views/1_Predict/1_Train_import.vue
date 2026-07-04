@@ -324,6 +324,7 @@
 
 </template>
 <script setup lang="ts">
+import * as XLSX from 'xlsx'
 
 
 
@@ -522,7 +523,6 @@ function importfile(obj:any) {
     for (let i = 0; i < length; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
-    const XLSX = require("xlsx");
     const wb = XLSX.read(binary, {
       type: "binary",
     });
@@ -594,7 +594,7 @@ body,
 .Page {
   width: 100vw;
   height: 100vh;
-  background: transparent;
+  background: rgb(252, 252, 252);
   position: relative;
 }
 .mainArea{

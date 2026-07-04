@@ -1,0 +1,1 @@
+export const mockStorageKey = "DY2024_MOCK_ENABLED";

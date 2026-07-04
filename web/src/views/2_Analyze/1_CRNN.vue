@@ -21,7 +21,7 @@
                   accept=".h5"
                   >
                   <template #trigger>
-                    <el-button disabled text type="primary" style="margin-top: 0px;;margin-left: 8px;"><div style="font-size: 15px;">重新上传</div></el-button>
+                    <el-button text type="primary" style="margin-top: 0px;;margin-left: 8px;"><div style="font-size: 15px;">重新上传</div></el-button>
                   </template>
               
                 </el-upload>
@@ -47,7 +47,7 @@
                       accept=".h5"
                       >
                       <template #trigger>
-                        <el-button disabled class="littleBtn" text type="primary" style="margin-top: -15px;;">上传</el-button>
+                        <el-button class="littleBtn" text type="primary" style="margin-top: -15px;;">上传</el-button>
                       </template>
                     </el-upload>
                     或
@@ -350,13 +350,13 @@
 </template>
 
 <script lang="ts" setup>
+import * as XLSX from 'xlsx'
 import * as global from '@/utils/global'
 import { onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue';
 import { useStore } from 'vuex';
 import { ElMessage, UploadProps, UploadRawFile } from "element-plus";
 import { json } from 'neo4j-driver-core';
 import * as echarts from 'echarts';
-import * as XLSX from "xlsx";
 type EChartsType = echarts.EChartsType;
 
 const store = useStore()
@@ -566,7 +566,6 @@ function importfile(obj:any,size:number|undefined,fileName:string,kind:string = 
     for (let i = 0; i < length; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
-    const XLSX = require("xlsx");
     const wb = XLSX.read(binary, {
       type: "binary",
     });
@@ -666,7 +665,7 @@ function rClear() {
 
 const ABORT = ()=>{
   rPush("正在发送中止命令...",true)
-  store.state.server.socket.send(json.stringify({type:"settings",model:modelName,parameter:"training",parameter_val:false}))
+  store.state.server.socket.send(JSON.stringify({type:"settings",model:modelName,parameter:"training",parameter_val:false}))
   d.onTraining = false
   // rPush("训练已中止。",true)
 }
@@ -707,14 +706,7 @@ const TRAIN = ()=>{
   rPush("准备上传数据")
   rPush("训练样本序列长度："+d.datasetInfo[0].val+"，窗口大小："+d.datasetInfo[1].val)
   rPush("开始训练...")
-  rPush("无法训练模型。原因：演示版本。已提前return。",true)
-
-  ElMessage.info("演示版本 无法进行写操作。")
-  return;
-
-
-
-  store.state.server.socket.send(json.stringify({type:"settings",model:modelName,parameter:"training",parameter_val:true}))
+  store.state.server.socket.send(JSON.stringify({type:"settings",model:modelName,parameter:"training",parameter_val:true}))
 
   d.onTraining = true;
   d.onTrained = false;
@@ -748,8 +740,6 @@ const DOWNLOAD =  ()=> {
 }
 const PREDICT =  ()=> {
 
-  ElMessage.info("演示版本 无法进行写操作。")
-  return;
   d.onPredicting = true
   // function getAreaStyleColor(index:number,num:number){
     

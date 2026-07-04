@@ -1,9 +1,9 @@
 import axios from "axios";
 import Cookies from 'js-cookie'
 import { ElMessage } from 'element-plus';
-import { useStore } from "vuex";
-import NeoVis from "neovis.js/dist/neovis.js";
 import store from '../store'
+import * as base64js from 'base64-js'
+import { getMockPostResponse } from './mock';
 
 export const setToken = (token:any,days:number=7)=>{
   Cookies.set('token',token,{ expires: Number(days) })
@@ -12,13 +12,29 @@ export const getToken = ()=>{
   return Cookies.get('token')
 }
 
-
-
 export const removeToken = ()=>{
   Cookies.remove('token');
 }
 
 export function httpPost(url:string,data:object,option:(res:any)=>void=()=>{},err_option:(err:any)=>void=()=>{},final:()=>void=()=>{}){
+  if(store.state.mock.enabled){
+    const mockResponse = getMockPostResponse(url,data);
+    if(mockResponse != undefined){
+      Promise.resolve(mockResponse)
+        .then((res) => {
+          option(res);
+        })
+        .catch((err) => {
+          err_option(err);
+          ElMessage.error("Mock 数据加载失败。")
+        })
+        .finally(() => {
+          final();
+        });
+      return;
+    }
+  }
+
   axios.post(url,data,{
       headers:{
         token : getToken() ,
@@ -151,7 +167,6 @@ export const graphInit = async(tips:boolean = false) => {
       let g = store.state.kg.graph
       let s = store.state.server
       let c = store.state.config
-      var base64js = require('base64-js')
       if(res.status == store.state.server.successResponse){
         g.url = res.obj.url;
         g.nodeClasses = res.obj.nodes;
@@ -221,7 +236,9 @@ export const graphInit = async(tips:boolean = false) => {
   console.log("GRAPH DONE")
 }
 export const webSocketInit = () => {
-  store.state.server.socket = new WebSocket("ws"+store.state.server.address.slice(4)+"/connect/"+store.state.status.loginUserName+"/")
+  const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
+  const socketBaseUrl = `${protocol}://${window.location.host}${store.state.server.socketBasePath}`
+  store.state.server.socket = new WebSocket(socketBaseUrl + "/connect/" + store.state.status.loginUserName + "/")
   store.state.server.socket.onmessage = function(event:any){
     let res = JSON.parse(event.data)
     if(res.type=="cnn"){

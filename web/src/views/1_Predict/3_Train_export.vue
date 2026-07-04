@@ -268,11 +268,6 @@ function TRAIN() {
   d.onTraining = true;
   d.onTrained = false;
 
-  rPush("无法训练模型。原因：演示版本。已提前return。",true)
-  ElMessage.info("演示版本 无法进行写操作。")
-  d.onTraining = false;
-  return;
-
   store.state.server.socket.send(JSON.stringify({type:"settings",model:"cnn",parameter:"training",parameter_val:true}))
   let sendData = (()=>{
     let xData = [], yData = [];

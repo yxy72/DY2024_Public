@@ -324,7 +324,6 @@ function importfile(obj:any) {
     for (let i = 0; i < length; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
-    const XLSX = require("xlsx");
     const wb = XLSX.read(binary, {
       type: "binary",
     });
@@ -567,11 +566,6 @@ function LOAD(){
     return
 
   }
-
-  ElMessage.info("演示版本，无法写入知识图谱");
-  return;
-
-
 
   global.httpPost(
     store.state.server.address + "/kg/send/",

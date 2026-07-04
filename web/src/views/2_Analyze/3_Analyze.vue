@@ -87,7 +87,6 @@ import { onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue';
 import { useStore } from 'vuex';
 import { ElMessage} from "element-plus";
 import * as echarts from 'echarts';
-import { el } from 'element-plus/es/locale';
 type EChartsType = echarts.EChartsType;
 const store = useStore()
 let d = reactive(store.state.analyze.analyze);
@@ -469,8 +468,7 @@ const SELECTCHANGE = (val:string) => {
 
 }
 onBeforeMount(()=>{
-  // ElMessage.info("演示版本，图表不再间隔刷新");
-  /*global.httpPost(
+  global.httpPost(
     store.state.server.address + '/option/GraphTime/',
     {type:"get"},
     (res)=>{
@@ -490,12 +488,10 @@ onBeforeMount(()=>{
       }, 5000);
     
     }
-  )*/
+  )
 })
 onMounted(()=>{
 
-
-  ElMessage.info("演示版本，图表不再间隔刷新"); //取消onBeforeMount的内容。
 
   chart = echarts.init(chartRef.value);
   // getAnalyzeData();

@@ -1,7 +1,6 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from channels.exceptions import StopConsumer
-from utils.Quality import QM
 # from app.views import USERMODELS
 
 from app import models
@@ -47,6 +46,8 @@ class DY_UploadRawDataConsumer(WebsocketConsumer):
         self.accept()
     def websocket_receive(self, message):
         # 客户端发信息时触发
+        from utils.Quality import QM
+
         obj = json.loads((message)["text"])
         # obj = json.loads(message["text"])
         # if('type' in obj and obj['type']=="settings"):

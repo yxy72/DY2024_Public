@@ -19,7 +19,7 @@
                 :on-success="handleUploadSuccess"
                 >
                 <template #trigger>
-                  <el-button disabled size="small" type="primary" plain><div style="font-size: 16px;">{{pd.onModelLoaded?'更改':'上传'}}</div></el-button>
+                  <el-button size="small" type="primary" plain><div style="font-size: 16px;">{{pd.onModelLoaded?'更改':'上传'}}</div></el-button>
                 </template>
               
               </el-upload>
@@ -373,7 +373,6 @@ function importfile(obj:any) {
     for (let i = 0; i < length; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
-    const XLSX = require("xlsx");
     const wb = XLSX.read(binary, {
       type: "binary",
     });
@@ -503,7 +502,6 @@ function importfile_cmp(obj:any) {
     for (let i = 0; i < length; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
-    const XLSX = require("xlsx");
     const wb = XLSX.read(binary, {
       type: "binary",
     });
@@ -592,8 +590,6 @@ const OPTIMIZATION = () =>{
     ElMessage.warning("参数文件异常或与模型不匹配。")
   }
   
-  ElMessage.info("演示版本 无法进行写操作。")
-  return;
   d.onOptimizing = true;
   d.onOptimized = false
 

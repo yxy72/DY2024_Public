@@ -75,6 +75,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 
 
+  if(store.state.mock.enabled){
+    store.state.status.login = true;
+    store.state.option.NEEDLOGIN = false;
+    next();
+    return;
+  }
   
   if(!store.state.option.NEEDLOGIN || to.path == "/login" || store.state.status.login) {
     next();
@@ -135,6 +141,10 @@ router.beforeEach((to, from, next) => {
               next(`/login`);
               ElMessage.info("请重新登录")
             }
+          },
+          () => {
+            store.state.status.login = false;
+            next(`/login`);
           }
         )
   }

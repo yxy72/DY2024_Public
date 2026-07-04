@@ -280,14 +280,13 @@
   </div>
 </template>
 <script setup lang="ts">
+import * as XLSX from 'xlsx'
 import { ref, reactive,watch  } from "vue";
 import { ElMessage, genFileId, UploadInstance, UploadProps, UploadRawFile,TableV2FixedDir } from "element-plus";
 import { useRouter,useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { onMounted, onUnmounted } from "@vue/runtime-core";
 import * as global from "@/utils/global"
-import * as XLSX from "xlsx";
-import { tr } from "element-plus/es/locale";
 
 let calReady = ref(false);
 const $router = useRouter();
@@ -496,7 +495,6 @@ function importfile(obj:any) {
     for (let i = 0; i < length; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
-    const XLSX = require("xlsx");
     const wb = XLSX.read(binary, {
       type: "binary",
     });
@@ -555,10 +553,6 @@ function RUN() {
     ElMessage.error("样本的输入维度："+d.sampleColumnNames.length+"，与模型的输入维度："+modelInfo[2].val+" 不匹配。")
     return
   }
-
-
-  ElMessage.info("演示版本 无法进行写操作。")
-  return;
 
 
   let sendData = (()=>{
@@ -776,6 +770,7 @@ body,
 .Page {
   width: 100vw;
   height: 100vh;
+  background: rgb(252, 252, 252);
 }
 .rowArea1{
   /* background: yellow; */
@@ -810,7 +805,9 @@ body,
   width: 100%;
   height:calc(100% - 50px);
   /* min-height: 400px; */
-  overflow: scroll;
+  overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   .headerClass{
     font-size: 15px;
   }
@@ -845,6 +842,16 @@ body,
   //  background: gray; 
   display:flex;
   max-width: 1600px;
+}
+:deep(.PagePanel_BoxCard > .el-card__body){
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+:deep(.PagePanel_BoxCard > .el-card__body::-webkit-scrollbar){
+  display: none;
+  width: 0;
+  height: 0;
 }
 .iconfont {
   font-family: "iconfont" !important;
@@ -885,12 +892,13 @@ body,
   // line-height: 10px;
   font-size: 16px;
 }
-::-webkit-scrollbar {
+.predictResArea::-webkit-scrollbar {
+  display: none;
   /* 滚动条整体样式 */
   width: 5px; /* 高宽分别对应横竖滚动条的尺寸 */
-  height: 8px;
+  height: 0;
 }
-::-webkit-scrollbar-thumb {
+.predictResArea::-webkit-scrollbar-thumb {
   /* 滚动条内滑块的样式 */
   border-radius: 5px;
   -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.11);

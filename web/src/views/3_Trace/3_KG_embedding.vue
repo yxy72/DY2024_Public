@@ -276,7 +276,6 @@ function importfile(obj:any) {
     for (let i = 0; i < length; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
-    const XLSX = require("xlsx");
     const wb = XLSX.read(binary, {
       type: "binary",
     });
@@ -337,9 +336,6 @@ function RUN(){
 
 
   
-  ElMessage.info("演示版本，无法执行计算");
-  return;
-
   d.embedEntityDataOnLoading = true;
   d.embedEdgeDataOnLoading = true;
   d.sampleDataOnCalulating = true
