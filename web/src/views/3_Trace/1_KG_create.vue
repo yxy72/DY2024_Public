@@ -567,11 +567,6 @@ function LOAD(){
 
   }
 
-  ElMessage.info("演示版本，无法写入知识图谱");
-  return;
-
-
-
   global.httpPost(
     store.state.server.address + "/kg/send/",
     {target:d.loadNodeClassSelect,tripletList:d.tripletData},

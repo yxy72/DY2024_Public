@@ -1,8 +1,12 @@
 ﻿import { createStore } from 'vuex'
 import * as global from "@/utils/global"
+import { mockStorageKey } from '@/const'
 
 export default createStore({
   state: {
+    mock:{
+      enabled: localStorage.getItem(mockStorageKey) === "true" ? true : false,
+    },
    
     router:{
         

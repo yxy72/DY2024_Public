@@ -75,6 +75,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 
 
+  if(store.state.mock.enabled){
+    store.state.status.login = true;
+    store.state.option.NEEDLOGIN = false;
+    next();
+    return;
+  }
   
   if(!store.state.option.NEEDLOGIN || to.path == "/login" || store.state.status.login) {
     next();

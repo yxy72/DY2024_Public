@@ -1,10 +1,9 @@
 import axios from "axios";
 import Cookies from 'js-cookie'
 import { ElMessage } from 'element-plus';
-import { useStore } from "vuex";
-import NeoVis from "neovis.js/dist/neovis.js";
 import store from '../store'
 import * as base64js from 'base64-js'
+import { getMockPostResponse } from './mock';
 
 export const setToken = (token:any,days:number=7)=>{
   Cookies.set('token',token,{ expires: Number(days) })
@@ -13,13 +12,29 @@ export const getToken = ()=>{
   return Cookies.get('token')
 }
 
-
-
 export const removeToken = ()=>{
   Cookies.remove('token');
 }
 
 export function httpPost(url:string,data:object,option:(res:any)=>void=()=>{},err_option:(err:any)=>void=()=>{},final:()=>void=()=>{}){
+  if(store.state.mock.enabled){
+    const mockResponse = getMockPostResponse(url,data);
+    if(mockResponse != undefined){
+      Promise.resolve(mockResponse)
+        .then((res) => {
+          option(res);
+        })
+        .catch((err) => {
+          err_option(err);
+          ElMessage.error("Mock 数据加载失败。")
+        })
+        .finally(() => {
+          final();
+        });
+      return;
+    }
+  }
+
   axios.post(url,data,{
       headers:{
         token : getToken() ,

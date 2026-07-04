@@ -594,7 +594,7 @@ body,
 .Page {
   width: 100vw;
   height: 100vh;
-  background: transparent;
+  background: rgb(252, 252, 252);
   position: relative;
 }
 .mainArea{

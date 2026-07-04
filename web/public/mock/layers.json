@@ -1,0 +1,77 @@
+{
+  "status": "success",
+  "layers": [
+    {
+      "layer": "Reshape",
+      "output": "(None, 27, 1)",
+      "channels": "-",
+      "size": "-",
+      "stride": "-",
+      "activation": "-",
+      "parameters": 0
+    },
+    {
+      "layer": "Conv1D",
+      "output": "(None, 27, 4)",
+      "channels": 4,
+      "size": 1,
+      "stride": 1,
+      "activation": "relu",
+      "parameters": 8
+    },
+    {
+      "layer": "Conv1D",
+      "output": "(None, 24, 64)",
+      "channels": 64,
+      "size": 4,
+      "stride": 1,
+      "activation": "relu",
+      "parameters": 1088
+    },
+    {
+      "layer": "Conv1D",
+      "output": "(None, 21, 256)",
+      "channels": 256,
+      "size": 4,
+      "stride": 1,
+      "activation": "relu",
+      "parameters": 65792
+    },
+    {
+      "layer": "Conv1D",
+      "output": "(None, 20, 512)",
+      "channels": 512,
+      "size": 2,
+      "stride": 1,
+      "activation": "relu",
+      "parameters": 262656
+    },
+    {
+      "layer": "Flatten",
+      "output": "(None, 10240)",
+      "channels": "-",
+      "size": "-",
+      "stride": "-",
+      "activation": "-",
+      "parameters": 0
+    },
+    {
+      "layer": "Dropout",
+      "output": "(None, 10240)",
+      "channels": "-",
+      "size": "-",
+      "stride": "-",
+      "activation": "-",
+      "parameters": 0
+    },
+    {
+      "layer": "Dense",
+      "output": "(None, 7)",
+      "channels": 7,
+      "size": "-",
+      "stride": "-",
+      "activation": "-",
+      "parameters": 71687
+    }
+  ]
+}

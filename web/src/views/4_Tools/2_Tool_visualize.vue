@@ -59,7 +59,7 @@ import * as XLSX from 'xlsx'
 import { EChartsType } from "echarts";
 import * as echarts from 'echarts';
 import { ElMessage, UploadProps } from "element-plus";
-import {onMounted, onUnmounted, reactive,ref } from "vue";
+import { nextTick, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
@@ -70,11 +70,27 @@ let chart = <EChartsType>{};
 
 onMounted(()=>{
   chart = echarts.init(chartRef.value);
+  nextTick(() => {
+    chart.setOption(d.option, true);
+    chart.resize();
+  })
 })
 
 onUnmounted(() => {
   store.state.status.menu[3].route = store.state.router.page_tool_visualize;
 })
+
+watch(
+  () => d.option,
+  () => {
+    if(Object.keys(chart).length == 0)
+      return;
+
+    chart.setOption(d.option, true);
+    chart.resize();
+  },
+  { deep: true }
+)
 const LOAD = ()=>{
 
 }

@@ -12,7 +12,7 @@
           <div>
             <el-icon size="22"><WarningFilled /></el-icon>
             <span>演示版本</span>
-            由于性能限制，服务器仅提供读操作。（已去密）
+            页面数据全部预加载。（已去密）
 
             </div>
         </div>

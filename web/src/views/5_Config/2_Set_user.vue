@@ -198,8 +198,6 @@ function deleteRow(row:any){
       type: 'warning',
     })
     .then(() => {
-      ElMessage.info("演示版本，无法修改用户信息");
-      return;
       global.httpPost(
         store.state.server.address + "/deleteuser/",
         {username:row.username},
@@ -223,8 +221,6 @@ function onRegist(){
       
   
 
-      ElMessage.info("演示版本，无法修改用户信息");
-      return;
       global.httpPost(
         store.state.server.address + "/regist/config/",
         {username:registInfo.username,useradmin:registInfo.useradmin=="管理员"?true:false},
@@ -256,9 +252,6 @@ function checkRegisterPassword(rule:any,value:any,callback:any){
 function onChangingUserInfo(){
 
   
-  ElMessage.info("演示版本，无法修改用户信息");
-  return;
-
   if(!userInfo.changingpwd){
     if(userInfo.username == store.state.status.loginUserName && !userInfo.changingavatar)
       return;
@@ -367,6 +360,7 @@ function devFunc(){}
   /* background: wheat; */
   width: 100vw;
   height: 100vh;
+  background: rgb(252, 252, 252);
   position: relative;
 }
 .page_body{
@@ -379,14 +373,17 @@ function devFunc(){}
   height: calc(100% - 62px);
   display: flex;
   /* align-items: center; */
-  overflow: scroll;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-::-webkit-scrollbar {
+.page_body::-webkit-scrollbar {
+  display: none;
   /* 滚动条整体样式 */
   width: 5px; /* 高宽分别对应横竖滚动条的尺寸 */
-  height: 8px;
+  height: 0;
 }
-::-webkit-scrollbar-thumb {
+.page_body::-webkit-scrollbar-thumb {
   /* 滚动条内滑块的样式 */
   border-radius: 5px;
   -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.11);
@@ -413,6 +410,7 @@ function devFunc(){}
   /* height: 470px; */
   min-height: 260px;
   position: relative;
+  overflow: hidden;
   .formColumn{
     width: calc(100% - 150px - 20px);
   }
@@ -432,6 +430,21 @@ function devFunc(){}
   height: 600px;
   min-width: 680px;
   max-width: 910px;
+  overflow: hidden;
+}
+
+:deep(.main_card1 .el-card__body),
+:deep(.card_user_control .el-card__body){
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+:deep(.main_card1 .el-card__body::-webkit-scrollbar),
+:deep(.card_user_control .el-card__body::-webkit-scrollbar){
+  display: none;
 }
 
 .avatarTile{

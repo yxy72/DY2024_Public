@@ -336,9 +336,6 @@ function RUN(){
 
 
   
-  ElMessage.info("演示版本，无法执行计算");
-  return;
-
   d.embedEntityDataOnLoading = true;
   d.embedEdgeDataOnLoading = true;
   d.sampleDataOnCalulating = true

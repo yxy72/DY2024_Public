@@ -111,8 +111,8 @@
                 
                 <div class="optionRow" >
                 <div style="font-size: 15px;color: gray;
-                    margin-left: 10px;margin-right: 20px;">
-                    > 通过节点类别 
+                    margin-left: 10px;margin-right: 10px; width: 110px">
+                    > 通过类别 
                 </div>
                 <el-select
                     filterable
@@ -138,8 +138,8 @@
 
                 <div class="optionRow">
                 <div style="font-size: 15px;color: gray;
-                    margin-left: 10px;margin-right: 20px;">
-                    > 通过节点名称 
+                    margin-left: 10px;margin-right: 10px; width: 110px">
+                    > 通过名称 
                 </div>
                 <el-select
                     filterable
@@ -166,8 +166,8 @@
                 <div class="optionRow" >
                 <div
                     style="font-size: 15px;color: gray;
-                    margin-left: 10px;margin-right: 20px;">
-                    > 通过节点路径
+                    margin-left: 10px;margin-right: 10px; width: 110px">
+                    > 通过路径
                 </div>
                 <el-select
                     filterable
@@ -428,6 +428,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { useStore } from "vuex";
 import { onMounted, onUnmounted } from "@vue/runtime-core";
 import NeoVis from "neovis.js/dist/neovis.js";
+import * as neo4j from "neo4j-driver";
 import { useRouter,useRoute } from "vue-router";
 import { httpPost } from "@/utils/global";
 import * as XLSX from "xlsx";
@@ -439,6 +440,124 @@ const $router = useRouter();
 const route = useRoute();
 
 let viz = <any>{};
+let mockGraphData:any = null;
+
+async function loadMockGraphData(){
+  if(mockGraphData != null)
+    return mockGraphData;
+
+  const res = await fetch("/mock/kg-graph.json", { cache: "no-store" });
+  if(!res.ok)
+    throw new Error("Failed to load mock kg graph");
+
+  mockGraphData = await res.json();
+  return mockGraphData;
+}
+
+function getMockNodeNamesByClass(nodeClass:string){
+  if(mockGraphData == null)
+    return [];
+
+  return mockGraphData.nodes
+    .filter((node:any) => node.group == nodeClass)
+    .map((node:any) => node.label);
+}
+
+function getMockGraphRows(filter:any = {}){
+  const graph = mockGraphData;
+  if(graph == null)
+    return [];
+
+  const nodeById = new Map(graph.nodes.map((node:any) => [node.id, node]));
+  let edges = graph.edges.slice(0, d.maxLoad);
+
+  if(filter.relation != null && filter.relation != "")
+    edges = graph.edges.filter((edge:any) => edge.type == filter.relation || edge.label == filter.relation).slice(0, d.maxLoad);
+
+  if(filter.nodeClass != null && filter.nodeClass != ""){
+    const classNodeIds = new Set(graph.nodes.filter((node:any) => node.group == filter.nodeClass).map((node:any) => node.id));
+    edges = graph.edges.filter((edge:any) => classNodeIds.has(edge.from) || classNodeIds.has(edge.to)).slice(0, d.maxLoad);
+  }
+
+  if(filter.nodeName != null && filter.nodeName != ""){
+    const targetNodeIds = new Set(graph.nodes.filter((node:any) => node.label == filter.nodeName).map((node:any) => node.id));
+    edges = graph.edges.filter((edge:any) => targetNodeIds.has(edge.from) || targetNodeIds.has(edge.to)).slice(0, d.maxLoad);
+  }
+
+  return edges
+    .map((edge:any) => ({
+      n: nodeById.get(edge.from),
+      r: edge,
+      m: nodeById.get(edge.to),
+    }))
+    .filter((row:any) => row.n != null && row.m != null);
+}
+
+function createMockNeo4jRecords(filter:any = {}){
+  const graph = mockGraphData;
+  if(graph == null)
+    return [];
+
+  const nodeIdMap = new Map<string, number>(graph.nodes.map((node:any, index:number) => [node.id, index + 1]));
+  const edgeIdMap = new Map<string, number>(graph.edges.map((edge:any, index:number) => [edge.id, index + 1]));
+
+  return getMockGraphRows(filter).map((row:any) => {
+    const fromId = nodeIdMap.get(row.n.id) || 0;
+    const toId = nodeIdMap.get(row.m.id) || 0;
+    const edgeId = edgeIdMap.get(row.r.id) || 0;
+    const fromNode = new neo4j.types.Node(
+      neo4j.int(fromId),
+      [row.n.group],
+      {
+        ...row.n.properties,
+        name: row.n.label,
+        color: row.n.color || row.n.properties?.color,
+      }
+    );
+    const relationship = new neo4j.types.Relationship(
+      neo4j.int(edgeId),
+      neo4j.int(fromId),
+      neo4j.int(toId),
+      row.r.type || row.r.label || "correlate",
+      {
+        ...row.r.properties,
+        name: row.r.label || row.r.type,
+      }
+    );
+    const toNode = new neo4j.types.Node(
+      neo4j.int(toId),
+      [row.m.group],
+      {
+        ...row.m.properties,
+        name: row.m.label,
+        color: row.m.color || row.m.properties?.color,
+      }
+    );
+
+    return new neo4j.types.Record(
+      ["n", "r", "m"],
+      [fromNode, relationship, toNode],
+      { n: 0, r: 1, m: 2 }
+    );
+  });
+}
+
+async function renderMockGraph(filter:any = {}, append:boolean = false){
+  d.containerLoaded = false;
+  await loadMockGraphData();
+  const renderer = async function*(){
+    for(const record of createMockNeo4jRecords(filter))
+      yield record;
+  };
+
+  if(append)
+    viz.updateWithFunction(renderer);
+  else
+    viz.renderWithFunction(renderer);
+
+  d.containerLoaded = true;
+}
+
 const graphInit = ()=>{
   viz = new NeoVis(d.config);
   //viz.render();
@@ -460,6 +579,10 @@ const graphInit = ()=>{
       d.onConnecting = false
     }, 200);
   }else{
+    if(store.state.mock.enabled){
+      renderMockGraph();
+      return;
+    }
     viz.updateWithCypher('MATCH (n)-[r]->(m) RETURN n,r,m LIMIT '+d.maxLoad);
     d.containerLoaded = true
   }
@@ -469,6 +592,10 @@ onMounted(() => {
     if(newV)
       graphInit();
   })
+  if(store.state.mock.enabled){
+    graphInit();
+    return;
+  }
   if(d.onConnected){
     graphInit();
   }
@@ -480,6 +607,12 @@ onUnmounted(() => {
 const queryNodeFromClasses = (val:any)=>{
   
   d.queryNode = ""
+  if(store.state.mock.enabled){
+    loadMockGraphData().then(() => {
+      d.nodes = getMockNodeNamesByClass(val);
+    })
+    return;
+  }
   httpPost(
     store.state.server.address + '/kg/query/',
     {"label":val},
@@ -490,6 +623,12 @@ const queryNodeFromClasses = (val:any)=>{
 }
 const newRelation_HeadClassOnchange = (val:any)=>{
   d.new.node_relation_head = ""
+  if(store.state.mock.enabled){
+    loadMockGraphData().then(() => {
+      d.new.nodes_relation_head = getMockNodeNamesByClass(val);
+    })
+    return;
+  }
   httpPost(
     store.state.server.address + '/kg/query/',
     {"label":val},
@@ -500,6 +639,12 @@ const newRelation_HeadClassOnchange = (val:any)=>{
 }
 const newRelation_TailClassOnchange = (val:any)=>{
   d.new.node_relation_tail = ""
+  if(store.state.mock.enabled){
+    loadMockGraphData().then(() => {
+      d.new.nodes_relation_tail = getMockNodeNamesByClass(val);
+    })
+    return;
+  }
   httpPost(
     store.state.server.address + '/kg/query/',
     {"label":val},
@@ -510,6 +655,12 @@ const newRelation_TailClassOnchange = (val:any)=>{
 }
 const delClassOnchange = (val:any)=>{
   d.del.node = ""
+  if(store.state.mock.enabled){
+    loadMockGraphData().then(() => {
+      d.del.nodes = getMockNodeNamesByClass(val);
+    })
+    return;
+  }
   httpPost(
     store.state.server.address + '/kg/query/',
     {"label":val},
@@ -553,10 +704,6 @@ function DELETE(){
       type: 'warning',
     })
     .then(() => {
-      ElMessage.info("演示版本，无法修改知识图谱。");
-      return;
-
-
       viz.updateWithCypher('MATCH (n:'+d.del.nodeClass+'{name:"'+d.del.node+'"}) DETACH DELETE n');
       d.nodes.splice(d.nodes.indexOf(d.del.node),1)
       if(d.queryNode==d.del.node){
@@ -582,8 +729,6 @@ function DELETEALL(){
       type: 'warning',
     })
     .then(() => {
-      ElMessage.info("演示版本，无法修改知识图谱。");
-      return;
       viz.updateWithCypher('MATCH (n:'+d.del.nodeClass+') DETACH DELETE n');
       d.nodeClasses.splice(d.nodeClasses.indexOf(d.del.nodeClass),1)
       if(d.queryNodeClass==d.del.nodeClass){
@@ -610,9 +755,6 @@ function NEWNODE(){
   let obj = <any>{}
     
   if(d.new.parameters==""){
-    ElMessage.info("演示版本，无法修改知识图谱。");
-    return;
-
     obj.name = d.new.node
     obj.color = "#D3D3D3"
     let str_ = "{"
@@ -655,9 +797,6 @@ function NEWNODE(){
         str_ += obj[key]
         str_ += '",'
       }
-      ElMessage.info("演示版本，无法修改知识图谱。");
-      return;
-
       str_ = str_.slice(0,-1)
       str_ += "}"
       // console.log(str_)
@@ -689,10 +828,6 @@ function NEWRELATION(){
     return
   }
 
-  ElMessage.info("演示版本，无法修改知识图谱。");
-  return;
-
-
   let str = 'MATCH(a:'+d.new.nodeClass_relation_head+'),(b:'+d.new.nodeClass_relation_tail+')WHERE a.name="'+d.new.node_relation_head+'"AND b.name="'+d.new.node_relation_tail+'"MERGE(a)-[r:'+d.new.relation+'{name:"'+d.new.relation+'"}]->(b)RETURN r'
   d.relations.push(d.new.relation)
   d.config.relationships[d.new.relation] = {
@@ -708,6 +843,10 @@ function QUERYNODES(){
     ElMessage.error("请输入节点名称。")
     return
   }
+  if(store.state.mock.enabled){
+    renderMockGraph({nodeClass: d.queryNodeClass, nodeName: d.queryNode});
+    return;
+  }
   viz.renderWithCypher('MATCH(n:' + d.queryNodeClass + ')-[r]->(nn) WHERE n.name="'+d.queryNode+'" RETURN n,r,nn  LIMIT '+d.maxLoad);
   viz.updateWithCypher('MATCH(n)-[r]->(nn:' + d.queryNodeClass + ') WHERE nn.name="'+d.queryNode+'" RETURN n,r,nn  LIMIT '+d.maxLoad);
 
@@ -719,6 +858,10 @@ function QUERYNODECLASSES(){
     ElMessage.error("请输入节点类别。")
     return
   }
+  if(store.state.mock.enabled){
+    renderMockGraph({nodeClass: d.queryNodeClass});
+    return;
+  }
   viz.renderWithCypher("MATCH(n:" + d.queryNodeClass + ")-[r]->(nn)  RETURN n,r,nn  LIMIT "+d.maxLoad);
   viz.updateWithCypher("MATCH(n)-[r]->(nn:" + d.queryNodeClass + ")  RETURN n,r,nn  LIMIT "+d.maxLoad);
 
@@ -729,9 +872,17 @@ function QUERYRELATIONS(){
     ElMessage.error("请输入节点路径。")
     return
   }
+  if(store.state.mock.enabled){
+    renderMockGraph({relation: d.queryRelation});
+    return;
+  }
   viz.renderWithCypher("MATCH(n)-[r:" + d.queryRelation + "]->(nn)  RETURN n,r,nn  LIMIT "+d.maxLoad);
 }  
 function MAXLOAD(){
+  if(store.state.mock.enabled){
+    renderMockGraph();
+    return;
+  }
   d.config.initialCypher =  'MATCH (n)-[r]->(m) RETURN n,r,m LIMIT '+d.maxLoad
   viz = new NeoVis(d.config);
   viz.render();
@@ -778,11 +929,20 @@ let value_nodeSelect = reactive({
 });
 function SUBMIT() {
   var cypher = d.cypher;
+  if(store.state.mock.enabled){
+    if(cypher.indexOf("strong_correlation") != -1)
+      renderMockGraph({relation: "strong_correlation"});
+    else if(cypher.indexOf("correlate") != -1)
+      renderMockGraph({relation: "correlate"});
+    else if(cypher.indexOf("质量因素") != -1)
+      renderMockGraph({nodeClass: "质量因素"});
+    else if(cypher.indexOf("工艺参数") != -1)
+      renderMockGraph({nodeClass: "工艺参数"});
+    else
+      renderMockGraph();
+    return;
+  }
   
-  
-  ElMessage.info("无法判断查询语句是否有写入操作，故无法执行。");
-  return;
-
   if (cypher.length > 3) {
     viz.renderWithCypher(cypher);
     // console.log(viz.nodes._data);

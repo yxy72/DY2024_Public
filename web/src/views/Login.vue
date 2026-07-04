@@ -94,18 +94,8 @@
 
               </el-form>
             </el-dialog>
-
-
-
-
           </div>
-         
         </div>
-      
-  
-
-
-
       </div>
     </div>
     <div  class="titleBKG"></div>
@@ -175,6 +165,7 @@ function onSubmit(){
         userinfo.loginUserName =  res.data.username
         userinfo.loginUserAvatarUrl = res.data.avatar+"?r="+Math.random();
         userinfo.loginUserAdmin = res.data.admin
+        global.setToken(res.data.token,res.data.tokenExpires)
       }else if(res.status=="success"){
         $router.replace({ path: store.state.router.page_start });
         ElMessage.success("登陆成功")

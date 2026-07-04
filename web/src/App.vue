@@ -1,7 +1,15 @@
 <template>
   <div class="Page">
+    <el-tag
+      class="mockSwitchTag"
+      :type="store.state.mock.enabled ? 'success' : 'info'"
+      effect="dark"
+      @click="toggleMockMode"
+    >
+      {{ store.state.mock.enabled ? "关闭快照" : "启用快照" }}
+    </el-tag>
     <!-- <div style="background: red; width: 583px; left: 200px; height: 200px; z-index: 2000; position: absolute;">1</div> -->
-    <div v-if="store.state.option.style.navigateBar && store.state.status.login" ref="titleAreaRef" class="PagePanel_Title">
+    <div v-if="store.state.option.style.navigateBar && store.state.status.login && $router.currentRoute.value.path != store.state.router.page_login" ref="titleAreaRef" class="PagePanel_Title">
       <div class="menuArea">
         <el-menu
           :default-active="menuTitleActive($router.currentRoute.value.path)"
@@ -80,7 +88,7 @@
 
 
   
-    <div v-if="store.state.option.style.navigateBar && store.state.status.login&&!store.state.status.inStartPage" class="PagePanel_Sidebar">
+    <div v-if="store.state.option.style.navigateBar && store.state.status.login && $router.currentRoute.value.path != store.state.router.page_login && !store.state.status.inStartPage" class="PagePanel_Sidebar">
 
       <div class="PagePanel_Sidebar_Area">
 
@@ -141,11 +149,13 @@
 
 import { ElMessage, FormInstance } from 'element-plus';
 import * as global from '@/utils/global'
+import { hydrateStoreFromMockSnapshot } from '@/mock/storeSnapshot'
 
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { reactive,ref } from "vue";
 import { onBeforeMount, onMounted, onUnmounted } from "@vue/runtime-core";
+import { mockStorageKey } from './const';
 
 
 const $router = useRouter();
@@ -157,6 +167,8 @@ let pd = reactive({
   titleRightAreaVisivle:true,
 
 })
+
+restoreMockMode()
 
 let c = ref(1);
 function B(){
@@ -173,6 +185,59 @@ const changeStyle = ()=>{
     r = true
     store.state.option.style.el_descriptions_label_background_color = '#f5f7fa'
     store.state.option.style.el_button_border_radius = "6px"
+  }
+}
+
+async function restoreMockMode(){
+  if(localStorage.getItem(mockStorageKey) != "true")
+    return
+
+  try{
+    store.state.mock.enabled = true
+    await hydrateStoreFromMockSnapshot(store)
+  }catch(e){
+    store.state.mock.enabled = false
+    localStorage.removeItem(mockStorageKey)
+    console.error(e)
+  }
+}
+
+async function toggleMockMode(){
+  if(store.state.mock.enabled){
+    store.state.mock.enabled = false
+    localStorage.removeItem(mockStorageKey)
+    global.removeToken()
+    if(store.state.server.socket && typeof store.state.server.socket.close == "function")
+      store.state.server.socket.close()
+    store.state.status.login = false
+    store.state.status.loginUserName = ""
+    store.state.status.loginUserAdmin = false
+    store.state.status.loginUserAvatarUrl = ""
+    store.state.option.NEEDLOGIN = true
+    ElMessage({
+      type: "info",
+      message: "已关闭 Mock",
+      duration: 1000,
+    })
+    $router.replace({ path: store.state.router.page_login })
+    return
+  }
+
+  try{
+    store.state.mock.enabled = true
+    localStorage.setItem(mockStorageKey, "true")
+    await hydrateStoreFromMockSnapshot(store)
+    $router.replace({ path: store.state.router.page_start })
+    ElMessage({
+      type: "success",
+      message: "已打开 Mock",
+      duration: 1000,
+    })
+  }catch(e){
+    store.state.mock.enabled = false
+    localStorage.removeItem(mockStorageKey)
+    console.error(e)
+    ElMessage.error("Mock snapshot load failed")
   }
 }
 
@@ -581,6 +646,15 @@ html,body,#app {
   
 }
 
+.mockSwitchTag.el-tag{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px;
+  z-index: 3000;
+  cursor: pointer;
+  user-select: none;
+}
 
 .devTest{
   position: absolute;

@@ -156,8 +156,6 @@ function onSubmit(){
         submitingText.value = submitingText.value=="修改"?"确认":"修改"
       }else{
 
-        ElMessage.info("演示版本 无法修改服务器。")
-        return;
         global.httpPost(
           store.state.server.address + '/config/setKGIP/',
           {new_url:newURL},
@@ -207,6 +205,7 @@ onUnmounted(() => {
 /* background: wheat; */
   width: 100vw;
   height: 100vh;
+  background: rgb(252, 252, 252);
   position: relative;
 }
 .page_body{
@@ -229,7 +228,17 @@ onUnmounted(() => {
   /* height: calc(100% - 100px); */
   height: 270px;
   min-height: 260px;
-  
+  overflow: hidden;
+}
+.main_card2 .el-card__body{
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.main_card2 .el-card__body::-webkit-scrollbar{
+  display: none;
 }
 .titleRow{
   /* background: blue; */

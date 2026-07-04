@@ -1,0 +1,21 @@
+{
+  "status": "success",
+  "obj": {
+    "status": true,
+    "neo4j_username": "neo4j",
+    "neo4j_password": "QWJjMTIzKCk=",
+    "url": "bolt://127.0.0.1:7687(mock)",
+    "allNodesNum": 46,
+    "nodes": [
+      "质量因素",
+      "工艺参数"
+    ],
+    "relations": [
+      "non_corr",
+      "某关系",
+      "correlate",
+      "strong_correlation"
+    ],
+    "totalNums": 200
+  }
+}
