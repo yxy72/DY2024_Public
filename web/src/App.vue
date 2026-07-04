@@ -20,7 +20,7 @@
           active-text-color="#f3ffff"
           
         >
-          <el-menu-item style="" v-for="(item,index) in mainMenuTable" :key="index" @click="$router.replace({path:mainMenuTable[index].route})" :index="item.id" >
+          <el-menu-item style="" v-for="(item,index) in mainMenuTable" :key="index" @click="$router.replace({path:getMainMenuRoute(index)})" :index="item.id" >
             {{ item.label }}
           </el-menu-item>
         </el-menu>
@@ -88,7 +88,7 @@
 
 
   
-    <div v-if="store.state.option.style.navigateBar && store.state.status.login && $router.currentRoute.value.path != store.state.router.page_login && !store.state.status.inStartPage" class="PagePanel_Sidebar">
+    <div v-if="store.state.option.style.navigateBar && store.state.status.login && $router.currentRoute.value.path != store.state.router.page_login && !isStartRoute()" class="PagePanel_Sidebar">
 
       <div class="PagePanel_Sidebar_Area">
 
@@ -175,6 +175,12 @@ let c = ref(1);
 function B(){
   return c.value
 }
+
+function isStartRoute(){
+  const path = $router.currentRoute.value.path
+  return path == "/" || path == store.state.router.page_start
+}
+
 let r = false;
 const changeStyle = ()=>{
   if(r){
@@ -360,6 +366,24 @@ let subMenuTable = ([
   }
 
 ])
+
+function getMainMenuRoute(index:number){
+  switch(index){
+    case 0:
+      return store.state.router.page_predict_import_data
+    case 1:
+      return store.state.router.page_analyze_lstm
+    case 2:
+      return store.state.router.page_kg_display
+    case 3:
+      return store.state.router.page_tool_preprocess
+    case 4:
+      return store.state.router.page_config_user
+    default:
+      return store.state.router.page_start
+  }
+}
+
 onBeforeMount(()=>{     
   
   // global.httpPost(
@@ -531,11 +555,16 @@ function menuTitleActive(route:any){
 
 function onLogout(){
   global.removeToken()
-  store.state.server.socket.close()
+  if(store.state.server.socket && typeof store.state.server.socket.close == "function")
+    store.state.server.socket.close()
   userinfo.login = false
   let temp = userinfo.loginUserName
   userinfo.loginUserName = ""
   $router.replace({ path: store.state.router.page_login});
+  if(store.state.mock.enabled){
+    ElMessage.info("已退出。")
+    return
+  }
   global.httpPost(
       store.state.server.address + "/logout/",
       {username: temp},
@@ -567,6 +596,17 @@ function devFunc(){
   justify-content: center; /* 水平居中 */
   height: 100%;
 }
+
+.PagePanel_Title > .menuArea > .el-menu{
+  border-bottom: none;
+  --el-menu-horizontal-height: 62px;
+}
+
+.PagePanel_Title > .menuArea > .el-menu > .el-menu-item{
+  height: var(--el-menu-horizontal-height);
+  line-height: var(--el-menu-horizontal-height);
+}
+
 .el-menu-item {
   line-height: 60px;
   font-size: 16px !important;
@@ -708,6 +748,7 @@ span {
   width: 100vw;
   justify-content: center;
   position: absolute;
+  z-index: 10;
 }
 
 .PagePanel_Sidebar {
