@@ -6,6 +6,9 @@ on:
     branches:
       - staging
       - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   install-web:
