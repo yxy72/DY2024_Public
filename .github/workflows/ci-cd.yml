@@ -1,0 +1,51 @@
+name: CI/CD Tutorial
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - staging
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  install-web:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Download Code.
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Install Node.js.
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # Step 3: Install dependencies from package-lock.json.
+      - name: Install web dependencies
+        working-directory: web
+        run: npm ci
+
+      # Step 4: Build.
+      - name: Build web
+        working-directory: web
+        run: npm run build
+
+      # Step 5: Upload.
+      - name: Upload web artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: web/dist
+
+  backend-placeholder:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Backend is mocked for now, so this job only keeps the workflow structure.
+      - name: Skip backend checks
+        run: echo "Backend checks are skipped because the backend is mocked."
