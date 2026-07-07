@@ -312,18 +312,7 @@
 
         </div>
       </el-card>
-      <el-dialog
-        v-model="pd.onDialog"
-        append-to-body
-        align-center
-        width="770"
-        >
-        <template #header>
-          <div style="margin-bottom: -20px;display: flex;">
-            <div style="margin-left: 0px;font-size: 23px;margin-top: 0px;"><el-icon><Setting /></el-icon></div>
-            <div style="margin-left: 4px;font-size: 20px;">参数范围文件接收说明</div>
-          </div>
-        </template>
+      <InfoDialog v-model="pd.onDialog" title="参数范围文件接收说明" width="770">
         <div class="dialogRow">1. 表格的第一行：各参数的<div style="color: darkred;">参数名</div>。</div>
         <div class="dialogRow">2. 表格的第二行：各参数的<div style="color: darkred;">最小值</div>。</div>
         <div class="dialogRow">3. 表格的第三行：各参数的<div style="color: darkred;">最大值</div>。</div>
@@ -332,7 +321,7 @@
         <div style="display: flex;justify-content: center;flex-wrap: wrap;">
           <el-image :src="getServerStaticUrl('/src/images/pages/page_optimization_samp.png', store.state.server.address, store.state.mock.enabled)"></el-image>
         </div>
-      </el-dialog>
+      </InfoDialog>
     </div>
 </template>
 
@@ -344,6 +333,7 @@ import { useStore } from 'vuex';
 import { ElMessage,TableV2FixedDir} from "element-plus";
 import * as echarts from 'echarts';
 import { getServerStaticUrl } from '@/utils/staticAssets'
+import InfoDialog from '@/components/InfoDialog.vue'
 type EChartsType = echarts.EChartsType;
 const store = useStore()
 import type { UploadProps,UploadInstance,TableV2Instance,RowClassNameGetter} from 'element-plus'

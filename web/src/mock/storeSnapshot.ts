@@ -119,12 +119,50 @@ function rebuildRowsForTable(rows: any[]){
   }));
 }
 
+function stripTableMeta(rows: any[]){
+  return rows.map((row) => {
+    const { id, parentId, ...data } = row;
+    return data;
+  });
+}
+
+function getColumnKeys(columns: any){
+  if(!Array.isArray(columns))
+    return [];
+
+  return columns
+    .map((column) => typeof column == "string" ? column : column?.dataKey)
+    .filter(Boolean);
+}
+
+function getOptimizationAxisLabels(optimization: any){
+  const legendData = optimization?.option?.legend?.data;
+  if(Array.isArray(legendData))
+    return legendData;
+
+  const columnNames = optimization?.parameters?.columnNames_really;
+  if(Array.isArray(columnNames))
+    return columnNames;
+
+  return getColumnKeys(optimization?.parameters?.columnNames);
+}
+
 function repairSnapshot(snapshot: any){
   if(hasCircularRows(snapshot?.train?.data_forTable) && Array.isArray(snapshot.train.data))
     snapshot.train.data_forTable = rebuildRowsForTable(snapshot.train.data);
 
   if(hasCircularRows(snapshot?.train?.predict?.data_forTable) && Array.isArray(snapshot.train.predict.data))
     snapshot.train.predict.data_forTable = rebuildRowsForTable(snapshot.train.predict.data);
+
+  const optimization = snapshot?.optimization;
+  if(optimization?.option?.xAxis && !Array.isArray(optimization.option.xAxis.data)){
+    const labels = getOptimizationAxisLabels(optimization);
+    if(labels.length > 0)
+      optimization.option.xAxis.data = labels;
+  }
+
+  if(hasCircularRows(optimization?.parameters?.data) && Array.isArray(optimization.parameters.data_Table))
+    optimization.parameters.data = stripTableMeta(optimization.parameters.data_Table);
 }
 
 export async function hydrateStoreFromMockSnapshot(store: any, path?: string){

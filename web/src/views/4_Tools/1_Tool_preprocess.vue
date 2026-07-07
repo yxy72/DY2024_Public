@@ -148,17 +148,7 @@
       </div>
 
     </el-card>
-    <el-dialog
-      v-model="pd.parameter_onLoading"
-      append-to-body
-      align-center
-      >
-      <template #header>
-        <div style="margin-bottom: -20px;display: flex;">
-          <div style="margin-left: 0px;font-size: 23px;margin-top: 0px;"><el-icon><Setting /></el-icon></div>
-          <div style="margin-left: 4px;font-size: 20px;">自定义过程参数</div>
-        </div>
-      </template>
+    <InfoDialog v-model="pd.parameter_onLoading" title="自定义过程参数">
       <div class="dialogRow">预处理方式：{{ pd.preProcess[pd.preProcess.map((e:any) => { return e.val; }).indexOf(pd.preProcessVal)].name }}</div>
       <div class="dialogRow2">请以数组的形式输入下列所需参数。</div>
       <!-- <div class="dialogRow">参数:</div> -->
@@ -181,18 +171,8 @@
         确认
       </el-button>
       </div>
-    </el-dialog>
-    <el-dialog
-      v-model="pd.onQueryingParams"
-      append-to-body
-      align-center
-      >
-      <template #header>
-        <div style="margin-bottom: -20px;display: flex;">
-          <div style="margin-left: 0px;font-size: 23px;margin-top: 0px;"><el-icon><Setting /></el-icon></div>
-          <div style="margin-left: 4px;font-size: 20px;">过程参数</div>
-        </div>
-      </template>
+    </InfoDialog>
+    <InfoDialog v-model="pd.onQueryingParams" title="过程参数">
       <div class="dialogRow">预处理方式：{{ d.preProcessValNow }}</div>
       <div class="dialogRow2">使用模型预测时确保输入按照同样的方式进行了初始化。</div>
       <!-- <div class="dialogRow">参数:</div> -->
@@ -214,7 +194,7 @@
         </el-table-column>
 
       </el-table>
-    </el-dialog>
+    </InfoDialog>
   </div>
 </template>
 
@@ -223,6 +203,7 @@ import * as XLSX from 'xlsx'
 import { ElMessage, ElMessageBox } from "element-plus";
 import {onMounted, onUnmounted, reactive,ref } from "vue";
 import { useStore } from "vuex";
+import InfoDialog from '@/components/InfoDialog.vue'
 
 const store = useStore();
 let d = reactive(store.state.tools.preprocess);

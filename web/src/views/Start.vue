@@ -11,8 +11,8 @@
         <div class="card_row2">
           <div>
             <el-icon size="22"><WarningFilled /></el-icon>
-            <span>快照</span>
-            页面通过快照/mock预加载数据。
+            <span>静态页面</span>
+            页面通过快照/mock展示数据。
 
             </div>
         </div>

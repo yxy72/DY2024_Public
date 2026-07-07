@@ -251,32 +251,9 @@
           <el-button style="color: gray" size="small" @click="pageReset()" link>重置本步骤</el-button>
         </div>
       </el-card>
-      <div class="bottomArea">
-      <div class="step">
-        <el-steps
-          :active="d.step"
-          finish-status="success"
-          simple>
-          <el-step title="导入数据" />
-          <el-step title="预处理" />
-          <el-step title="选择网络" />
-          <el-step title="训练模型" />
-          <el-step title="完成" />
-        </el-steps>
-      </div>
-    </div>
+    <TrainStepBar :active="d.step" />
 
-    <el-dialog
-      v-model="pd.onQueryingParams"
-      append-to-body
-      align-center
-      >
-      <template #header>
-        <div style="margin-bottom: -20px;display: flex;">
-          <div style="margin-left: 0px;font-size: 23px;margin-top: 0px;"><el-icon><Setting /></el-icon></div>
-          <div style="margin-left: 4px;font-size: 20px;">过程参数</div>
-        </div>
-      </template>
+    <InfoDialog v-model="pd.onQueryingParams" title="过程参数">
       <div class="dialogRow">预处理方式：{{d.preProcess[d.preProcess.map((e:any) => { return e.val; }).indexOf(d.preProcessVal)].name  }}</div>
       <div class="dialogRow2">使用模型预测时确保输入按照同样的方式进行了初始化。</div>
       <!-- <div class="dialogRow">参数:</div> -->
@@ -298,20 +275,9 @@
         </el-table-column>
 
       </el-table>
-    </el-dialog>
+    </InfoDialog>
 
-    <el-dialog
-      v-model="pd.onDialog"
-      append-to-body
-      align-center
-      width="720"
-      >
-      <template #header>
-        <div style="margin-bottom: -20px;display: flex;">
-          <div style="margin-left: 0px;font-size: 23px;margin-top: 0px;"><el-icon><Setting /></el-icon></div>
-          <div style="margin-left: 4px;font-size: 20px;">数据集说明</div>
-        </div>
-      </template>
+    <InfoDialog v-model="pd.onDialog" title="数据集说明" width="720">
       <div class="dialogRow2">1. 表格的不同行代表不同的样本，不同的列代表样本的特征或标签。</div>
       <div class="dialogRow2">2. 表格<div style="color: darkred;">应含</div>表头。</div>
       <el-divider style="margin-top: 15px;margin-bottom: 20px;"><div style="color: gray;">示例</div></el-divider>
@@ -319,15 +285,11 @@
         <el-image :src="getServerStaticUrl('/src/images/pages/page_cnn_datasetSample.png', store.state.server.address, store.state.mock.enabled)"></el-image>
         <div style="font-size: 16px;margin-top: 5px;">特征或标签列：8，样本数：9</div>
       </div>
-    </el-dialog>
+    </InfoDialog>
   </div>
 
 </template>
 <script setup lang="ts">
-import * as XLSX from 'xlsx'
-
-
-
 import { ElMessage } from "element-plus";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
@@ -336,10 +298,14 @@ import { onMounted, onUnmounted, ref } from "@vue/runtime-core";
 import useClipboard from 'vue-clipboard3'
 import type { UploadProps, UploadUserFile } from 'element-plus'
 import { getServerStaticUrl } from '@/utils/staticAssets'
+import InfoDialog from '@/components/InfoDialog.vue'
+import TrainStepBar from '@/components/TrainStepBar.vue'
+import { useExcelTable } from '@/composables/useExcelTable'
 
 const $router = useRouter();
 const store = useStore();
 const { toClipboard } = useClipboard()
+const { readExcelAsJson, normalizeExcelRows, createTableV2 } = useExcelTable()
 
 let d = reactive(store.state.train);
 
@@ -513,58 +479,24 @@ const handleChange: UploadProps['onChange'] = (file) => {
       ElMessage.error("请上传附件！")
   }
 }
-function importfile(obj:any) {
-  const reader = new FileReader();
-  reader.readAsArrayBuffer(obj);
-  reader.onload = function () {
-    const buffer:any = reader.result;
-    const bytes = new Uint8Array(buffer);
-    const length = bytes.byteLength;
-    let binary = "";
-    for (let i = 0; i < length; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    const wb = XLSX.read(binary, {
-      type: "binary",
-    });
-    const outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-    let data = [...outdata];
-    const arr:any = [];
-    let coName = Object.keys(data[0]);
-    d.sampleColumnCount = coName.length;
-    let rowSum = 0;
-    data.map((v) => {
-      const obj:any = {};
-      for (let i = 0; i < coName.length; i++) {
-        obj[coName[i]] = v[coName[i]];
-      }
-      rowSum++;
-      d.sampleColumnNames = coName;
-      arr.push(obj);
-    });
-    d.sampleRowCount = rowSum;
-    d.data = arr;
-    d.onLoaded = true;
-    d.step = 1;
+async function importfile(obj:any) {
+  const outdata = await readExcelAsJson(obj)
+  const table = normalizeExcelRows(outdata)
+  d.sampleColumnCount = table.columnCount;
+  d.sampleColumnNames = table.columnNames;
+  d.sampleRowCount = table.rowCount;
+  d.data = table.rows;
+  d.onLoaded = true;
+  d.step = 1;
+
+  const tableV2 = createTableV2(d.data, d.sampleColumnNames)
+  d.data_forTable = tableV2.data
+  d.sampleColumnNames_forTable = tableV2.columns
 
 
-    d.data_forTable = d.data.map((val:any,rowIndex:any) => {
-      val.id = rowIndex
-      val.parentId = null
-      return val
-    })
-    d.sampleColumnNames_forTable = d.sampleColumnNames.map((val:any,index:any) => ({
-      key: `${index}`,
-      dataKey: `${val}`,
-      title: val,
-      width: 150,
-    }))
-
-
-    // console.log(d.sampleColumnNames)
-    // console.log(d.data)
-    // console.log(d.sampleColumnNames)
-  };
+  // console.log(d.sampleColumnNames)
+  // console.log(d.data)
+  // console.log(d.sampleColumnNames)
 }
 
 
@@ -659,30 +591,6 @@ body,
     //   background-color: red;
     //   height: 100%;
     // }
-  }
-}
-.bottomArea{
-  width:calc(100% - 220px - 100px - 0px);
-  overflow: hidden;
-  height: 46px;
-
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 8px;
-  padding-right: 8px;
-
-  position: absolute;
-  bottom: 42px;
-  left: calc(220px + 50px - 8px);
-  max-width: 1600px;
-  align-items: center;
-  // background: #509bfe2d;
-
-  .step{
-    height: 46px;
-    min-width: 810px;
-    // background: red;
-    box-shadow: 0px 0px 8px 0px rgba(109, 109, 109, 0.205);
   }
 }
 ::-webkit-scrollbar {

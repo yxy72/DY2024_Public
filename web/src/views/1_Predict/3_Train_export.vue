@@ -165,20 +165,7 @@
       
 
     </el-card>
-    <div class="bottomArea">
-      <div class="step">
-        <el-steps
-          :active="d.step"
-          finish-status="success"
-          simple>
-          <el-step title="导入数据" />
-          <el-step title="预处理" />
-          <el-step title="选择网络" />
-          <el-step title="训练模型" />
-          <el-step title="完成" />
-        </el-steps>
-      </div>
-    </div>
+    <TrainStepBar :active="d.step" />
   </div>
 </template>
 <script setup lang="ts">
@@ -188,6 +175,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { onBeforeMount, onMounted, onUnmounted } from "@vue/runtime-core";
 import * as global from "@/utils/global"
+import TrainStepBar from '@/components/TrainStepBar.vue'
 
 const $router = useRouter();
 const store = useStore();
@@ -437,30 +425,6 @@ body,
     //   color: rgba(100, 100, 100, 0.774);
     // }
 
-  }
-}
-.bottomArea{
-  width:calc(100% - 220px - 100px - 0px);
-  overflow: hidden;
-  height: 46px;
-
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 8px;
-  padding-right: 8px;
-
-  position: absolute;
-  bottom: 42px;
-  left: calc(220px + 50px - 8px);
-  max-width: 1600px;
-  align-items: center;
-  // background: #509bfe2d;
-
-  .step{
-    height: 46px;
-    min-width: 810px;
-    // background: red;
-    box-shadow: 0px 0px 8px 0px rgba(109, 109, 109, 0.205);
   }
 }
 .subTitleRow {

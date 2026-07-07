@@ -30,7 +30,7 @@
 
                 <!-- :disabled="pd.modelInfoOnLoading"  -->
                 <template #trigger>
-                  <el-button :disabled="true"  text type="primary" style="margin-top: 0px;;margin-left: 8px;"><div style="font-size: 15px;">更改</div></el-button>
+                  <el-button  text type="primary" style="margin-top: 0px;;margin-left: 8px;"><div style="font-size: 15px;">更改</div></el-button>
                 </template>
             
               </el-upload>
@@ -245,17 +245,7 @@
 
 
     </el-card>
-    <el-dialog
-      v-model="pd.onReflecting"
-      append-to-body
-      align-center
-      >
-      <template #header>
-        <div style="margin-bottom: -20px;display: flex;">
-          <div style="margin-left: 0px;font-size: 23px;margin-top: 0px;"><el-icon><Setting /></el-icon></div>
-          <div style="margin-left: 4px;font-size: 20px;">列名映射</div>
-        </div>
-      </template>
+    <InfoDialog v-model="pd.onReflecting" title="列名映射">
       <div class="dialogRow2">将各所属类别和指定标签进行对应。</div>
 
 
@@ -276,7 +266,7 @@
         确认
       </el-button>
       </div>
-    </el-dialog>
+    </InfoDialog>
   </div>
 </template>
 <script setup lang="ts">
@@ -287,11 +277,14 @@ import { useRouter,useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { onMounted, onUnmounted } from "@vue/runtime-core";
 import * as global from "@/utils/global"
+import InfoDialog from '@/components/InfoDialog.vue'
+import { useExcelTable } from '@/composables/useExcelTable'
 
 let calReady = ref(false);
 const $router = useRouter();
 const store = useStore();
 const route = useRoute();
+const { readExcelAsJson, normalizeExcelRows, createTableV2 } = useExcelTable()
 
 const uploadModelRef = ref<UploadInstance>()
 
@@ -408,40 +401,18 @@ onMounted(() => {
 
             try{
               data = res.data;
-
-              const arr:any = [];
-              let coName = Object.keys(data[0]);
-              d.sampleColumnCount = coName.length;
-              let rowSum = 0;
-              data.map((v:any) => {
-                const obj:any = {};
-                for (let i = 0; i < coName.length; i++) {
-                  obj[coName[i]] = v[coName[i]];
-                }
-                rowSum++;
-                d.sampleColumnNames = coName;
-                arr.push(obj);
-              });
-              d.sampleRowCount = rowSum;
-              d.data = arr;
+              const table = normalizeExcelRows(data);
+              d.sampleColumnCount = table.columnCount;
+              d.sampleColumnNames = table.columnNames;
+              d.sampleRowCount = table.rowCount;
+              d.data = table.rows;
               d.onLoaded = true;
 
               d.onPredicted = false
 
-              d.data_forTable = d.data.map((val:any,rowIndex:any) => {
-                val.id = rowIndex
-                val.parentId = null
-                return val
-              })
-
-              let props:any;
-              d.sampleColumnNames_forTable = d.sampleColumnNames.map((val:any,index:any) => ({
-                ...props,
-                key: `${index}`,
-                dataKey: `${val}`,
-                title: val,
-                width: 150,
-              }))
+              const tableV2 = createTableV2(d.data, d.sampleColumnNames)
+              d.data_forTable = tableV2.data
+              d.sampleColumnNames_forTable = tableV2.columns
             }catch(e){
               ElMessage.warning("自动拉取的数据存在错误。")
             }
@@ -484,65 +455,30 @@ function handleChange(file:any) {
       ElMessage.error("请上传附件！")
   }
 }
-function importfile(obj:any) {
-  const reader = new FileReader();
-  reader.readAsArrayBuffer(obj);
-  reader.onload = function () {
-    const buffer:any = reader.result;
-    const bytes = new Uint8Array(buffer);
-    const length = bytes.byteLength;
-    let binary = "";
-    for (let i = 0; i < length; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    const wb = XLSX.read(binary, {
-      type: "binary",
-    });
-    const outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-    data = [...outdata];
+async function importfile(obj:any) {
+  const outdata = await readExcelAsJson(obj)
+  data = [...outdata];
 
 
-    // console.log(data)
+  // console.log(data)
 
-    const arr:any = [];
-    let coName = Object.keys(data[0]);
-    d.sampleColumnCount = coName.length;
-    let rowSum = 0;
-    data.map((v) => {
-      const obj:any = {};
-      for (let i = 0; i < coName.length; i++) {
-        obj[coName[i]] = v[coName[i]];
-      }
-      rowSum++;
-      d.sampleColumnNames = coName;
-      arr.push(obj);
-    });
-    d.sampleRowCount = rowSum;
-    d.data = arr;
-    d.onLoaded = true;
+  const table = normalizeExcelRows(data);
+  d.sampleColumnCount = table.columnCount;
+  d.sampleColumnNames = table.columnNames;
+  d.sampleRowCount = table.rowCount;
+  d.data = table.rows;
+  d.onLoaded = true;
 
-    d.onPredicted = false
+  d.onPredicted = false
 
-    d.data_forTable = d.data.map((val:any,rowIndex:any) => {
-      val.id = rowIndex
-      val.parentId = null
-      return val
-    })
-    
-    let props:any;
-    d.sampleColumnNames_forTable = d.sampleColumnNames.map((val:any,index:any) => ({
-      ...props,
-      key: `${index}`,
-      dataKey: `${val}`,
-      title: val,
-      width: 150,
-    }))
+  const tableV2 = createTableV2(d.data, d.sampleColumnNames)
+  d.data_forTable = tableV2.data
+  d.sampleColumnNames_forTable = tableV2.columns
 
 
-    // console.log(d.sampleColumnNames)
-    // console.log(d)
-    // console.log(d.sampleColumnNames)
-  };
+  // console.log(d.sampleColumnNames)
+  // console.log(d)
+  // console.log(d.sampleColumnNames)
 }
 function RUN() {
   if(!d.onLoaded){
