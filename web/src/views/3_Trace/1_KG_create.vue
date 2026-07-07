@@ -93,7 +93,7 @@
                 <div class="subTitleRow">
                   <div class="subTitleLabel" style="margin-Top:20px">> 阈值计算方式 ></div>
                 </div>
-                <el-row style="background:;height:81px;margin-Top:-10px;"  align="middle">
+                <el-row style="height:81px;margin-Top:-10px;"  align="middle">
                   
                   <div style="width: 180px;border-right: 1px solid #dcdfe6;display: flex;justify-content: center;">
                     <el-radio-group v-model="d.calMethod">
@@ -131,7 +131,7 @@
             <el-divider direction="vertical"  style="height:calc(100% - 20px)" />
             <div class="yxyCol" style="min-width: 320px;" >
 
-              <div class="subTitleRow" style="background: ;">
+              <div class="subTitleRow" style="">
                 <div class="subTitleLabel">> 计算结果 ></div>
                 <div style="margin-left:20px;color:gray" class="subTitleLabel">R:{{d.threshold}}</div>
               </div>
@@ -151,7 +151,7 @@
                 </el-auto-resizer>
               </div>
 
-              <div class="subTitleRow"  style="border-top: 1px solid #dcdfe66b;background: ;" >
+              <div class="subTitleRow"  style="border-top: 1px solid #dcdfe66b;" >
                 <div class="subTitleLabel">> 知识三元组 ></div>
                 <div style="margin-left:20px;color:gray" class="subTitleLabel">总计:{{d.tripletData.length}}</div>
               </div>
@@ -329,7 +329,7 @@ function importfile(obj:any) {
       type: "binary",
     });
     const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-    obj = global.getDataAndColumnsForTable(data, Object.keys(data[0]))
+    obj = global.getDataAndColumnsForTable(data as any[], Object.keys((data as any)[0] || {}))
     
     d.sampleData = obj.data
     d.sampleDataColumns = obj.columns
@@ -511,34 +511,41 @@ function CALCORRELATION(xCol1:string[], yCol1:string[], rho:number, kind:string)
   setTimeout(() => {
     d.sampleDataOnCalulated = true
     d.sampleDataOnCalulating = false
-    
-  }, 100);
-  return
+  }, 100)
 
+  if (!store.state.mock.enabled) {
+    const headEntities: string[] = []
+    const tailEntities: string[] = []
+    const allEntities: string[] = []
+    const allRelations: string[] = []
 
-  let HEAD_ENITY = [], TAIL_ENITY = []
-  for (let j = 0 ;j < xCol.length;j++)
-    HEAD_ENITY.push(coName[xCol[j]])
-  for (let j = 0 ;j < yCol.length;j++)
-    TAIL_ENITY.push(coName[yCol[j]])
-  let ALL_ENITY = []
-  for (let i = 0; i < HEAD_ENITY.length; i++) 
-    if (ALL_ENITY.indexOf(HEAD_ENITY[i]) == -1) 
-      ALL_ENITY.push(HEAD_ENITY[i])
-  for (let i = 0; i < TAIL_ENITY.length; i++) 
-    if (ALL_ENITY.indexOf(TAIL_ENITY[i]) == -1) 
-      ALL_ENITY.push(TAIL_ENITY[i])            
-  let ALL_EDGES = []
-  for (let i = 0; i < edges.length; i++)
-    if (ALL_EDGES.indexOf(edges[i]) == -1) 
-      ALL_EDGES.push(edges[i])          
-  kgapi.nodes = ALL_ENITY,
-  kgapi.edges = ALL_EDGES,
-  kgapi.headE =  HEAD_ENITY,
-  kgapi.tailE = TAIL_ENITY,
-  store.dispatch('setData_KG_api', kgapi)
-  pdd.isValid = true;
-  loading = false;
+    for (let j = 0; j < xCol.length; j++) {
+      headEntities.push(coName[xCol[j]])
+    }
+    for (let j = 0; j < yCol.length; j++) {
+      tailEntities.push(coName[yCol[j]])
+    }
+
+    for (let i = 0; i < headEntities.length; i++) {
+      if (!allEntities.includes(headEntities[i])) {
+        allEntities.push(headEntities[i])
+      }
+    }
+    for (let i = 0; i < tailEntities.length; i++) {
+      if (!allEntities.includes(tailEntities[i])) {
+        allEntities.push(tailEntities[i])
+      }
+    }
+    for (let i = 0; i < edges.length; i++) {
+      if (!allRelations.includes(edges[i])) {
+        allRelations.push(edges[i])
+      }
+    }
+
+    store.state.kg.graph.nodes = allEntities
+    store.state.kg.graph.relations = allRelations
+    store.state.kg.graph.nodeClasses = allEntities
+  }
 }
 function DOWNLOAD() {
   const ws = XLSX.utils.json_to_sheet(d.tripletData)

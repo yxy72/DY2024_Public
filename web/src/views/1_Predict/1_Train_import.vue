@@ -206,7 +206,7 @@
               </el-button>
             </div>
             <el-row v-if="d.serverDataOnLoaded"
-                    style="background: ; height: 80px; margin-top: -20px"
+                    style="height: 80px; margin-top: -20px"
                     align="middle"
             >
               <el-col :span="1"></el-col>
@@ -224,9 +224,9 @@
               </el-col>
               <el-col :span="5" style="display: flex; align-items: center;">
                 <vue-latex
-                  :expression="d.preProcess[d.preProcess.map(function(e) { return e.val; }).indexOf(d.preProcessVal)].expression"
+                  :expression="d.preProcess[d.preProcess.map(function(e: any) { return e.val; }).indexOf(d.preProcessVal)].expression"
                   display-mode/>
-                <el-icon style="marginleft: 6px; color: lightgray"
+                <el-icon style="margin-left: 6px; color: lightgray"
                 ><question-filled
                 /></el-icon>
               </el-col>
