@@ -2,213 +2,201 @@
   <div class="Page">
     <el-card class="mainArea">
 
-        <div class="titleRow">
-          <div class="subTitleRow">
-            <div class="subTitleIcon"><el-icon size="25px" style="marginRight:4px"><histogram /></el-icon></div>
-            <div class="subTitleLabel">已选数据集</div>
-          </div>
+      <div class="titleRow">
+        <div class="subTitleRow">
+          <div class="subTitleIcon"><el-icon size="25px" style="marginRight:4px"><histogram /></el-icon></div>
+          <div class="subTitleLabel">已选数据集</div>
+        </div>
 
-          <div style="background: ;height: 80px;overflow: hidden;">
-            <el-descriptions
-              class="margin-top"
-              :column="5"
-              border>
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item"><i class="iconfont">&#xec17;</i> 文件名</div>
-                </template>
-                <div style="font-family:Arial, Helvetica, sans-serif">
-                  {{d.fileName==""?"未加载":d.fileName}}
-                </div>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item"><i class="iconfont">&#xe87c;</i> 计数</div>
-                </template>
-                {{d.sampleRowCount}}
-              </el-descriptions-item>
+        <div style="background: ;height: 80px;overflow: hidden;">
+          <el-descriptions
+            class="margin-top"
+            :column="5"
+            border>
+            <el-descriptions-item>
+              <template #label>
+                <div class="cell-item"><i class="iconfont">&#xec17;</i> 文件名</div>
+              </template>
+              <div style="font-family:Arial, Helvetica, sans-serif">
+                {{d.fileName==""?"未加载":d.fileName}}
+              </div>
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template #label>
+                <div class="cell-item"><i class="iconfont">&#xe87c;</i> 计数</div>
+              </template>
+              {{d.sampleRowCount}}
+            </el-descriptions-item>
 
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item"><i class="iconfont"> &#xe60e; </i>特征维度数</div>
-                </template>
-                {{d.selectXColNames.length==0?"未选择":d.selectXColNames.length}}
-              </el-descriptions-item>
+            <el-descriptions-item>
+              <template #label>
+                <div class="cell-item"><i class="iconfont"> &#xe60e; </i>特征维度数</div>
+              </template>
+              {{d.selectXColNames.length==0?"未选择":d.selectXColNames.length}}
+            </el-descriptions-item>
 
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item"><i class="iconfont"> &#xe618; </i>标签维度数</div>
-                </template>
-                {{d.selectYColNames.length==0?"未选择":d.selectYColNames.length}}
-              </el-descriptions-item>
+            <el-descriptions-item>
+              <template #label>
+                <div class="cell-item"><i class="iconfont"> &#xe618; </i>标签维度数</div>
+              </template>
+              {{d.selectYColNames.length==0?"未选择":d.selectYColNames.length}}
+            </el-descriptions-item>
 
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item"><i class="iconfont"> &#xe615; </i> 预处理方式</div>
-                </template>
-                <!-- <el-tag size="small"><div style="fontSize:10px" >已处理</div></el-tag> -->
-                {{d.preProcess[d.preProcess.map(function(e: { val: any; }) { return e.val; }).indexOf(d.preProcessVal)].val}}
+            <el-descriptions-item>
+              <template #label>
+                <div class="cell-item"><i class="iconfont"> &#xe615; </i> 预处理方式</div>
+              </template>
+              <!-- <el-tag size="small"><div style="fontSize:10px" >已处理</div></el-tag> -->
+              {{d.preProcess[d.preProcess.map(function(e: { val: any; }) { return e.val; }).indexOf(d.preProcessVal)].val}}
 
-              </el-descriptions-item>
+            </el-descriptions-item>
 
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item"><i class="iconfont">&#xec17;</i> 文件大小</div>
-                </template>
-                <div style="font-family:Arial, Helvetica, sans-serif">
-                  {{d.fileSize>1024 * 1024?(d.fileSize/1024/1024).toFixed(2)+" MB":(d.fileSize>1024)?(d.fileSize/1024).toFixed(2)+" kB":(d.fileSize+" Bytes")}}
-                </div>
-              </el-descriptions-item>
+            <el-descriptions-item>
+              <template #label>
+                <div class="cell-item"><i class="iconfont">&#xec17;</i> 文件大小</div>
+              </template>
+              <div style="font-family:Arial, Helvetica, sans-serif">
+                {{d.fileSize>1024 * 1024?(d.fileSize/1024/1024).toFixed(2)+" MB":(d.fileSize>1024)?(d.fileSize/1024).toFixed(2)+" kB":(d.fileSize+" Bytes")}}
+              </div>
+            </el-descriptions-item>
 
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item"><el-icon> <office-building /> </el-icon> 处理状况</div>
-                </template>
-                <el-tag size="small" type="success"><div style="fontSize:10px" >已完成</div></el-tag>
-              </el-descriptions-item>
+            <el-descriptions-item>
+              <template #label>
+                <div class="cell-item"><el-icon> <office-building /> </el-icon> 处理状况</div>
+              </template>
+              <el-tag size="small" type="success"><div style="fontSize:10px" >已完成</div></el-tag>
+            </el-descriptions-item>
 
-            </el-descriptions>
+          </el-descriptions>
           
-          </div>
+        </div>
               
-          <el-divider style="margin-bottom: 0;margin-top: 12px;"></el-divider>
+        <el-divider style="margin-bottom: 0;margin-top: 12px;"></el-divider>
 
-          <div class="subTitleRow">
-            <div class="subTitleIcon"><el-icon size="25px" style="marginRight:4px"><grid /></el-icon></div>
-            <div class="subTitleLabel">卷积神经网络参数设定</div>
+        <div class="subTitleRow">
+          <div class="subTitleIcon"><el-icon size="25px" style="marginRight:4px"><grid /></el-icon></div>
+          <div class="subTitleLabel">卷积神经网络参数设定</div>
+        </div>
+
+      </div>
+        
+      <div class="scrollRow">
+
+        <div class="scrollRowCol1">
+          <div ref="tabRef" style="height:100%">
+            <el-tabs class=""
+                     v-model="activeName"
+                     type="card"
+            >
+              <el-tab-pane label="预设1" name="first" :style="'height:'+tableHeight+'px;background:red;min-height: 240px;'">
+                <el-table :data="networkData" stripe  style="width: 100%;height: 100%;" empty-text="尚未选择输入/输出特征。">
+                  <el-table-column fixed prop="layer" label="层" width="90" />
+                  <el-table-column prop="output" label="输出" width="120" />
+                  <el-table-column prop="channels" label="通道"  />
+                  <el-table-column prop="size" label="大小" />
+                  <el-table-column prop="stride" label="步长"  />
+                  <el-table-column prop="activation" label="激活函数"  />
+                  <el-table-column fixed="right" prop="parameters" label="参数量"  />
+                    
+                </el-table>
+                  
+              </el-tab-pane>
+              <el-tab-pane label="预设2" name="second"></el-tab-pane>
+              <!-- <el-tab-pane label="预设3" name="third"></el-tab-pane> -->
+            </el-tabs>
+          </div>
+        </div>
+
+        <div class="scrollRowCol2">
+          <div class="subTitleRow" style="margin-bottom:0;background: ;">
+            <div class="subTitleLabel1">> 通用模型结构 ></div>
+          </div>
+
+          <div  style="overflow: scroll;height: calc(100% - 50px);background: ;width: 100%;">
+            <el-image :src="networkImg" fit="" />
           </div>
 
         </div>
-        
-        <div class="scrollRow">
 
-            <div class="scrollRowCol1">
-              <div ref="tabRef" style="height:100%">
-                <el-tabs class=""
-                v-model="activeName"
-                type="card"
-                >
-                  <el-tab-pane label="预设1" name="first" :style="'height:'+tableHeight+'px;background:red;min-height: 240px;'">
-                    <el-table :data="networkData" stripe  style="width: 100%;height: 100%;" empty-text="尚未选择输入/输出特征。">
-                      <el-table-column fixed prop="layer" label="层" width="90" />
-                      <el-table-column prop="output" label="输出" width="120" />
-                      <el-table-column prop="channels" label="通道"  />
-                      <el-table-column prop="size" label="大小" />
-                      <el-table-column prop="stride" label="步长"  />
-                      <el-table-column prop="activation" label="激活函数"  />
-                      <el-table-column fixed="right" prop="parameters" label="参数量"  />
-                    
-                    </el-table>
-                  
-                  </el-tab-pane>
-                  <el-tab-pane label="预设2" name="second"></el-tab-pane>
-                  <!-- <el-tab-pane label="预设3" name="third"></el-tab-pane> -->
-              </el-tabs>
-              </div>
-            </div>
+        <div class="scrollRowCol3">
+          <div class="subTitleRow" style="marginBottom:0">
+            <div class="subTitleLabel1">> 设置模型参数 ></div>
+          </div>
+          <el-row style="background:;" align="middle">
+            <div class="paraLabel" >LOSS</div>
+            <el-select v-model="d.parameters.loss.val" class="m-2" placeholder="损失函数" size="large">
+              <el-option v-for="item in d.parameters.loss.scope"
+                         :key="item"
+                         :label="item"
+                         :value="item"/>
+            </el-select>
+          </el-row>
+          <el-row style="background:;marginTop:10px" align="middle">
+            <div class="paraLabel" >optimizer</div>
+            <el-select v-model="d.parameters.optimizer.val" class="m-2" placeholder="优化器" size="large">
+              <el-option v-for="item in d.parameters.optimizer.scope"
+                         :key="item"
+                         :label="item"
+                         :value="item"/>
+            </el-select>
+          </el-row>
+          <el-row style="background:;marginTop:10px" align="middle">
+            <div class="paraLabel" >learning_rate</div>
+            <el-select v-model="d.parameters.learning_rate.val" class="m-2" placeholder="学习率" size="large">
+              <el-option v-for="item in d.parameters.learning_rate.scope"
+                         :key="item"
+                         :label="item"
+                         :value="item"/>
+            </el-select>
+          </el-row>
+          <el-row style="background:;marginTop:10px" align="middle">
+            <div class="paraLabel" >epoch</div>
+            <el-select v-model="d.parameters.epoch.val" class="m-2" placeholder="轮次" size="large">
+              <el-option v-for="item in d.parameters.epoch.scope"
+                         :key="item"
+                         :label="item"
+                         :value="item" />
+            </el-select>
+          </el-row>
+          <el-row style="background:;marginTop:10px" align="middle">
+            <div class="paraLabel" >batch</div>
+            <el-select v-model="d.parameters.batch_size.val" class="m-2" placeholder="批大小" size="large">
+              <el-option v-for="item in d.parameters.batch_size.scope"
+                         :key="item"
+                         :label="item"
+                         :value="item"/>
+            </el-select>
+          </el-row>
 
-            <div class="scrollRowCol2">
-              <div class="subTitleRow" style="margin-bottom:0;background: ;">
-                <div class="subTitleLabel1">> 通用模型结构 ></div>
-              </div>
-
-              <div  style="overflow: scroll;height: calc(100% - 50px);background: ;width: 100%;">
-                <el-image :src="networkImg" fit="" />
-              </div>
-
-            </div>
-
-            <div class="scrollRowCol3">
-              <div class="subTitleRow" style="marginBottom:0">
-                  <div class="subTitleLabel1">> 设置模型参数 ></div>
-              </div>
-              <el-row style="background:;" align="middle">
-                <div class="paraLabel" >LOSS</div>
-                <el-select v-model="d.parameters.loss.val" class="m-2" placeholder="损失函数" size="large">
-                  <el-option v-for="item in d.parameters.loss.scope"
-                    :key="item"
-                    :label="item"
-                    :value="item"/>
-                </el-select>
-              </el-row>
-              <el-row style="background:;marginTop:10px" align="middle">
-                <div class="paraLabel" >optimizer</div>
-                <el-select v-model="d.parameters.optimizer.val" class="m-2" placeholder="优化器" size="large">
-                  <el-option v-for="item in d.parameters.optimizer.scope"
-                    :key="item"
-                    :label="item"
-                    :value="item"/>
-                </el-select>
-              </el-row>
-              <el-row style="background:;marginTop:10px" align="middle">
-                <div class="paraLabel" >learning_rate</div>
-                <el-select v-model="d.parameters.learning_rate.val" class="m-2" placeholder="学习率" size="large">
-                  <el-option v-for="item in d.parameters.learning_rate.scope"
-                    :key="item"
-                    :label="item"
-                    :value="item"/>
-                </el-select>
-              </el-row>
-              <el-row style="background:;marginTop:10px" align="middle">
-                <div class="paraLabel" >epoch</div>
-                  <el-select v-model="d.parameters.epoch.val" class="m-2" placeholder="轮次" size="large">
-                    <el-option v-for="item in d.parameters.epoch.scope"
-                      :key="item"
-                      :label="item"
-                      :value="item" />
-                  </el-select>
-              </el-row>
-              <el-row style="background:;marginTop:10px" align="middle">
-                <div class="paraLabel" >batch</div>
-                  <el-select v-model="d.parameters.batch_size.val" class="m-2" placeholder="批大小" size="large">
-                    <el-option v-for="item in d.parameters.batch_size.scope"
-                    :key="item"
-                    :label="item"
-                    :value="item"/>
-                </el-select>
-              </el-row>
-
-            </div>
+        </div>
 
     
-        </div>
+      </div>
 
 
       <div class="bottomRow">
         <el-button-group>
-            <el-button size="large"  @click="$router.replace({path:store.state.router.page_predict_import_data})" type="primary" plain  ><el-icon class="el-icon--right" style=""><ArrowLeft /></el-icon>上一步</el-button>
+          <el-button size="large"  @click="$router.replace({path:store.state.router.page_predict_import_data})" type="primary" plain  ><el-icon class="el-icon--right" style=""><ArrowLeft /></el-icon>上一步</el-button>
 
-            <el-button size="large"  @click="$router.replace({path:store.state.router.page_predict_export_data})" type="primary" plain >下一步<el-icon class="el-icon--right"><ArrowRight /></el-icon></el-button>
+          <el-button size="large"  @click="$router.replace({path:store.state.router.page_predict_export_data})" type="primary" plain >下一步<el-icon class="el-icon--right"><ArrowRight /></el-icon></el-button>
         </el-button-group>
         <el-divider direction="vertical" />
         <el-button style="color:gray" size="small" @click="pageReset()" link>重置本步骤</el-button>
       </div>
 
     </el-card>
-    <div class="bottomArea">
-      <div class="step">
-        <el-steps
-          :active="d.step"
-          finish-status="success"
-          simple>
-          <el-step title="导入数据" />
-          <el-step title="预处理" />
-          <el-step title="选择网络" />
-          <el-step title="训练模型" />
-          <el-step title="完成" />
-        </el-steps>
-      </div>
-    </div>
+    <TrainStepBar :active="d.step" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ElMessage, FormInstance } from 'element-plus'
-import { reactive,ref} from 'vue'
-import { useRouter,useRoute } from "vue-router";
+import { reactive, ref} from 'vue'
+import { useRouter, useRoute } from "vue-router";
 import { useStore } from 'vuex'
 import { onMounted, onUnmounted } from '@vue/runtime-core';
 import { httpPost } from '@/utils/global';
+import TrainStepBar from '@/components/TrainStepBar.vue'
 
 const networkImg = new URL('../../assets/images/page_train/img4.png', import.meta.url).href
 
@@ -225,7 +213,7 @@ const tabRef = ref()
 let activeName = "first"
 
 
-function pageReset(){
+function pageReset() {
   d.parameters.loss.val = "";
   d.parameters.optimizer.val = "";
   d.parameters.learning_rate.val = "";
@@ -369,12 +357,12 @@ function pageReset(){
 
 
 onMounted(()=>{
-  d.step = d.onLoaded?2:0;
-  if(d.selectXColNames.length!=0 && d.selectYColNames.length!=0){
+  d.step = d.onLoaded ? 2 : 0;
+  if (d.selectXColNames.length != 0 && d.selectYColNames.length != 0) {
     httpPost(
       store.state.server.address + "/train/layers/",
-      {dimX:d.selectXColNames.length,dimY:d.selectYColNames.length},
-      (res)=>{
+      {dimX:d.selectXColNames.length, dimY:d.selectYColNames.length},
+      res=>{
         networkData.value = (res.layers)
       }
     )
@@ -518,34 +506,6 @@ height: 100%;/* precious */
       }
   }
 }
-.bottomArea{
-  width:calc(100% - 220px - 100px - 0px);
-  overflow: hidden;
-  height: 46px;
-
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 8px;
-  padding-right: 8px;
-
-  position: absolute;
-  bottom: 42px;
-  left: calc(220px + 50px - 8px);
-  max-width: 1600px;
-  align-items: center;
-  // background: #509bfe2d;
-
-  .step{
-    height: 46px;
-    min-width: 810px;
-    // background: red;
-    box-shadow: 0px 0px 8px 0px rgba(109, 109, 109, 0.205);
-  }
-}
-
-
-
-
 .excel{
   width: 100%;
   height: 100%;

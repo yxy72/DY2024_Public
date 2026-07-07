@@ -1,317 +1,283 @@
 <template>
   <div class="Page">
-      <el-card class="mainArea">
-        <div class="titleRow">
-          <el-upload
-              class="upload-demo"
-              action=""
-              :on-change="handleChange"
-              :show-file-list="false"
-              :auto-upload="false">
-              <el-button size="large" :style='"padding: 7px;border-radius:"+store.state.option.style.el_button_border_radius+";"' type="primary"
-                ><el-icon size="25px" style="margin-right: 4px"
-                  ><folder-add /></el-icon
-                >读取Excel文件</el-button
-              >
-            </el-upload>
+    <el-card class="mainArea">
+      <div class="titleRow">
+        <el-upload
+          class="upload-demo"
+          action=""
+          :on-change="handleChange"
+          :show-file-list="false"
+          :auto-upload="false">
+          <el-button size="large" :style='"padding: 7px;border-radius:"+store.state.option.style.el_button_border_radius+";"' type="primary"
+          ><el-icon size="25px" style="margin-right: 4px"
+          ><folder-add /></el-icon
+          >读取Excel文件</el-button
+          >
+        </el-upload>
             
-            <div style="margin-left: 20px;font-size: 13px;color: gray;font-family: Arial, Helvetica, sans-serif;display: flex;align-items: end;margin-bottom: 10px; ">
-              从本地文件上传用于训练模型的数据集<el-button @click="pd.onDialog = true;" type="primary" link style="margin-left: 10px;padding: 0;">
-              <div style="font-size: 14px;">查看说明</div></el-button>
-            </div>
+        <div style="margin-left: 20px;font-size: 13px;color: gray;font-family: Arial, Helvetica, sans-serif;display: flex;align-items: end;margin-bottom: 10px; ">
+          从本地文件上传用于训练模型的数据集<el-button @click="pd.onDialog = true;" type="primary" link style="margin-left: 10px;padding: 0;">
+            <div style="font-size: 14px;">查看说明</div></el-button>
         </div>
-        <div class="scollRow">
-          <div class="tableRow">
-            <el-empty
+      </div>
+      <div class="scollRow">
+        <div class="tableRow">
+          <el-empty
             v-if="!d.onLoaded"
             style="height: 100%; background: #f7f7f7"
             description="请载入表格（支持xlsx、csv格式）"
-            />
-            <el-auto-resizer v-else>
-              <template #default="{ height, width }">
-                <el-table-v2
-                  :width="width"
-                  :height="height"
-                  fixed
-                  :columns="d.sampleColumnNames_forTable"
-                  :data="d.data_forTable"
-                >
-                  <!-- <el-table-column
+          />
+          <el-auto-resizer v-else>
+            <template #default="{ height, width }">
+              <el-table-v2
+                :width="width"
+                :height="height"
+                fixed
+                :columns="d.sampleColumnNames_forTable"
+                :data="d.data_forTable"
+              >
+                <!-- <el-table-column
                     v-for="(item, index) in d.sampleColumnNames"
                     :key="index"
                     :prop="item"
                     :label="item"
                   ></el-table-column> -->
-                </el-table-v2>
-              </template>
-              </el-auto-resizer>
+              </el-table-v2>
+            </template>
+          </el-auto-resizer>
           
 
 
-          </div>
+        </div>
 
               
               
-          <div class="optionRow">
+        <div class="optionRow">
+          <div class="subTitleRow">
+            <div class="subTitleIcon">
+              <el-icon size="25px" style="marginright: 4px"
+              ><histogram
+              /></el-icon>
+            </div>
+            <div class="subTitleLabel">数据集属性</div>
+          </div>
+          <div style="min-width: 1080px;">
+            <el-descriptions class="margin-top" :column="4" border >
+              <el-descriptions-item width="120px" >
+                <template #label >
+                  <div class="cell-item" >
+                    <i class="iconfont" >&#xe87c;</i>
+                    样本总计1
+                  </div>
+                </template>
+                <div
+                  v-if="!d.onLoaded"
+                  style="color: gray; font-size: 11px"
+                >
+                  等待加载
+                </div>
+                <div v-else>{{ d.sampleRowCount }}</div>
+              </el-descriptions-item>
+              <el-descriptions-item width="120px">
+                <template #label>
+                  <div class="cell-item">
+                    <i class="iconfont">&#xe618;</i>
+
+                    样本列数
+                  </div>
+                </template>
+                <div
+                  v-if="!d.onLoaded"
+                  style="color: gray; font-size: 11px"
+                >
+                  等待加载
+                </div>
+                <div v-else>{{ d.sampleColumnCount }}</div>
+              </el-descriptions-item>
+              <el-descriptions-item width="120px">
+                <template #label>
+                  <div class="cell-item">
+                    <i class="iconfont"> &#xe60e; </i>
+                    特征维度数
+                  </div>
+                </template>
+                <div
+                  v-if="!d.onLoaded"
+                  style="color: gray; font-size: 11px"
+                >
+                  等待加载
+                </div>
+                <div v-else>{{ d.selectXColNames.length }}</div>
+              </el-descriptions-item>
+              <el-descriptions-item width="120px">
+                <template #label>
+                  <div class="cell-item">
+                    <i class="iconfont"> &#xe618; </i>
+                    标签维度数
+                  </div>
+                </template>
+                <div
+                  v-if="!d.onLoaded"
+                  style="color: gray; font-size: 11px"
+                >
+                  等待加载
+                </div>
+                <div v-else>{{ d.selectYColNames.length }}</div>
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    <i class="iconfont"> &#xe60a; </i>
+                    数据状态
+                  </div>
+                </template>
+                <el-tag
+                  v-if="
+                    d.selectXColNames.length == 0 || d.selectYColNames.length == 0
+                  "
+                  class="ml-2"
+                  type="warning"
+                ><div style="font-size: 12px;">未处理</div></el-tag>
+                <el-tag v-else class="ml-2" type="success"
+                ><div style="font-size: 12px;">已处理</div></el-tag>
+                  
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    <i class="iconfont"> &#xe71c; </i>
+                    选择特征列
+                  </div>
+                </template>
+                <el-select
+                  v-model="d.selectXColNames"
+                  multiple
+                  collapse-tags
+                  @change="selectOnchange"
+                  placeholder="特征列"
+                  class="excelSecletLabel"
+                  style="width: 240px"
+                >
+                  <el-option
+                    v-for="item in d.sampleColumnNames"
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    <i class="iconfont"> &#xe71c; </i>
+                    选择标签列
+                  </div>
+                </template>
+                <el-select
+                  v-model="d.selectYColNames"
+                  multiple
+                  collapse-tags
+                  placeholder="标签列"
+                  class="excelSecletLabel"
+                  style="width: 240px"
+                >
+                  <el-option
+                    v-for="item in d.sampleColumnNames"
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </el-descriptions-item>
+            </el-descriptions>
+          </div>
+
+          <el-divider style="margin-bottom: 5px;min-width: 1080px;" />
+          <div style="min-width: 1080px;">
             <div class="subTitleRow">
               <div class="subTitleIcon">
                 <el-icon size="25px" style="marginright: 4px"
-                  ><histogram
+                ><data-line
                 /></el-icon>
               </div>
-              <div class="subTitleLabel">数据集属性</div>
+              <div class="subTitleLabel">预处理</div>
+              <el-button :disabled="(d.onloaded)" style="margin-left: 10px" size="small" @click="queryPreParameters()">
+                <div style="font-size: 12px">查看参数</div>
+              </el-button>
             </div>
-            <div style="min-width: 1080px;">
-              <el-descriptions class="margin-top" :column="4" border >
-                <el-descriptions-item width="120px" >
-                  <template #label >
-                    <div class="cell-item" >
-                      <i class="iconfont" >&#xe87c;</i>
-                      样本总计1
-                    </div>
-                  </template>
-                  <div
-                    v-if="!d.onLoaded"
-                    style="color: gray; font-size: 11px"
-                  >
-                    等待加载
-                  </div>
-                  <div v-else>{{ d.sampleRowCount }}</div>
-                </el-descriptions-item>
-                <el-descriptions-item width="120px">
-                  <template #label>
-                    <div class="cell-item">
-                      <i class="iconfont">&#xe618;</i>
-
-                      样本列数
-                    </div>
-                  </template>
-                  <div
-                    v-if="!d.onLoaded"
-                    style="color: gray; font-size: 11px"
-                  >
-                    等待加载
-                  </div>
-                  <div v-else>{{ d.sampleColumnCount }}</div>
-                </el-descriptions-item>
-                <el-descriptions-item width="120px">
-                  <template #label>
-                    <div class="cell-item">
-                      <i class="iconfont"> &#xe60e; </i>
-                      特征维度数
-                    </div>
-                  </template>
-                  <div
-                    v-if="!d.onLoaded"
-                    style="color: gray; font-size: 11px"
-                  >
-                    等待加载
-                  </div>
-                  <div v-else>{{ d.selectXColNames.length }}</div>
-                </el-descriptions-item>
-                <el-descriptions-item width="120px">
-                  <template #label>
-                    <div class="cell-item">
-                      <i class="iconfont"> &#xe618; </i>
-                      标签维度数
-                    </div>
-                  </template>
-                  <div
-                    v-if="!d.onLoaded"
-                    style="color: gray; font-size: 11px"
-                  >
-                    等待加载
-                  </div>
-                  <div v-else>{{ d.selectYColNames.length }}</div>
-                </el-descriptions-item>
-                <el-descriptions-item>
-                  <template #label>
-                    <div class="cell-item">
-                      <i class="iconfont"> &#xe60a; </i>
-                      数据状态
-                    </div>
-                  </template>
-                  <el-tag
-                    v-if="
-                      d.selectXColNames.length == 0 || d.selectYColNames.length == 0
-                    "
-                    class="ml-2"
-                    type="warning"
-                    ><div style="font-size: 12px;">未处理</div></el-tag>
-                  <el-tag v-else class="ml-2" type="success"
-                    ><div style="font-size: 12px;">已处理</div></el-tag>
+            <el-row v-if="d.serverDataOnLoaded"
+                    style="height: 80px; margin-top: -20px"
+                    align="middle"
+            >
+              <el-col :span="1"></el-col>
+              <el-col :span="16">
+                <el-radio-group v-model="d.preProcessVal" >
+                  <el-radio size="small" v-for="(item,index) in d.preProcess" :key="index" :label="item.val"
+                  ><div style="font-size: 17px">{{item.name}}</div>
+                  </el-radio>
                   
-                </el-descriptions-item>
-                <el-descriptions-item>
-                  <template #label>
-                    <div class="cell-item">
-                      <i class="iconfont"> &#xe71c; </i>
-                      选择特征列
-                    </div>
-                  </template>
-                  <el-select
-                    v-model="d.selectXColNames"
-                    multiple
-                    collapse-tags
-                    @change="selectOnchange"
-                    placeholder="特征列"
-                    class="excelSecletLabel"
-                    style="width: 240px"
-                  >
-                    <el-option
-                      v-for="item in d.sampleColumnNames"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                    />
-                  </el-select>
-                </el-descriptions-item>
-                <el-descriptions-item>
-                  <template #label>
-                    <div class="cell-item">
-                      <i class="iconfont"> &#xe71c; </i>
-                      选择标签列
-                    </div>
-                  </template>
-                  <el-select
-                    v-model="d.selectYColNames"
-                    multiple
-                    collapse-tags
-                    placeholder="标签列"
-                    class="excelSecletLabel"
-                    style="width: 240px"
-                  >
-                    <el-option
-                      v-for="item in d.sampleColumnNames"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                    />
-                  </el-select>
-                </el-descriptions-item>
-              </el-descriptions>
-            </div>
-
-            <el-divider style="margin-bottom: 5px;min-width: 1080px;" />
-            <div style="min-width: 1080px;">
-              <div class="subTitleRow">
-                <div class="subTitleIcon">
-                  <el-icon size="25px" style="marginright: 4px"
-                    ><data-line
-                  /></el-icon>
-                </div>
-                <div class="subTitleLabel">预处理</div>
-                <el-button :disabled="(d.onloaded)" style="margin-left: 10px" size="small" @click="queryPreParameters()">
-                  <div style="font-size: 12px">查看参数</div>
-                </el-button>
-              </div>
-              <el-row v-if="d.serverDataOnLoaded"
-                style="background: ; height: 80px; margin-top: -20px"
-                align="middle"
-              >
-                <el-col :span="1"></el-col>
-                <el-col :span="16">
-                  <el-radio-group v-model="d.preProcessVal" >
-                    <el-radio size="small" v-for="(item,index) in d.preProcess" :key="index" :label="item.val"
-                    ><div style="font-size: 17px">{{item.name}}</div>
-                    </el-radio>
-                  
-                  </el-radio-group>
-                </el-col>
-                <el-divider direction="vertical" />
-                <el-col :span="1">
-                  <div style="">预览</div>
-                </el-col>
-                <el-col :span="5" style="display: flex; align-items: center;">
-                  <vue-latex
-                    :expression="d.preProcess[d.preProcess.map(function(e) { return e.val; }).indexOf(d.preProcessVal)].expression"
-                    display-mode/>
-                  <el-icon style="marginleft: 6px; color: lightgray"
-                    ><question-filled
-                  /></el-icon>
-                </el-col>
-              </el-row>
-            </div>
+                </el-radio-group>
+              </el-col>
+              <el-divider direction="vertical" />
+              <el-col :span="1">
+                <div style="">预览</div>
+              </el-col>
+              <el-col :span="5" style="display: flex; align-items: center;">
+                <vue-latex
+                  :expression="d.preProcess[d.preProcess.map(function(e: any) { return e.val; }).indexOf(d.preProcessVal)].expression"
+                  display-mode/>
+                <el-icon style="margin-left: 6px; color: lightgray"
+                ><question-filled
+                /></el-icon>
+              </el-col>
+            </el-row>
           </div>
-
-
         </div>
 
 
-
-
-        <div class="bottomRow">
-          <el-button-group>
-            <el-button hidden="hidden" size="large" type="info" plain disabled><el-icon class="el-icon--right" style=""><ArrowLeft /></el-icon>上一步</el-button>
-            <el-button @click="$router.replace({path: store.state.router.page_predict_settings});"
-              size="large" type="primary" plain>下一步<el-icon class="el-icon--right"><ArrowRight /></el-icon>
-            </el-button>
-          </el-button-group>
-          <el-divider direction="vertical" />
-          <el-button style="color: gray" size="small" @click="pageReset()" link>重置本步骤</el-button>
-        </div>
-      </el-card>
-      <div class="bottomArea">
-      <div class="step">
-        <el-steps
-          :active="d.step"
-          finish-status="success"
-          simple>
-          <el-step title="导入数据" />
-          <el-step title="预处理" />
-          <el-step title="选择网络" />
-          <el-step title="训练模型" />
-          <el-step title="完成" />
-        </el-steps>
       </div>
-    </div>
 
-    <el-dialog
-      v-model="pd.onQueryingParams"
-      append-to-body
-      align-center
-      >
-      <template #header>
-        <div style="margin-bottom: -20px;display: flex;">
-          <div style="margin-left: 0px;font-size: 23px;margin-top: 0px;"><el-icon><Setting /></el-icon></div>
-          <div style="margin-left: 4px;font-size: 20px;">过程参数</div>
-        </div>
-      </template>
+
+
+
+      <div class="bottomRow">
+        <el-button-group>
+          <el-button hidden="hidden" size="large" type="info" plain disabled><el-icon class="el-icon--right" style=""><ArrowLeft /></el-icon>上一步</el-button>
+          <el-button @click="$router.replace({path: store.state.router.page_predict_settings});"
+                     size="large" type="primary" plain>下一步<el-icon class="el-icon--right"><ArrowRight /></el-icon>
+          </el-button>
+        </el-button-group>
+        <el-divider direction="vertical" />
+        <el-button style="color: gray" size="small" @click="pageReset()" link>重置本步骤</el-button>
+      </div>
+    </el-card>
+    <TrainStepBar :active="d.step" />
+
+    <InfoDialog v-model="pd.onQueryingParams" title="过程参数">
       <div class="dialogRow">预处理方式：{{d.preProcess[d.preProcess.map((e:any) => { return e.val; }).indexOf(d.preProcessVal)].name  }}</div>
       <div class="dialogRow2">使用模型预测时确保输入按照同样的方式进行了初始化。</div>
       <!-- <div class="dialogRow">参数:</div> -->
       <el-table :data="pd.dialogTableData" style="width: 100%"
-      empty-text="-/-">
+                empty-text="-/-">
         <el-table-column fixed prop="parameters" label="参数名" />
         <el-table-column v-for="(item,index) in pd.dialogTableCol" :prop="item.prop" :key="index" :label="item.label" />
         <el-table-column fixed="right" label="操作" >
           <template #default="scope">
-              <el-button
-                link
-                type="primary"
-                size="small"
-                @click.prevent="tableCopy(scope.row)"
-              >
-                <div style="color:#409EFF"><div style="font-size: 14px;">复制</div></div>
-              </el-button>
-            </template> 
+            <el-button
+              link
+              type="primary"
+              size="small"
+              @click.prevent="tableCopy(scope.row)"
+            >
+              <div style="color:#409EFF"><div style="font-size: 14px;">复制</div></div>
+            </el-button>
+          </template> 
         </el-table-column>
 
       </el-table>
-    </el-dialog>
+    </InfoDialog>
 
-    <el-dialog
-      v-model="pd.onDialog"
-      append-to-body
-      align-center
-      width="720"
-      >
-      <template #header>
-        <div style="margin-bottom: -20px;display: flex;">
-          <div style="margin-left: 0px;font-size: 23px;margin-top: 0px;"><el-icon><Setting /></el-icon></div>
-          <div style="margin-left: 4px;font-size: 20px;">数据集说明</div>
-        </div>
-      </template>
+    <InfoDialog v-model="pd.onDialog" title="数据集说明" width="720">
       <div class="dialogRow2">1. 表格的不同行代表不同的样本，不同的列代表样本的特征或标签。</div>
       <div class="dialogRow2">2. 表格<div style="color: darkred;">应含</div>表头。</div>
       <el-divider style="margin-top: 15px;margin-bottom: 20px;"><div style="color: gray;">示例</div></el-divider>
@@ -319,15 +285,11 @@
         <el-image :src="getServerStaticUrl('/src/images/pages/page_cnn_datasetSample.png', store.state.server.address, store.state.mock.enabled)"></el-image>
         <div style="font-size: 16px;margin-top: 5px;">特征或标签列：8，样本数：9</div>
       </div>
-    </el-dialog>
+    </InfoDialog>
   </div>
 
 </template>
 <script setup lang="ts">
-import * as XLSX from 'xlsx'
-
-
-
 import { ElMessage } from "element-plus";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
@@ -336,10 +298,14 @@ import { onMounted, onUnmounted, ref } from "@vue/runtime-core";
 import useClipboard from 'vue-clipboard3'
 import type { UploadProps, UploadUserFile } from 'element-plus'
 import { getServerStaticUrl } from '@/utils/staticAssets'
+import InfoDialog from '@/components/InfoDialog.vue'
+import TrainStepBar from '@/components/TrainStepBar.vue'
+import { useExcelTable } from '@/composables/useExcelTable'
 
 const $router = useRouter();
 const store = useStore();
 const { toClipboard } = useClipboard()
+const { readExcelAsJson, normalizeExcelRows, createTableV2 } = useExcelTable()
 
 let d = reactive(store.state.train);
 
@@ -351,17 +317,17 @@ let pd = reactive({
   dialogTableCol:[{}],
 })
 onMounted(() => {
-  d.step = d.onLoaded?2:0;
+  d.step = d.onLoaded ? 2 : 0;
 });
 onUnmounted(() => {
   store.state.status.menu[0].route = store.state.router.page_predict_import_data;
 })
 const selectOnchange = (val:any)=>{
-  if(val.length==0){
+  if (val.length == 0) {
     pd.queryValid = false
     d.queryValid = false
     return
-  }else{
+  } else {
     pd.queryValid = true
     d.queryValid = true
   }
@@ -371,7 +337,7 @@ const tableCopy = async(val:any) =>{
 
 }
 const queryPreParameters = () => {
-  if(!d.queryValid){
+  if (!d.queryValid) {
     ElMessage.error("还没有选择特征列。")
     return
   }
@@ -380,25 +346,25 @@ const queryPreParameters = () => {
   
   // 预处理列名
   pd.dialogTableCol = Array.from({"length":d.selectXColNames.length})
-  .map((_,index)=>({
-    prop:d.selectXColNames[index],
-    label:d.selectXColNames[index]
-  }))
+    .map((_, index)=>({
+      prop:d.selectXColNames[index],
+      label:d.selectXColNames[index]
+    }))
   let rowNames :any[] = []
 
   // 特征列数据
-  let colData = Array.from({"length":d.selectXColNames.length}).map((_,index)=>({
+  let colData = Array.from({"length":d.selectXColNames.length}).map((_, index)=>({
     colName:d.selectXColNames[index],
     val: <any>[],
   }))
-  for(let i = 0 ; i<d.data.length ; i++){
-    for(let j = 0 ; j<colData.length ; j++){
+  for (let i = 0 ; i < d.data.length ; i++) {
+    for (let j = 0 ; j < colData.length ; j++) {
       colData[j].val.push(d.data[i][colData[j].colName])
     }
   }
   
-  function calRes(type:string,data:number[]){
-    switch(type){
+  function calRes(type:string, data:number[]) {
+    switch (type) {
       case "0":
         return data[0].toFixed(2)
       case "min":
@@ -406,13 +372,13 @@ const queryPreParameters = () => {
       case "max":
         return Math.max(...data).toFixed(2)
       case "mean":
-        return (data.reduce((a,b)=>a+b,0)/data.length).toFixed(2)
+        return (data.reduce((a, b)=>a + b, 0) / data.length).toFixed(2)
       case "std":
-        let mean = data.reduce((a,b)=>a+b,0)/data.length
-        return (Math.sqrt(data.reduce((a,b)=>a+(b-mean)**2,0)/data.length)).toFixed(2)
+        let mean = data.reduce((a, b)=>a + b, 0) / data.length
+        return (Math.sqrt(data.reduce((a, b)=>a + (b - mean) ** 2, 0) / data.length)).toFixed(2)
     }
   }
-  switch(d.preProcessVal){
+  switch (d.preProcessVal) {
     case d.preProcess[0].val:
       rowNames = ["映射"];
       break;
@@ -423,57 +389,57 @@ const queryPreParameters = () => {
     case d.preProcess[3].val:
       rowNames = ["初值"]; break;
     case d.preProcess[4].val:
-      rowNames = ["均值","标准差"]; break;
+      rowNames = ["均值", "标准差"]; break;
     case d.preProcess[5].val:
-      rowNames = ["最小值","最大值"]; break;
+      rowNames = ["最小值", "最大值"]; break;
     case d.preProcess[6].val:
       rowNames = []; break;
   }
   
   pd.dialogTableData = rowNames
-  .map((rowName,index)=>{
-    let row:any = {parameters:rowName};
-    switch(rowName){
-      case "映射":
-        for(let r = 0; r<d.selectXColNames.length;r++){
-          row[d.selectXColNames[r]] = d.preProcessVal==d.preProcess[0].val?"log10":"ln"
-        }
-        break;
-      case "均值":
-        for(let r = 0; r<d.selectXColNames.length;r++){
-          let data = colData[colData.findIndex((item)=>item.colName==d.selectXColNames[r])].val
-          row[d.selectXColNames[r]] = calRes("mean",data)
-        }
-        break;
-      case "初值":
-        for(let r = 0; r<d.selectXColNames.length;r++){
+    .map((rowName, index)=>{
+      let row:any = {parameters:rowName};
+      switch (rowName) {
+        case "映射":
+          for (let r = 0; r < d.selectXColNames.length;r++) {
+            row[d.selectXColNames[r]] = d.preProcessVal == d.preProcess[0].val ? "log10" : "ln"
+          }
+          break;
+        case "均值":
+          for (let r = 0; r < d.selectXColNames.length;r++) {
+            let data = colData[colData.findIndex(item=>item.colName == d.selectXColNames[r])].val
+            row[d.selectXColNames[r]] = calRes("mean", data)
+          }
+          break;
+        case "初值":
+          for (let r = 0; r < d.selectXColNames.length;r++) {
           // let data = colData[colData.findIndex((item)=>item.colName==d.selectXColNames[r])].val
           // row[d.selectXColNames[r]] = calRes("0",data)
-          row[d.selectXColNames[r]] = d.data[0][d.selectXColNames[r]]
-        }
-        break;
-      case "标准差":
-        for(let r = 0; r<d.selectXColNames.length;r++){
-          let data = colData[colData.findIndex((item)=>item.colName==d.selectXColNames[r])].val
-          row[d.selectXColNames[r]] = calRes("std",data)
-        }
-        break;
-      case "最小值":
-        for(let r = 0; r<d.selectXColNames.length;r++){
-          let data = colData[colData.findIndex((item)=>item.colName==d.selectXColNames[r])].val
-          row[d.selectXColNames[r]] = calRes("min",data)
-        }
-        break;
-      case "最大值":
-        for(let r = 0; r<d.selectXColNames.length;r++){
-          let data = colData[colData.findIndex((item)=>item.colName==d.selectXColNames[r])].val
-          row[d.selectXColNames[r]] = calRes("max",data)
-        }
-        break;
+            row[d.selectXColNames[r]] = d.data[0][d.selectXColNames[r]]
+          }
+          break;
+        case "标准差":
+          for (let r = 0; r < d.selectXColNames.length;r++) {
+            let data = colData[colData.findIndex(item=>item.colName == d.selectXColNames[r])].val
+            row[d.selectXColNames[r]] = calRes("std", data)
+          }
+          break;
+        case "最小值":
+          for (let r = 0; r < d.selectXColNames.length;r++) {
+            let data = colData[colData.findIndex(item=>item.colName == d.selectXColNames[r])].val
+            row[d.selectXColNames[r]] = calRes("min", data)
+          }
+          break;
+        case "最大值":
+          for (let r = 0; r < d.selectXColNames.length;r++) {
+            let data = colData[colData.findIndex(item=>item.colName == d.selectXColNames[r])].val
+            row[d.selectXColNames[r]] = calRes("max", data)
+          }
+          break;
+      }
+      return row
     }
-    return row
-  }
-  )
+    )
 
 
 }
@@ -494,7 +460,7 @@ function reloadDefaultSettings() {
   d.selectXColNames = [];
   d.selectYColNames = [];
 }
-const handleChange: UploadProps['onChange'] = (file) => {
+const handleChange: UploadProps['onChange'] = file => {
   // ElMessage('success')
   let fileContent;
   reloadDefaultSettings();
@@ -510,61 +476,27 @@ const handleChange: UploadProps['onChange'] = (file) => {
       ElMessage.error("附件格式错误，请重新上传！")
     }
   } else {
-      ElMessage.error("请上传附件！")
+    ElMessage.error("请上传附件！")
   }
 }
-function importfile(obj:any) {
-  const reader = new FileReader();
-  reader.readAsArrayBuffer(obj);
-  reader.onload = function () {
-    const buffer:any = reader.result;
-    const bytes = new Uint8Array(buffer);
-    const length = bytes.byteLength;
-    let binary = "";
-    for (let i = 0; i < length; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    const wb = XLSX.read(binary, {
-      type: "binary",
-    });
-    const outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-    let data = [...outdata];
-    const arr:any = [];
-    let coName = Object.keys(data[0]);
-    d.sampleColumnCount = coName.length;
-    let rowSum = 0;
-    data.map((v) => {
-      const obj:any = {};
-      for (let i = 0; i < coName.length; i++) {
-        obj[coName[i]] = v[coName[i]];
-      }
-      rowSum++;
-      d.sampleColumnNames = coName;
-      arr.push(obj);
-    });
-    d.sampleRowCount = rowSum;
-    d.data = arr;
-    d.onLoaded = true;
-    d.step = 1;
+async function importfile(obj:any) {
+  const outdata = await readExcelAsJson(obj)
+  const table = normalizeExcelRows(outdata)
+  d.sampleColumnCount = table.columnCount;
+  d.sampleColumnNames = table.columnNames;
+  d.sampleRowCount = table.rowCount;
+  d.data = table.rows;
+  d.onLoaded = true;
+  d.step = 1;
+
+  const tableV2 = createTableV2(d.data, d.sampleColumnNames)
+  d.data_forTable = tableV2.data
+  d.sampleColumnNames_forTable = tableV2.columns
 
 
-    d.data_forTable = d.data.map((val:any,rowIndex:any) => {
-      val.id = rowIndex
-      val.parentId = null
-      return val
-    })
-    d.sampleColumnNames_forTable = d.sampleColumnNames.map((val:any,index:any) => ({
-      key: `${index}`,
-      dataKey: `${val}`,
-      title: val,
-      width: 150,
-    }))
-
-
-    // console.log(d.sampleColumnNames)
-    // console.log(d.data)
-    // console.log(d.sampleColumnNames)
-  };
+  // console.log(d.sampleColumnNames)
+  // console.log(d.data)
+  // console.log(d.sampleColumnNames)
 }
 
 
@@ -659,30 +591,6 @@ body,
     //   background-color: red;
     //   height: 100%;
     // }
-  }
-}
-.bottomArea{
-  width:calc(100% - 220px - 100px - 0px);
-  overflow: hidden;
-  height: 46px;
-
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 8px;
-  padding-right: 8px;
-
-  position: absolute;
-  bottom: 42px;
-  left: calc(220px + 50px - 8px);
-  max-width: 1600px;
-  align-items: center;
-  // background: #509bfe2d;
-
-  .step{
-    height: 46px;
-    min-width: 810px;
-    // background: red;
-    box-shadow: 0px 0px 8px 0px rgba(109, 109, 109, 0.205);
   }
 }
 ::-webkit-scrollbar {

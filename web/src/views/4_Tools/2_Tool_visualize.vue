@@ -11,7 +11,7 @@
           :auto-upload="false"
           :on-change="handleChange"
           accept=".xlsx"
-          >
+        >
           <template #trigger>
             <el-button size="small" plain type="primary" style="margin-top: 0px;;margin-left: 8px;"><div style="font-size: 13px;">载入表格</div></el-button>
           </template>
@@ -83,7 +83,7 @@ onUnmounted(() => {
 watch(
   () => d.option,
   () => {
-    if(Object.keys(chart).length == 0)
+    if (Object.keys(chart).length == 0)
       return;
 
     chart.setOption(d.option, true);
@@ -94,7 +94,7 @@ watch(
 const LOAD = ()=>{
 
 }
-const handleChange: UploadProps['onChange'] = (file) => {
+const handleChange: UploadProps['onChange'] = file => {
   let fileContent = file.raw;
   const fileName = file.name;
   const fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -106,13 +106,13 @@ const handleChange: UploadProps['onChange'] = (file) => {
       ElMessage.error("附件格式错误，请重新上传！")
     }
   } else {
-      ElMessage.error("请上传附件！")
+    ElMessage.error("请上传附件！")
   }
 }
 function importfile(obj:any) {
   const reader = new FileReader();
   reader.readAsArrayBuffer(obj);
-  reader.onload = function () {
+  reader.onload = function() {
     const buffer:any = reader.result;
     const bytes = new Uint8Array(buffer);
     const length = bytes.byteLength;
@@ -124,46 +124,46 @@ function importfile(obj:any) {
       type: "binary",
     });
     let DATA :any;
-    if(d.readType=="按列读取"){
-        DATA = d.hasTitle?XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]):XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1});
+    if (d.readType == "按列读取") {
+      DATA = d.hasTitle ? XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]) : XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1});
       
 
-      d.sampleCount = d.hasTitle?Object.keys(DATA[0]).length:DATA[0].length
+      d.sampleCount = d.hasTitle ? Object.keys(DATA[0]).length : DATA[0].length
       d.sampleLength = DATA.length
 
-      if(d.sampleCount>10){
-        ElMessage.error("样本数量："+d.sampleCount+"大于10，无法导入。")
+      if (d.sampleCount > 10) {
+        ElMessage.error("样本数量：" + d.sampleCount + "大于10，无法导入。")
         return
       }
-      let Series = Array.from({length:d.sampleCount}).map((_)=>(<any>[]))
-        DATA.map((val:any,index:number)=>{
-        if(d.hasTitle){
+      let Series = Array.from({length:d.sampleCount}).map(_=>(<any>[]))
+      DATA.map((val:any, index:number)=>{
+        if (d.hasTitle) {
           let i = 0 ;
-          for(let key in val){
+          for (let key in val) {
             Series[i].push(val[key])
             i++;
           }
-        }else{
-          for(let i = 0 ;i<Series.length;i++){
-              Series[i].push(val[i])
+        } else {
+          for (let i = 0 ;i < Series.length;i++) {
+            Series[i].push(val[i])
           }
         }
       })
       
 
       let label = []
-      let ss = Series.map((val:any,index:number)=>({
+      let ss = Series.map((val:any, index:number)=>({
         data:val,
         type:'line',
-        name:!d.hasTitle?`默认类别${index+1}`:Object.keys(DATA[0])[index],
+        name:!d.hasTitle ? `默认类别${index + 1}` : Object.keys(DATA[0])[index],
       }))
-      for(let i = 0 ;i<ss.length;i++)
-        label.push("默认类别"+(i+1))
+      for (let i = 0 ;i < ss.length;i++)
+        label.push("默认类别" + (i + 1))
 
       console.log(ss)
       d.option.series = ss
-      d.option.legend = {data:d.hasTitle?Object.keys(DATA[0]):label}
-      d.option.xAxis.data = Series[0].map((_,index:number)=>{return index+1})
+      d.option.legend = {data:d.hasTitle ? Object.keys(DATA[0]) : label}
+      d.option.xAxis.data = Series[0].map((_, index:number)=>{return index + 1})
     }
     // console.log(d.option)
 

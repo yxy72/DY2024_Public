@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="ysArea">
-<div id="viz"></div>
+      <div id="viz"></div>
       <!-- 攻击区<el-input v-model="gj" label="s">2</el-input>
       倍率区<el-input v-model="bl" label="s">2</el-input>
       增伤区<el-input v-model="zs" label="s">2</el-input>

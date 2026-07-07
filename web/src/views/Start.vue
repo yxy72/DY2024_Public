@@ -11,10 +11,10 @@
         <div class="card_row2">
           <div>
             <el-icon size="22"><WarningFilled /></el-icon>
-            <span>快照</span>
-            页面通过快照/mock预加载数据。
+            <span>静态页面</span>
+            页面通过快照/mock展示数据。
 
-            </div>
+          </div>
         </div>
         <div class="card_row3">
 
@@ -64,7 +64,7 @@ const Navigation = [
       { Name:"训练一个模型...", Click: ()=>{ $router.push({ path: store.state.router.page_predict_import_data }); }},
       { Name:"预测数据...", Click: ()=>{ $router.push({ path: store.state.router.page_predict_predict }); }},
     ]
-  },{
+  }, {
     name:"知识图谱",
     style:"color:#0fae57",
     src: predict2Img,
@@ -73,7 +73,7 @@ const Navigation = [
       { Name:"知识图谱交互...", Click: ()=>{ $router.push({ path: store.state.router.page_kg_display }); }},
       { Name:"知识嵌入...", Click: ()=>{ $router.push({ path: store.state.router.page_kg_embed }); }},
     ]
-  },{
+  }, {
     name:"数据分析",
     style:"color:#ff7226",
     src: predict3Img,
@@ -83,7 +83,7 @@ const Navigation = [
       { Name:"产品质量分析...", Click: ()=>{ $router.push({ path: store.state.router.page_analyze }) }},
       { Name:"工艺优化...", Click: ()=>{ $router.push({ path: store.state.router.page_optimization }) }},
     ]
-  },{
+  }, {
     name:"实用工具",
     style:"color:#409EFF",
     src: toolImg,

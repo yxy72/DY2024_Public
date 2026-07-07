@@ -6,7 +6,7 @@
           <div class="subTitleRow">
             <div class="subTitleIcon">
               <el-icon size="25px" style="marginright: 4px"
-                ><histogram
+              ><histogram
               /></el-icon>
             </div>
             <div class="subTitleLabel">训练参数</div>
@@ -86,37 +86,37 @@
                 </div>
               </template>
               <el-tag class="ml-2" type="success"
-                ><div style="fontsize: 10px">
-                  loss = {{d.parameters.loss.val}}
-                </div></el-tag
+              ><div style="fontsize: 10px">
+                loss = {{d.parameters.loss.val}}
+              </div></el-tag
               >
               <el-tag class="ml-2" 
-                ><div style="fontsize: 10px">
-                  optimizer = {{d.parameters.optimizer.val}}
-                </div></el-tag
+              ><div style="fontsize: 10px">
+                optimizer = {{d.parameters.optimizer.val}}
+              </div></el-tag
               >
               <el-tag class="ml-2" 
-                ><div style="fontsize: 10px">
-                  lr = {{d.parameters.learning_rate.val}}
-                </div></el-tag
+              ><div style="fontsize: 10px">
+                lr = {{d.parameters.learning_rate.val}}
+              </div></el-tag
               >
               <el-tag class="ml-2" type="warning"
-                ><div style="fontsize: 10px">
-                  epoch = {{d.parameters.epoch.val}}
-                </div></el-tag
+              ><div style="fontsize: 10px">
+                epoch = {{d.parameters.epoch.val}}
+              </div></el-tag
               >
               <el-tag class="ml-2" type="warning"
-                ><div style="fontsize: 10px">
-                  batchSize = {{d.parameters.batch_size.val}}
-                </div></el-tag
+              ><div style="fontsize: 10px">
+                batchSize = {{d.parameters.batch_size.val}}
+              </div></el-tag
               >
             </el-descriptions-item>
           </el-descriptions>
           <div class="btnRow">
             <el-button type="primary"
-            :style='"border-radius:"+store.state.option.style.el_button_border_radius+";"'
-              @click="TRAIN()"
-              :loading="d.onTraining">开始训练</el-button>
+                       :style='"border-radius:"+store.state.option.style.el_button_border_radius+";"'
+                       @click="TRAIN()"
+                       :loading="d.onTraining">开始训练</el-button>
             <!-- <el-button
               :type="d.onTrained ? 'success' : 'info'"
               :disabled="!d.onTrained" @click="SAVE()">保存到平台</el-button> -->
@@ -125,7 +125,7 @@
               <div style="font-size: 16px;">中止训练</div></el-button>
 
             <el-button
-            :style='"border-radius:"+store.state.option.style.el_button_border_radius+";"'
+              :style='"border-radius:"+store.state.option.style.el_button_border_radius+";"'
 
               :type="d.onTrained ? 'success' : 'info'"
               :disabled="!d.onTrained"
@@ -158,27 +158,14 @@
             <el-icon class="el-icon--right" style=""><ArrowLeft /></el-icon>上一步
           </el-button>
           <el-button size="large" disabled type="info" plain>下一步<el-icon class="el-icon--right"
-              ><ArrowRight /></el-icon
+          ><ArrowRight /></el-icon
           ></el-button>
         </el-button-group>
       </div>
       
 
     </el-card>
-    <div class="bottomArea">
-      <div class="step">
-        <el-steps
-          :active="d.step"
-          finish-status="success"
-          simple>
-          <el-step title="导入数据" />
-          <el-step title="预处理" />
-          <el-step title="选择网络" />
-          <el-step title="训练模型" />
-          <el-step title="完成" />
-        </el-steps>
-      </div>
-    </div>
+    <TrainStepBar :active="d.step" />
   </div>
 </template>
 <script setup lang="ts">
@@ -188,6 +175,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { onBeforeMount, onMounted, onUnmounted } from "@vue/runtime-core";
 import * as global from "@/utils/global"
+import TrainStepBar from '@/components/TrainStepBar.vue'
 
 const $router = useRouter();
 const store = useStore();
@@ -199,7 +187,7 @@ let d = reactive(store.state.train);
 //   console.log(d.preProcess);
 // })
 onMounted(() => {
-  d.step = d.onLoaded?3:0;
+  d.step = d.onLoaded ? 3 : 0;
 });
 onUnmounted(() => {
   store.state.status.menu[0].route = store.state.router.page_predict_export_data;
@@ -209,37 +197,37 @@ function test() {
 }
 
 function rPush(msg:string, iftime = true) {
-  if (iftime) d.trainingInfo.push('['+global.getTime_hms()+'] ' + msg);
+  if (iftime) d.trainingInfo.push('[' + global.getTime_hms() + '] ' + msg);
   else d.trainingInfo.push(msg);
 }
 function rClear() {
   d.trainingInfo = [];
 }
 const ABORT = ()=>{
-  rPush("正在发送中止命令...",true)
-  store.state.server.socket.send(JSON.stringify({type:"settings",model:"cnn",parameter:"training",parameter_val:false}))
+  rPush("正在发送中止命令...", true)
+  store.state.server.socket.send(JSON.stringify({type:"settings", model:"cnn", parameter:"training", parameter_val:false}))
   d.onTraining = false
   // rPush("训练已中止。",true)
 }
 function TRAIN() {
 
-  if(d.data == null){
+  if (d.data == null) {
     ElMessage.error("未选择训练样本。")
     return
   }
-  if(d.selectXColNames.length == 0 || d.selectYColNames.length ==0){
+  if (d.selectXColNames.length == 0 || d.selectYColNames.length == 0) {
     ElMessage.error("未选择特征列或标签列。")
     return
   }
-  if(d.parameters.loss.val == ""||d.parameters.optimizer.val == ""||d.parameters.learning_rate.val == ""||d.parameters.epoch.val == ""||d.parameters.batch_size.val == ""){
+  if (d.parameters.loss.val == "" || d.parameters.optimizer.val == "" || d.parameters.learning_rate.val == "" || d.parameters.epoch.val == "" || d.parameters.batch_size.val == "") {
     ElMessage.error("未选择模型参数。")
     return
   }
-  if(d.selectXColNames.length > 32 ){
+  if (d.selectXColNames.length > 32 ) {
     ElMessage.error("最多只支持32个特征维度选择。")
     return
   }
-  if(d.selectYColNames.length > 16 ){
+  if (d.selectYColNames.length > 16 ) {
     ElMessage.error("最多只支持16个标签维度选择。")
     return
   }
@@ -251,7 +239,7 @@ function TRAIN() {
   rClear();
   rPush("准备建立连接");
   // rPush("连接成功。");
-  rPush("数据预处理方式："+d.preProcessVal)
+  rPush("数据预处理方式：" + d.preProcessVal)
   rPush(
     "用户自定义参数:" + d.parameters.loss.val +
       "," + d.parameters.optimizer.val +
@@ -268,17 +256,17 @@ function TRAIN() {
   d.onTraining = true;
   d.onTrained = false;
 
-  store.state.server.socket.send(JSON.stringify({type:"settings",model:"cnn",parameter:"training",parameter_val:true}))
+  store.state.server.socket.send(JSON.stringify({type:"settings", model:"cnn", parameter:"training", parameter_val:true}))
   let sendData = (()=>{
     let xData = [], yData = [];
-    for(let i = 0 ; i<d.data.length ; i++){
+    for (let i = 0 ; i < d.data.length ; i++) {
       let row = []
-      for(let j = 0 ; j<d.selectXColNames.length; j++){
+      for (let j = 0 ; j < d.selectXColNames.length; j++) {
         row.push(Number(d.data[i][d.selectXColNames[j]]))
       }
       xData.push(row)
       row = []
-      for(let j = 0 ; j<d.selectYColNames.length; j++){
+      for (let j = 0 ; j < d.selectYColNames.length; j++) {
         row.push(Number(d.data[i][d.selectYColNames[j]]))
       }
       yData.push(row)
@@ -301,22 +289,22 @@ function TRAIN() {
         learning_rate:d.parameters.learning_rate.val,
         epoch:d.parameters.epoch.val,
         batch_size:d.parameters.batch_size.val
-      },preProcess:d.preProcessVal
-      ,sendData,
+      }, preProcess:d.preProcessVal
+      , sendData,
       username:store.state.status.loginUserName,
     },
-    (res)=>{
-      if(res.status == "success"){
+    res=>{
+      if (res.status == "success") {
         finishTime = new Date()
-        rPush('模型训练完成，用时：'+global.calTimelag(startTime,finishTime)+'。点击下载按钮存储到本地。');
+        rPush('模型训练完成，用时：' + global.calTimelag(startTime, finishTime) + '。点击下载按钮存储到本地。');
         d.step = 5;
         d.modelUrl = res.url
         d.modelName = res.name
         d.onTrained = true;
-      }else if(res.status == "abort"){
-        rPush("训练已中止，原因：用户中止训练。",true)
-      }else if(res.status == "error"){
-        rPush("训练已中止，原因：训练出现错误。",true)
+      } else if (res.status == "abort") {
+        rPush("训练已中止，原因：用户中止训练。", true)
+      } else if (res.status == "error") {
+        rPush("训练已中止，原因：训练出现错误。", true)
       }
     },
     ()=>{},
@@ -325,12 +313,12 @@ function TRAIN() {
 
 }
 
-function SAVE(){
+function SAVE() {
   global.httpPost(
     store.state.server.address + "/train/save/",
-    {username:store.state.status.loginUserName,filename:d.modelName},
-    (res)=>{
-      if(res.status==store.state.server.successResponse){
+    {username:store.state.status.loginUserName, filename:d.modelName},
+    res=>{
+      if (res.status == store.state.server.successResponse) {
         ElMessage.success('保存成功。')
       }
       else
@@ -342,7 +330,7 @@ function SAVE(){
 
 function DOWNLOAD() {
   ElMessage.info("下载已开始，请稍等。")
-  window.location.href = store.state.server.address + d.modelUrl+"?r="+Math.random();
+  window.location.href = store.state.server.address + d.modelUrl + "?r=" + Math.random();
 }
 
 </script>
@@ -437,30 +425,6 @@ body,
     //   color: rgba(100, 100, 100, 0.774);
     // }
 
-  }
-}
-.bottomArea{
-  width:calc(100% - 220px - 100px - 0px);
-  overflow: hidden;
-  height: 46px;
-
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 8px;
-  padding-right: 8px;
-
-  position: absolute;
-  bottom: 42px;
-  left: calc(220px + 50px - 8px);
-  max-width: 1600px;
-  align-items: center;
-  // background: #509bfe2d;
-
-  .step{
-    height: 46px;
-    min-width: 810px;
-    // background: red;
-    box-shadow: 0px 0px 8px 0px rgba(109, 109, 109, 0.205);
   }
 }
 .subTitleRow {

@@ -5,8 +5,8 @@ import store from '../store'
 import * as base64js from 'base64-js'
 import { getMockPostResponse } from './mock';
 
-export const setToken = (token:any,days:number=7)=>{
-  Cookies.set('token',token,{ expires: Number(days) })
+export const setToken = (token:any, days:number = 7)=>{
+  Cookies.set('token', token, { expires: Number(days) })
 }
 export const getToken = ()=>{
   return Cookies.get('token')
@@ -16,15 +16,15 @@ export const removeToken = ()=>{
   Cookies.remove('token');
 }
 
-export function httpPost(url:string,data:object,option:(res:any)=>void=()=>{},err_option:(err:any)=>void=()=>{},final:()=>void=()=>{}){
-  if(store.state.mock.enabled){
-    const mockResponse = getMockPostResponse(url,data);
-    if(mockResponse != undefined){
+export function httpPost(url:string, data:object, option:(res:any)=>void = ()=>{}, err_option:(err:any)=>void = ()=>{}, final:()=>void = ()=>{}) {
+  if (store.state.mock.enabled) {
+    const mockResponse = getMockPostResponse(url, data);
+    if (mockResponse != undefined) {
       Promise.resolve(mockResponse)
-        .then((res) => {
+        .then(res => {
           option(res);
         })
-        .catch((err) => {
+        .catch(err => {
           err_option(err);
           ElMessage.error("Mock 数据加载失败。")
         })
@@ -35,23 +35,23 @@ export function httpPost(url:string,data:object,option:(res:any)=>void=()=>{},er
     }
   }
 
-  axios.post(url,data,{
-      headers:{
-        token : getToken() ,
-        "Content-Type": "application/json",
-        // "Content-Type": "application/x-www-form-urlencoded",
+  axios.post(url, data, {
+    headers:{
+      token : getToken(),
+      "Content-Type": "application/json",
+      // "Content-Type": "application/x-www-form-urlencoded",
     }})
-    .then(function (res) {
+    .then(function(res) {
       option(res.data)
     })
-    .catch((error)=>{
+    .catch(error=>{
       err_option(error)
-      if(error.request)
+      if (error.request)
         ElMessage.error("数据返回异常。")
-      if(error.response){
+      if (error.response) {
         ElMessage.error("服务器访问失败。")
         
-    }
+      }
     })
     .finally(()=>{
       final();
@@ -59,30 +59,30 @@ export function httpPost(url:string,data:object,option:(res:any)=>void=()=>{},er
 }
 
 export function getTime() {
-	var time = new Date();
-	var year = time.getFullYear();
-	var month = time.getMonth() + 1;
-	var date = time.getDate();
-	var h = time.getHours();
-	var hh = h < 10 ? '0' + h : h;
-	var m = time.getMinutes();
-	var mm = m < 10 ? '0' + m : m;
-	var s = time.getSeconds();
-	var ss = s < 10 ? '0' + s : s;
-	return (year + "年" + month + "月" + date + "日 " + hh + ":" + mm + ":" + ss) ;
+  var time = new Date();
+  var year = time.getFullYear();
+  var month = time.getMonth() + 1;
+  var date = time.getDate();
+  var h = time.getHours();
+  var hh = h < 10 ? '0' + h : h;
+  var m = time.getMinutes();
+  var mm = m < 10 ? '0' + m : m;
+  var s = time.getSeconds();
+  var ss = s < 10 ? '0' + s : s;
+  return (year + "年" + month + "月" + date + "日 " + hh + ":" + mm + ":" + ss) ;
 }
 export function getTime_number() {
-	var time = new Date();
-	var year = time.getFullYear();
-	var month = time.getMonth() + 1;
-	var date = time.getDate();
-	var h = time.getHours();
-	var hh = h < 10 ? '0' + h : h;
-	var m = time.getMinutes();
-	var mm = m < 10 ? '0' + m : m;
-	var s = time.getSeconds();
-	var ss = s < 10 ? '0' + s : s;
-	return (year + "/" + month + "/" + date + "/ " + hh + ":" + mm + ":" + ss) ;
+  var time = new Date();
+  var year = time.getFullYear();
+  var month = time.getMonth() + 1;
+  var date = time.getDate();
+  var h = time.getHours();
+  var hh = h < 10 ? '0' + h : h;
+  var m = time.getMinutes();
+  var mm = m < 10 ? '0' + m : m;
+  var s = time.getSeconds();
+  var ss = s < 10 ? '0' + s : s;
+  return (year + "/" + month + "/" + date + "/ " + hh + ":" + mm + ":" + ss) ;
 }
 export function getTime_hms() {
   let d = new Date();
@@ -91,32 +91,32 @@ export function getTime_hms() {
   let h = d.getHours() < 10 ? "0" + String(d.getHours()) : d.getHours();
   return h + ":" + m + ":" + s ;
 }
-export function calTimelag(date1:Date,date2:Date){
+export function calTimelag(date1:Date, date2:Date) {
   let ms = (date2.getTime() - date1.getTime());
-  let h = Math.floor(ms/1000/3600) ;
-  let m = Math.floor(ms/1000%3600/60);
-  let s = (ms/1000%3600%60);
+  let h = Math.floor(ms / 1000 / 3600) ;
+  let m = Math.floor(ms / 1000 % 3600 / 60);
+  let s = (ms / 1000 % 3600 % 60);
   let ss = "";
-  if(s.toFixed(2)[0] != '0')
+  if (s.toFixed(2)[0] != '0')
     ss = s.toFixed(2)
-  else if(s.toFixed(2) != "0.00")
+  else if (s.toFixed(2) != "0.00")
     ss = s.toFixed(2)
   else
-    if(s.toFixed(3) != "0.000")
+    if (s.toFixed(3) != "0.000")
       ss = s.toFixed(3)
     else
-      if(s.toFixed(4) != "0.0000")
+      if (s.toFixed(4) != "0.0000")
         ss = s.toFixed(4)
-    else 
-      ss = s.toFixed(5)
-  let hh = h==0?"":String(h)+"时";
-  let mm = m==0?"":String(m)+"分";
-  ss = ss+"秒";
-  return hh + mm +ss ;
+      else 
+        ss = s.toFixed(5)
+  let hh = h == 0 ? "" : String(h) + "时";
+  let mm = m == 0 ? "" : String(m) + "分";
+  ss = ss + "秒";
+  return hh + mm + ss ;
 }
 //该函数给原始的对象数组加上id和parentId标识，生成适用于el-table-v2组件的数据对象数组
 //并生成适用于el-table-v2组件的列名对象数组
-export function getDataAndColumnsForTable(data:{}[],columns:string[],widths?:number[]){
+export function getDataAndColumnsForTable(data:{}[], columns:string[], widths?:number[]) {
   // {X_Minimum: 42, X_Maximum: 50, 
   // {X_Minimum: 645, X_Maximum: 6
   let obj = {
@@ -129,19 +129,19 @@ export function getDataAndColumnsForTable(data:{}[],columns:string[],widths?:num
   //   val.parentId = null
   //   return val
   // })
-  obj.columns = columns.map((val:any,index:any) => ({
+  obj.columns = columns.map((val:any, index:any) => ({
     key: `${index}`,
     dataKey: `${val}`,
     title: val,
-    width: widths == undefined?120:widths[index],
+    width: widths == undefined ? 120 : widths[index],
   }))
   return obj
 }
-export function transposition(arr:[][]){
+export function transposition(arr:[][]) {
   let trans:Array<any> = []
-  for(let i = 0 ; i <arr[0].length; i++){
+  for (let i = 0 ; i < arr[0].length; i++) {
     let temp:string[] = []
-    for(let j = 0; j <arr.length;j++){
+    for (let j = 0; j < arr.length;j++) {
       temp.push(arr[j][i])
     }
     trans.push(temp)
@@ -149,25 +149,25 @@ export function transposition(arr:[][]){
   return trans
 }
 export const getIP = (address:string)=>{
-    const reg_ip = /(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/g
-    const reg_port = /.+:(\d{1,5})/;
-    let ip_list = address.match(reg_ip)
-    let port_list = address.match(reg_port)
-    if(ip_list!=null && port_list != null)
-        return [ip_list[0],port_list[1]]
-    else
-        return ["null","null"]
+  const reg_ip = /(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/g
+  const reg_port = /.+:(\d{1,5})/;
+  let ip_list = address.match(reg_ip)
+  let port_list = address.match(reg_port)
+  if (ip_list != null && port_list != null)
+    return [ip_list[0], port_list[1]]
+  else
+    return ["null", "null"]
 }
 // 因为登录界面和APP.mouted界面都要用到
 export const graphInit = async(tips:boolean = false) => {
   httpPost(
     store.state.server.address + '/kg/init/',
     {},
-    (res)=>{
+    res=>{
       let g = store.state.kg.graph
       let s = store.state.server
       let c = store.state.config
-      if(res.status == store.state.server.successResponse){
+      if (res.status == store.state.server.successResponse) {
         g.url = res.obj.url;
         g.nodeClasses = res.obj.nodes;
         g.allNodesNum = res.obj.allNodesNum;
@@ -175,14 +175,14 @@ export const graphInit = async(tips:boolean = false) => {
         g.totalNums = res.obj.totalNums;
         let obj = <any>{}
         res.obj.nodes.map((val:any)=>{
-          obj[val]={
+          obj[val] = {
             label: "name",
             color:'color',
           }
         })
         let edgeObj = <any>{}
         res.obj.relations.map((val:any)=>{
-          edgeObj[val]={
+          edgeObj[val] = {
             label: "name",
           }
         })
@@ -205,7 +205,7 @@ export const graphInit = async(tips:boolean = false) => {
           },
           labels: obj,
           relationships: edgeObj,
-          initialCypher: 'MATCH (n)-[r]->(m) RETURN n,r,m LIMIT '+g.maxLoad+' '
+          initialCypher: 'MATCH (n)-[r]->(m) RETURN n,r,m LIMIT ' + g.maxLoad + ' '
         };
         g.onConnected = true;
         g.onConnecting = false
@@ -213,9 +213,9 @@ export const graphInit = async(tips:boolean = false) => {
         c.editKGIP = getIP(s.kg_address)[0]
         c.editKGPort = getIP(s.kg_address)[1]
         store.state.server.kg_onConnected = true
-        if(tips)
-            ElMessage.success("图形数据库连接成功。")
-      }else{
+        if (tips)
+          ElMessage.success("图形数据库连接成功。")
+      } else {
         // ElMessage.error("图形数据库连接失败")
         g.url = res.obj.url
         s.kg_address = res.obj.url
@@ -224,8 +224,8 @@ export const graphInit = async(tips:boolean = false) => {
         g.onConnected = false;
         g.onConnecting = false
         store.state.server.kg_onConnected = false
-        if(tips)
-            ElMessage.error("图形数据库连接失败。")
+        if (tips)
+          ElMessage.error("图形数据库连接失败。")
       }
     },
     ()=>{},
@@ -239,40 +239,40 @@ export const webSocketInit = () => {
   const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
   const socketBaseUrl = `${protocol}://${window.location.host}${store.state.server.socketBasePath}`
   store.state.server.socket = new WebSocket(socketBaseUrl + "/connect/" + store.state.status.loginUserName + "/")
-  store.state.server.socket.onmessage = function(event:any){
+  store.state.server.socket.onmessage = function(event:any) {
     let res = JSON.parse(event.data)
-    if(res.type=="cnn"){
-      if(res.kind=="loss"){
+    if (res.type == "cnn") {
+      if (res.kind == "loss") {
         store.state.train.trainingInfo.push(
-          "Epoch "+(res.info.epoch+1)+"/"+store.state.train.parameters.epoch.val+"\r\n" 
-          + " - loss: " +String(res.info.loss) 
-          + " - accuracy: " +String(res.info.accuracy) 
+          "Epoch " + (res.info.epoch + 1) + "/" + store.state.train.parameters.epoch.val + "\r\n" 
+          + " - loss: " + String(res.info.loss) 
+          + " - accuracy: " + String(res.info.accuracy) 
         )
-      }else if(res.kind=="text"){
-        store.state.train.trainingInfo.push(('['+getTime_hms()+'] ' + res.info))
+      } else if (res.kind == "text") {
+        store.state.train.trainingInfo.push(('[' + getTime_hms() + '] ' + res.info))
       }
-    }else if(res.type=="crnn"){
-      if(res.kind=="loss"){
+    } else if (res.type == "crnn") {
+      if (res.kind == "loss") {
         store.state.analyze.crnn.trainingInfo.push(
-          "Epoch "+(res.info.epoch+1)+"/"+res.info.EPOCH+"\r\n" 
-          + " - loss: " +String(res.info.loss)
-          + " - val_loss: " +String(res.info.val_loss) 
+          "Epoch " + (res.info.epoch + 1) + "/" + res.info.EPOCH + "\r\n" 
+          + " - loss: " + String(res.info.loss)
+          + " - val_loss: " + String(res.info.val_loss) 
         )
-      }else if(res.kind=="text"){
-        store.state.analyze.crnn.trainingInfo.push(('['+getTime_hms()+'] ' + res.info))
+      } else if (res.kind == "text") {
+        store.state.analyze.crnn.trainingInfo.push(('[' + getTime_hms() + '] ' + res.info))
       }
-    }else if(res.type=="lstm"){
-      if(res.kind=="loss"){
+    } else if (res.type == "lstm") {
+      if (res.kind == "loss") {
         store.state.analyze.lstm.trainingInfo.push(
-          "Epoch "+(res.info.epoch+1)+"/"+res.info.EPOCH+"\r\n" 
-          + " - loss: " +String(res.info.loss)
-          + " - val_loss: " +String(res.info.val_loss) 
+          "Epoch " + (res.info.epoch + 1) + "/" + res.info.EPOCH + "\r\n" 
+          + " - loss: " + String(res.info.loss)
+          + " - val_loss: " + String(res.info.val_loss) 
         )
-      }else if(res.kind=="text"){
-        store.state.analyze.lstm.trainingInfo.push(('['+getTime_hms()+'] ' + res.info))
+      } else if (res.kind == "text") {
+        store.state.analyze.lstm.trainingInfo.push(('[' + getTime_hms() + '] ' + res.info))
       }
-    }else if(res.type=="pso"){
-        store.state.optimization.info.push(('['+getTime_hms()+'] ' + res.info))
+    } else if (res.type == "pso") {
+      store.state.optimization.info.push(('[' + getTime_hms() + '] ' + res.info))
     }
   }
   console.log("WEBSOCKET DONE")
@@ -301,6 +301,6 @@ export const SYS_Init = () => {
 }
 
 //判断key
-export function isKey(key: string | number | symbol,object: object): key is keyof typeof object{
+export function isKey(key: string | number | symbol, object: object): key is keyof typeof object {
   return key in object;
 }

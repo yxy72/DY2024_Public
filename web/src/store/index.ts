@@ -46,14 +46,14 @@ export default createStore({
       socketBasePath:'/ws',
       // 使用lamba表达式就无效？为什么？
       // 后记：因为箭头函数没有this。
-      getIP:function(){ return global.getIP(this.address)[0]},
-      getPort:function(){ return global.getIP(this.address)[1]},
+      getIP:function() { return global.getIP(this.address)[0]},
+      getPort:function() { return global.getIP(this.address)[1]},
       ip:'',
       port:0,
       socket:<any>Object,
       kg_address:'',
-      getKGIP:function(){ return global.getIP(this.kg_address)[0]},
-      getKGPort:function(){ return global.getIP(this.kg_address)[1]},
+      getKGIP:function() { return global.getIP(this.kg_address)[0]},
+      getKGPort:function() { return global.getIP(this.kg_address)[1]},
       kg_onConnecting:true,
       kg_onConnected:false,
       successResponse:"success",
@@ -78,11 +78,11 @@ export default createStore({
       //     return this.lastPage[target]
       // },
       menu:[
-        {label:"质量预测",id:"0",route:""},
-        {label:"时序分析",id:"1",route:""},
-        {label:"知识图谱",id:"2",route:""},
-        {label:"应用工具",id:"3",route:""},
-        {label:"参数配置",id:"4",route:""},
+        {label:"质量预测", id:"0", route:""},
+        {label:"时序分析", id:"1", route:""},
+        {label:"知识图谱", id:"2", route:""},
+        {label:"应用工具", id:"3", route:""},
+        {label:"参数配置", id:"4", route:""},
       ]
     },
     train:{
@@ -111,7 +111,7 @@ export default createStore({
       serverDataOnLoaded:false,
       // 以下数据现在来自于服务器
       preProcessVal:"none",
-      preProcess:[{"val":"none","name":"none","expression":""},],
+      preProcess:[{"val":"none", "name":"none", "expression":""},],
       parameters:{
         "loss":{},
         "optimizer":{},
@@ -304,10 +304,10 @@ export default createStore({
         sampleData:[],
         sampleDataColumns:[],
         sampleInfo:[
-          {name:"文件名",   icon:"iconfont icon-24gl-tags2",val:""},
-          {name:"文件大小", icon:"iconfont icon-shiti1",val:""},
-          {name:"序列长度", icon:"iconfont icon-shuchu2",val:""},
-          {name:"样本个数", icon:"iconfont icon-shuzi2",val:""},],
+          {name:"文件名",   icon:"iconfont icon-24gl-tags2", val:""},
+          {name:"文件大小", icon:"iconfont icon-shiti1", val:""},
+          {name:"序列长度", icon:"iconfont icon-shuchu2", val:""},
+          {name:"样本个数", icon:"iconfont icon-shuzi2", val:""},],
 
         onTraining:false,
         onTrained:false,
@@ -317,10 +317,10 @@ export default createStore({
         dataSetOnloaded:false,
         datasetData:[],
         datasetInfo:[
-          {name:"序列长度", icon:"iconfont icon-24gl-tags2",val:"等待加载 . . ."},
-          {name:"窗口大小", icon:"iconfont icon-24gl-minimize2",val:""},
-          {name:"预测长度", icon:"iconfont icon-dangjian_dangyuanguanxizhuanjie",val:""},
-          {name:"训练轮次", icon:"iconfont icon-shiti1",val:""},
+          {name:"序列长度", icon:"iconfont icon-24gl-tags2", val:"等待加载 . . ."},
+          {name:"窗口大小", icon:"iconfont icon-24gl-minimize2", val:""},
+          {name:"预测长度", icon:"iconfont icon-dangjian_dangyuanguanxizhuanjie", val:""},
+          {name:"训练轮次", icon:"iconfont icon-shiti1", val:""},
         ],
         onPredicting:false,
         onPredicted:false,
@@ -336,10 +336,10 @@ export default createStore({
         sampleData:[],
         sampleDataColumns:[],
         sampleInfo:[
-          {name:"文件名",   icon:"iconfont icon-24gl-tags2",val:""},
-          {name:"文件大小", icon:"iconfont icon-shiti1",val:""},
-          {name:"序列长度", icon:"iconfont icon-shuchu2",val:""},
-          {name:"样本个数", icon:"iconfont icon-shuzi2",val:""},],
+          {name:"文件名",   icon:"iconfont icon-24gl-tags2", val:""},
+          {name:"文件大小", icon:"iconfont icon-shiti1", val:""},
+          {name:"序列长度", icon:"iconfont icon-shuchu2", val:""},
+          {name:"样本个数", icon:"iconfont icon-shuzi2", val:""},],
 
         onTraining:false,
         onTrained:false,
@@ -349,10 +349,10 @@ export default createStore({
         dataSetOnloaded:false,
         datasetData:[],
         datasetInfo:[
-          {name:"序列长度", icon:"iconfont icon-24gl-tags2",val:"等待加载 . . ."},
-          {name:"窗口大小", icon:"iconfont icon-24gl-minimize2",val:""},
-          {name:"预测长度", icon:"iconfont icon-dangjian_dangyuanguanxizhuanjie",val:""},
-          {name:"训练轮次", icon:"iconfont icon-shiti1",val:""},],
+          {name:"序列长度", icon:"iconfont icon-24gl-tags2", val:"等待加载 . . ."},
+          {name:"窗口大小", icon:"iconfont icon-24gl-minimize2", val:""},
+          {name:"预测长度", icon:"iconfont icon-dangjian_dangyuanguanxizhuanjie", val:""},
+          {name:"训练轮次", icon:"iconfont icon-shiti1", val:""},],
         onPredicting:false,
         onPredicted:false,
 
@@ -366,12 +366,12 @@ export default createStore({
         selectItem:"",
         selectUnit:"",
         analyzeInfo:[
-          {name:"样本长度", icon:"iconfont icon-24gl-tags2",val:"",span:1},
-          {name:"预测长度", icon:"iconfont icon-dangjian_dangyuanguanxizhuanjie",val:"",span:1},
-          {name:"最大阈值", icon:"iconfont icon-24gl-minimize2",val:"",span:1},
-          {name:"最小阈值", icon:"iconfont icon-shiti1",val:"",span:1},
-          {name:"异常节点", icon:"iconfont icon-jinggaozhuangtai",val:"",span:4},
-          {name:"关联知识节点", icon:"iconfont icon-guanxitu1",val:"",span:4},
+          {name:"样本长度", icon:"iconfont icon-24gl-tags2", val:"", span:1},
+          {name:"预测长度", icon:"iconfont icon-dangjian_dangyuanguanxizhuanjie", val:"", span:1},
+          {name:"最大阈值", icon:"iconfont icon-24gl-minimize2", val:"", span:1},
+          {name:"最小阈值", icon:"iconfont icon-shiti1", val:"", span:1},
+          {name:"异常节点", icon:"iconfont icon-jinggaozhuangtai", val:"", span:4},
+          {name:"关联知识节点", icon:"iconfont icon-guanxitu1", val:"", span:4},
         ],
         errorNodes:[],
         correlatedGraphItems:[],
@@ -380,7 +380,7 @@ export default createStore({
         chartOption:{
           tooltip: {
             trigger: 'axis',
-            position: function (pt:any) {
+            position: function(pt:any) {
               return [pt[0], '10%'];
             },
             // appendToBody:true,
@@ -429,8 +429,8 @@ export default createStore({
       }
     },
     config:{
-        editKGIP:"",
-        editKGPort:"",
+      editKGIP:"",
+      editKGPort:"",
     },
     option:{
       NEEDLOGIN:true,
@@ -451,12 +451,12 @@ export default createStore({
 
       }
     }
-    ,optimization:{
+    , optimization:{
       modelInfo:[
-        {name:"模型名",   icon:"iconfont icon-24gl-tags2",val:""},
-        {name:"大小",     icon:"iconfont icon-shiti1",val:"0"},
-        {name:"输入维度", icon:"iconfont icon-shuchu2",val:"0"},
-        {name:"输出维度", icon:"iconfont icon-shuchu2",val:"0"},
+        {name:"模型名",   icon:"iconfont icon-24gl-tags2", val:""},
+        {name:"大小",     icon:"iconfont icon-shiti1", val:"0"},
+        {name:"输入维度", icon:"iconfont icon-shuchu2", val:"0"},
+        {name:"输出维度", icon:"iconfont icon-shuchu2", val:"0"},
       ],
       parametersLoaded:false,
       parameters:{
