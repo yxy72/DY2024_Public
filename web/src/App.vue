@@ -50,38 +50,38 @@
         <el-tooltip  style="font-size: 12px;" placement="bottom" effect="light">
           <template #content> {{store.state.status.loginUserName}}</template>
           <el-avatar
-          shape="square"
-          :size="24"
-          :src="getAvatarUrl(store.state.status.loginUserAvatarUrl, store.state.server.address, store.state.mock.enabled)"
-          @click="$router.replace({ path: store.state.router.page_config_user });"
-          style="cursor: pointer;"
-        />
+            shape="square"
+            :size="24"
+            :src="getAvatarUrl(store.state.status.loginUserAvatarUrl, store.state.server.address, store.state.mock.enabled)"
+            @click="$router.replace({ path: store.state.router.page_config_user });"
+            style="cursor: pointer;"
+          />
         </el-tooltip>
         
         <el-divider direction="vertical" />
         <el-button link @click="onLogout()"
-          ><div style="color: white; font-size: 13px; color: lightgray">
-            退出
-          </div></el-button
+        ><div style="color: white; font-size: 13px; color: lightgray">
+          退出
+        </div></el-button
         >
         <el-button disabled link
-          ><div style="color: white; font-size: 13px; color: lightgray">
-            帮助
-          </div></el-button
+        ><div style="color: white; font-size: 13px; color: lightgray">
+          帮助
+        </div></el-button
         >
         <el-button disabled link @click="$router.replace({path:store.state.router.page_test})"
-          ><div style="color: white; font-size: 13px; color: lightgray">
-            关于
-          </div></el-button
+        ><div style="color: white; font-size: 13px; color: lightgray">
+          关于
+        </div></el-button
         >
         <el-button
           type="primary"
           style="padding: 5px; height: 30px"
           size="small"
           @click="$router.replace({ path: store.state.router.page_start });"
-          ><div style="color: white; font-size: 13px; padding: 5px">
-            快速开始
-          </div></el-button
+        ><div style="color: white; font-size: 13px; padding: 5px">
+          快速开始
+        </div></el-button
         >
       </div>
     </div>
@@ -129,9 +129,9 @@
 
     <div class="PageRouterViewPanel" >
       <div style="position: absolute;right:70px;font-size: 200px;z-index: 233;">
-      <el-button v-if="false" @click="changeStyle()" style="color: rgba(0, 0, 0, 0.075);background-color: rgba(0, 0, 0, 0.014);border: none;">切换样式</el-button>
+        <el-button v-if="false" @click="changeStyle()" style="color: rgba(0, 0, 0, 0.075);background-color: rgba(0, 0, 0, 0.014);border: none;">切换样式</el-button>
       </div>
-    <!-- <div class="PageRouterViewPanel"> -->
+      <!-- <div class="PageRouterViewPanel"> -->
       <router-view ></router-view>
     </div>
 
@@ -153,7 +153,7 @@ import { hydrateStoreFromMockSnapshot } from '@/mock/storeSnapshot'
 
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { reactive,ref } from "vue";
+import { reactive, ref } from "vue";
 import { onBeforeMount, onMounted, onUnmounted } from "@vue/runtime-core";
 import { mockStorageKey } from './const';
 import { getAvatarUrl } from '@/utils/avatar';
@@ -172,50 +172,50 @@ let pd = reactive({
 restoreMockMode()
 
 let c = ref(1);
-function B(){
+function B() {
   return c.value
 }
 
-function isStartRoute(){
+function isStartRoute() {
   const path = $router.currentRoute.value.path
   return path == "/" || path == store.state.router.page_start
 }
 
 let r = false;
 const changeStyle = ()=>{
-  if(r){
+  if (r) {
     r = false
     store.state.option.style.el_descriptions_label_background_color = 'white'
     store.state.option.style.el_button_border_radius = 0
 
-  }else{
+  } else {
     r = true
     store.state.option.style.el_descriptions_label_background_color = '#f5f7fa'
     store.state.option.style.el_button_border_radius = "6px"
   }
 }
 
-async function restoreMockMode(){
-  if(localStorage.getItem(mockStorageKey) === "false")
+async function restoreMockMode() {
+  if (localStorage.getItem(mockStorageKey) === "false")
     return
 
-  try{
+  try {
     store.state.mock.enabled = true
     localStorage.setItem(mockStorageKey, "true")
     await hydrateStoreFromMockSnapshot(store)
-  }catch(e){
+  } catch(e) {
     store.state.mock.enabled = false
     localStorage.setItem(mockStorageKey, "false")
     console.error(e)
   }
 }
 
-async function toggleMockMode(){
-  if(store.state.mock.enabled){
+async function toggleMockMode() {
+  if (store.state.mock.enabled) {
     store.state.mock.enabled = false
     localStorage.setItem(mockStorageKey, "false")
     global.removeToken()
-    if(store.state.server.socket && typeof store.state.server.socket.close == "function")
+    if (store.state.server.socket && typeof store.state.server.socket.close == "function")
       store.state.server.socket.close()
     store.state.status.login = false
     store.state.status.loginUserName = ""
@@ -231,7 +231,7 @@ async function toggleMockMode(){
     return
   }
 
-  try{
+  try {
     store.state.mock.enabled = true
     localStorage.setItem(mockStorageKey, "true")
     await hydrateStoreFromMockSnapshot(store)
@@ -241,7 +241,7 @@ async function toggleMockMode(){
       message: "已打开 Mock",
       duration: 1000,
     })
-  }catch(e){
+  } catch(e) {
     store.state.mock.enabled = false
     localStorage.setItem(mockStorageKey, "false")
     console.error(e)
@@ -253,38 +253,38 @@ global.SYS_Init()
 
 
 // 搜索框逻辑
-interface serachItem{
+interface serachItem {
   value:string
   path:string
 }
 var searchInput = ref("")
 const searchTabel = ref([
-  {value:"训练CNN模型",path:store.state.router.page_predict_import_data},
-  {value:"训练CRNN模型",path:store.state.router.page_analyze_crnn,opt:{name:"crnn",tabPanel:'2'}},
-  {value:"训练LSTM模型",path:store.state.router.page_analyze_lstm,opt:{name:"lstm",tabPanel:'2'}},
-  {value:"设置神经网络参数",path:store.state.router.page_predict_settings},
-  {value:"预测质量数据",path:store.state.router.page_predict_predict},
-  {value:"灰色关联分析",path:store.state.router.page_kg_create},
-  {value:"知识三元组",path:store.state.router.page_kg_create},
-  {value:"知识图谱交互",path:store.state.router.page_kg_display},
-  {value:"知识嵌入",path:store.state.router.page_kg_embed},
-  {value:"服务器配置",path:store.state.router.page_config_server},
-  {value:"用户设置",path:store.state.router.page_config_user},
-  {value:"数据预处理",path:store.state.router.page_tool_preprocess},
-  {value:"工艺优化",path:store.state.router.page_optimization},
-  {value:"时序分析",path:store.state.router.page_analyze_crnn,opt:{name:"crnn",tabPanel:'1'}}, 
-  {value:"CRNN时序预测",path:store.state.router.page_analyze_crnn,opt:{name:"crnn",tabPanel:'1'}},
-  {value:"LSTM时序预测",path:store.state.router.page_analyze_lstm,opt:{name:"lstm",tabPanel:'1'}},
-  {value:"长短期预测",path:store.state.router.page_analyze_lstm,opt:{name:"lstm",tabPanel:'1'}},
+  {value:"训练CNN模型", path:store.state.router.page_predict_import_data},
+  {value:"训练CRNN模型", path:store.state.router.page_analyze_crnn, opt:{name:"crnn", tabPanel:'2'}},
+  {value:"训练LSTM模型", path:store.state.router.page_analyze_lstm, opt:{name:"lstm", tabPanel:'2'}},
+  {value:"设置神经网络参数", path:store.state.router.page_predict_settings},
+  {value:"预测质量数据", path:store.state.router.page_predict_predict},
+  {value:"灰色关联分析", path:store.state.router.page_kg_create},
+  {value:"知识三元组", path:store.state.router.page_kg_create},
+  {value:"知识图谱交互", path:store.state.router.page_kg_display},
+  {value:"知识嵌入", path:store.state.router.page_kg_embed},
+  {value:"服务器配置", path:store.state.router.page_config_server},
+  {value:"用户设置", path:store.state.router.page_config_user},
+  {value:"数据预处理", path:store.state.router.page_tool_preprocess},
+  {value:"工艺优化", path:store.state.router.page_optimization},
+  {value:"时序分析", path:store.state.router.page_analyze_crnn, opt:{name:"crnn", tabPanel:'1'}}, 
+  {value:"CRNN时序预测", path:store.state.router.page_analyze_crnn, opt:{name:"crnn", tabPanel:'1'}},
+  {value:"LSTM时序预测", path:store.state.router.page_analyze_lstm, opt:{name:"lstm", tabPanel:'1'}},
+  {value:"长短期预测", path:store.state.router.page_analyze_lstm, opt:{name:"lstm", tabPanel:'1'}},
 ])
 const querySearch = (queryString: string, cb: any) => {
 
   var results = queryString
     ? searchTabel.value.filter(createFilter(queryString))
     : searchTabel.value
-  if(results.length==0){
-    cb([{value:"没有搜索到该内容...",path:null}])
-  }else
+  if (results.length == 0) {
+    cb([{value:"没有搜索到该内容...", path:null}])
+  } else
     cb(results)
 }
 const createFilter = (queryString: string) => {
@@ -296,10 +296,10 @@ const createFilter = (queryString: string) => {
 }
 const onSearchSelect = (item:any)=>{
   searchInput.value = ""
-  if(item.opt!=undefined){
-    if(item.opt.name=="crnn"){
+  if (item.opt != undefined) {
+    if (item.opt.name == "crnn") {
       store.state.analyze.crnn.tabPanel = item.opt.tabPanel
-    }else if(item.opt.name=="lstm"){
+    } else if (item.opt.name == "lstm") {
       store.state.analyze.lstm.tabPanel = item.opt.tabPanel
     }
   }
@@ -308,67 +308,67 @@ const onSearchSelect = (item:any)=>{
 
 
 
-var mainMenuTable= reactive(store.state.status.menu)
+var mainMenuTable = reactive(store.state.status.menu)
 let subMenuTable = ([
   {
     name:"质量预测",
     subItem:[
-      {name:"训练新模型",icon:"mostly-cloudy",index:"1",menuItem:[
-        {name:"导入数据",route:store.state.router.page_predict_import_data},
-        {name:"神经网络",route:store.state.router.page_predict_settings},
-        {name:"生成模型",route:store.state.router.page_predict_export_data},]},
-      {name:"质量预测",icon:"compass",index:"2",menuItem:[
-        {name:"数据预测",route:store.state.router.page_predict_predict}]},
+      {name:"训练新模型", icon:"mostly-cloudy", index:"1", menuItem:[
+        {name:"导入数据", route:store.state.router.page_predict_import_data},
+        {name:"神经网络", route:store.state.router.page_predict_settings},
+        {name:"生成模型", route:store.state.router.page_predict_export_data},]},
+      {name:"质量预测", icon:"compass", index:"2", menuItem:[
+        {name:"数据预测", route:store.state.router.page_predict_predict}]},
       
     ]
     // ,Item:[
     //   {name:"通用管理",icon:"setting",route:""},]
-  },{
+  }, {
     name:"知识图谱",
     subItem:[
-      {name:"知识图谱",icon:"reading",index:"1",menuItem:[
-        {name:"创建三元组",route:store.state.router.page_kg_create},
-        {name:"知识检索",route:store.state.router.page_kg_display},]},
-      {name:"质量追溯",icon:"compass",index:"2",menuItem:[
-        {name:"知识嵌入",route:store.state.router.page_kg_embed},]},],
+      {name:"知识图谱", icon:"reading", index:"1", menuItem:[
+        {name:"创建三元组", route:store.state.router.page_kg_create},
+        {name:"知识检索", route:store.state.router.page_kg_display},]},
+      {name:"质量追溯", icon:"compass", index:"2", menuItem:[
+        {name:"知识嵌入", route:store.state.router.page_kg_embed},]},],
     // Item:[
     //   {name:"知识库管理",icon:"coin",route:""},]
-  },{
+  }, {
     name:"时序分析",
     subItem:[
-    {name:"时序模型",icon:"reading",index:"1",menuItem:[
-        {name:"CRNN 模型",route:store.state.router.page_analyze_crnn},
-        {name:"LSTM 模型",route:store.state.router.page_analyze_lstm},]
-      },{name:"工艺优化",icon:"SetUp",index:"2",menuItem:[
-        {name:"单目标优化",route:store.state.router.page_optimization},]
+      {name:"时序模型", icon:"reading", index:"1", menuItem:[
+        {name:"CRNN 模型", route:store.state.router.page_analyze_crnn},
+        {name:"LSTM 模型", route:store.state.router.page_analyze_lstm},]
+      }, {name:"工艺优化", icon:"SetUp", index:"2", menuItem:[
+        {name:"单目标优化", route:store.state.router.page_optimization},]
       }],
     Item:[
-      {name:"质量分析",icon:"PieChart",route:store.state.router.page_analyze},
+      {name:"质量分析", icon:"PieChart", route:store.state.router.page_analyze},
     ]
-  },{
+  }, {
     name:"应用工具",
     subItem:[
-      {name:"表格工具",icon:"Connection",index:"1",menuItem:[
-        {name:"数据预处理",route:store.state.router.page_tool_preprocess},
-        {name:"表格可视化",route:store.state.router.page_tool_visualize}]},],
+      {name:"表格工具", icon:"Connection", index:"1", menuItem:[
+        {name:"数据预处理", route:store.state.router.page_tool_preprocess},
+        {name:"表格可视化", route:store.state.router.page_tool_visualize}]},],
     Item:[
       
       // {name:"用户设置",icon:"user",route:store.state.router.page_config_user},
     ]
-  },{
+  }, {
     name:"参数配置",
     subItem:[],
     Item:[
-    {name:"用户设置",icon:"user",route:store.state.router.page_config_user},
-    {name:"服务器配置",icon:"monitor",route:store.state.router.page_config_server},
-      ]
-  },{
+      {name:"用户设置", icon:"user", route:store.state.router.page_config_user},
+      {name:"服务器配置", icon:"monitor", route:store.state.router.page_config_server},
+    ]
+  }, {
   }
 
 ])
 
-function getMainMenuRoute(index:number){
-  switch(index){
+function getMainMenuRoute(index:number) {
+  switch (index) {
     case 0:
       return store.state.router.page_predict_import_data
     case 1:
@@ -481,12 +481,12 @@ onMounted(() => {
   // console.log(store.state.status.getLastPage("config"))
   window.onresize = () => {
     return (() => {
-      if(titleAreaRef.value.clientWidth<960)
+      if (titleAreaRef.value.clientWidth < 960)
         pd.titleRightAreaVisivle = false
       else
         pd.titleRightAreaVisivle = true
 
-      if(titleAreaRef.value.clientWidth<720)
+      if (titleAreaRef.value.clientWidth < 720)
         pd.titleLeftAreaVisibile = false
       else
         pd.titleLeftAreaVisibile = true
@@ -500,28 +500,28 @@ onUnmounted(()=>{
 }
 )
 
-function calsubMenuTableVisible(index:any){
+function calsubMenuTableVisible(index:any) {
   let path = $router.currentRoute.value.path
-  switch(index){
-    case 0: return path==store.state.router.page_predict_import_data||
-      path==store.state.router.page_predict_settings||
-      path==store.state.router.page_predict_export_data||
-      path==store.state.router.page_predict_predict
-    case 1: return path==store.state.router.page_kg_create||
-      path==store.state.router.page_kg_display||
-      path==store.state.router.page_kg_embed
-    case 2: return path==store.state.router.page_analyze_crnn||
-      path==store.state.router.page_analyze_lstm||
-      path==store.state.router.page_analyze||
-      path==store.state.router.page_optimization
-    case 3: return path==store.state.router.page_tool_preprocess||
-      path==store.state.router.page_tool_visualize
-    case 4: return path==store.state.router.page_config_server||
-      path==store.state.router.page_config_user
+  switch (index) {
+    case 0: return path == store.state.router.page_predict_import_data ||
+      path == store.state.router.page_predict_settings ||
+      path == store.state.router.page_predict_export_data ||
+      path == store.state.router.page_predict_predict
+    case 1: return path == store.state.router.page_kg_create ||
+      path == store.state.router.page_kg_display ||
+      path == store.state.router.page_kg_embed
+    case 2: return path == store.state.router.page_analyze_crnn ||
+      path == store.state.router.page_analyze_lstm ||
+      path == store.state.router.page_analyze ||
+      path == store.state.router.page_optimization
+    case 3: return path == store.state.router.page_tool_preprocess ||
+      path == store.state.router.page_tool_visualize
+    case 4: return path == store.state.router.page_config_server ||
+      path == store.state.router.page_config_user
   }
 }
-function menuTitleActive(route:any){
-  switch(route){
+function menuTitleActive(route:any) {
+  switch (route) {
     case store.state.router.page_predict_import_data:
     case store.state.router.page_predict_settings:
     case store.state.router.page_predict_export_data:
@@ -553,33 +553,33 @@ function menuTitleActive(route:any){
   }
 }
 
-function onLogout(){
+function onLogout() {
   global.removeToken()
-  if(store.state.server.socket && typeof store.state.server.socket.close == "function")
+  if (store.state.server.socket && typeof store.state.server.socket.close == "function")
     store.state.server.socket.close()
   userinfo.login = false
   let temp = userinfo.loginUserName
   userinfo.loginUserName = ""
   $router.replace({ path: store.state.router.page_login});
-  if(store.state.mock.enabled){
+  if (store.state.mock.enabled) {
     ElMessage.info("已退出。")
     return
   }
   global.httpPost(
-      store.state.server.address + "/logout/",
-      {username: temp},
-      (res)=>{
+    store.state.server.address + "/logout/",
+    {username: temp},
+    res=>{
         
-      },
-      ()=>{},
-      ()=>{
+    },
+    ()=>{},
+    ()=>{
        
-        ElMessage.info("已退出。")
-      }
-    )
+      ElMessage.info("已退出。")
+    }
+  )
 
 }
-function devFunc(){
+function devFunc() {
   // store.state.kg.onLoadToKG = ! store.state.kg.onLoadToKG;
   console.log(store.state.optimization.cmp.scroll)
 }

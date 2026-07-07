@@ -49,7 +49,7 @@ export const readExcelAsJson = async <T extends ExcelTableRow = ExcelTableRow>(f
 export const normalizeExcelRows = <T extends ExcelTableRow = ExcelTableRow>(rows: T[]): ExcelTableResult<T> => {
   const data = [...rows]
   const columnNames = Object.keys(data[0])
-  const normalizedRows = data.map((row) => {
+  const normalizedRows = data.map(row => {
     const normalizedRow: ExcelTableRow = {}
     for (let i = 0; i < columnNames.length; i++) {
       normalizedRow[columnNames[i]] = row[columnNames[i]]

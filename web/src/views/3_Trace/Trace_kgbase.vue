@@ -1,17 +1,17 @@
 <template>
-    <div class="Page">
-        <div class="PagePanel">
-            <div class="PagePanel_name1">
-                知识库
-            </div>
-            <div class="PagePanel_name2">
-            </div>
-            <div class="PagePanel_name3">
-            </div>
-            <div class="PagePanel_name4">
-            </div>
-        </div>
+  <div class="Page">
+    <div class="PagePanel">
+      <div class="PagePanel_name1">
+        知识库
+      </div>
+      <div class="PagePanel_name2">
+      </div>
+      <div class="PagePanel_name3">
+      </div>
+      <div class="PagePanel_name4">
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -23,28 +23,28 @@ import { onMounted } from '@vue/runtime-core'
 
 
 export default {
-    name:'',
-    setup(){
+  name:'',
+  setup() {
         
 
-            const pd = reactive(new Object())
-            const $router = useRouter()
-            const store = useStore();
+    const pd = reactive(new Object())
+    const $router = useRouter()
+    const store = useStore();
 
-            onMounted(()=>{
-                //     console.log(networkData)
-            });
-            function test(){
-                pd;
-                ElMessage('load')
-                $router.replace({
-                    // path:'/Predict/Train/network'
-                })
-            }
-        return{
-            store,test
-        }
+    onMounted(()=>{
+      //     console.log(networkData)
+    });
+    function test() {
+      pd;
+      ElMessage('load')
+      $router.replace({
+        // path:'/Predict/Train/network'
+      })
     }
+    return {
+      store, test
+    }
+  }
 }
 </script>
 

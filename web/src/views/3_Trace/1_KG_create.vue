@@ -14,9 +14,9 @@
                   :on-change="handleChange"
                   :show-file-list="false">
                   <el-button size="large"
-                  :style='"padding: 7px;border-radius:"+store.state.option.style.el_button_border_radius+";"'
+                             :style='"padding: 7px;border-radius:"+store.state.option.style.el_button_border_radius+";"'
 
-                  type="primary" ><el-icon size="25px" style="margin-right:4px"><folder-add /></el-icon>上传</el-button>
+                             type="primary" ><el-icon size="25px" style="margin-right:4px"><folder-add /></el-icon>上传</el-button>
                 </el-upload>
               </div>
               <div class="tableRow">
@@ -120,7 +120,7 @@
                 </div>
                 <div class="sdr">
                   <div class="slider-demo-block"  >
-                      <el-slider :max="1" :step="0.01" v-model="d.coefficient" />
+                    <el-slider :max="1" :step="0.01" v-model="d.coefficient" />
                   </div>
                   <div class="sdrFont">{{d.coefficient}}</div>
                 </div>
@@ -172,7 +172,7 @@
               </div>
 
 
-        <div style="width:200px;height:200px;background:red;display:none" id="viz">35555555555555</div>
+              <div style="width:200px;height:200px;background:red;display:none" id="viz">35555555555555</div>
 
 
 
@@ -197,22 +197,22 @@
               @click="DOWNLOAD()"  plain>下载三元组</el-button>
            
             
-              <el-select
-                filterable
-                allow-create
-                v-model="d.loadNodeClassSelect"
-                v-if="d.onLoadToKG"
-                class="m-2"
-                style="width: 120px;margin-left: 15px;margin-right: 15px;"
-                placeholder="选择或输入"
+            <el-select
+              filterable
+              allow-create
+              v-model="d.loadNodeClassSelect"
+              v-if="d.onLoadToKG"
+              class="m-2"
+              style="width: 120px;margin-left: 15px;margin-right: 15px;"
+              placeholder="选择或输入"
             >
-                <el-option
+              <el-option
                 v-for="item in d.graph.nodeClasses"
                 :key="item"
                 :label="item"
                 :value="item"
-                />
-              </el-select>
+              />
+            </el-select>
 
             <el-button
               :style='"border-radius:"+store.state.option.style.el_button_border_radius+";"'
@@ -224,8 +224,8 @@
               :style='"border-radius:"+store.state.option.style.el_button_border_radius+";"'
               v-if="d.onLoadToKG"
               @click = "d.onLoadToKG = false;" type='primary' plain>
-            取消
-          </el-button>
+              取消
+            </el-button>
           
             <el-button
               :style='"border-radius:"+store.state.option.style.el_button_border_radius+";"'
@@ -234,7 +234,7 @@
               导入图谱
             </el-button>
           
-            </div>
+          </div>
         </el-tab-pane>
         <el-tab-pane label="样本构造" name="second"  height='23px' class="tabplane"></el-tab-pane>
         <el-tab-pane label="其他" name="third" height='23px' class="tabplane"></el-tab-pane>
@@ -243,7 +243,7 @@
 
 
     </el-card>
- <!--
+    <!--
     <el-dialog
       v-model="d.onLoadToKG"
       append-to-body
@@ -268,7 +268,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref,reactive, onUnmounted, onMounted} from 'vue'
+import { ref, reactive, onUnmounted, onMounted} from 'vue'
 import { ElMessage } from 'element-plus'
 import { useStore } from 'vuex'
 import NeoVis from 'neovis.js/dist/neovis.js';
@@ -298,26 +298,26 @@ let tempData = store.state.PageKG
 // let pdd = reactive(pageDatas)
 // let kgapi =  reactive(tempData.graphAPI)
 
-const handleChange: UploadProps['onChange'] = (file) => {
+const handleChange: UploadProps['onChange'] = file => {
   let fileContent = file.raw;
   const fileName = file.name;
   const fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
   if (fileContent) {
     if (fileType === "xlsx" || fileType === "xls") {
-      d.selectXColNames=[];    // string[]
-      d.selectYColNames=[];
+      d.selectXColNames = [];    // string[]
+      d.selectYColNames = [];
       importfile(fileContent);
     } else {
       ElMessage.error("附件格式错误，请重新上传！")
     }
   } else {
-      ElMessage.error("请上传附件！")
+    ElMessage.error("请上传附件！")
   }
 }
 function importfile(obj:any) {
   const reader = new FileReader();
   reader.readAsArrayBuffer(obj);
-  reader.onload = function () {
+  reader.onload = function() {
     const buffer:any = reader.result;
     const bytes = new Uint8Array(buffer);
     const length = bytes.byteLength;
@@ -329,7 +329,7 @@ function importfile(obj:any) {
       type: "binary",
     });
     const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-    obj = global.getDataAndColumnsForTable(data,Object.keys(data[0]))
+    obj = global.getDataAndColumnsForTable(data, Object.keys(data[0]))
     
     d.sampleData = obj.data
     d.sampleDataColumns = obj.columns
@@ -340,8 +340,8 @@ function importfile(obj:any) {
 
 
 
-function CALCORRELATION(xCol1:string[],yCol1:string[],rho:number,kind:string){
-  if(xCol1.length==0||yCol1.length==0){
+function CALCORRELATION(xCol1:string[], yCol1:string[], rho:number, kind:string) {
+  if (xCol1.length == 0 || yCol1.length == 0) {
     ElMessage('请选择比较列和参照列')
     return;
   }
@@ -351,20 +351,20 @@ function CALCORRELATION(xCol1:string[],yCol1:string[],rho:number,kind:string){
   })
 
   let xCol = [];
-  for(let i = 0;i<xCol1.length;i++){
+  for (let i = 0;i < xCol1.length;i++) {
     xCol.push(coName.indexOf(xCol1[i]))
   }
   let yCol = [];
-  for(let i = 0;i<yCol1.length;i++){
+  for (let i = 0;i < yCol1.length;i++) {
     yCol.push(coName.indexOf(yCol1[i]))
   }
-  let data:any[] = JSON.parse(JSON.stringify(d.sampleData)).map((val:any,index:any)=>{
+  let data:any[] = JSON.parse(JSON.stringify(d.sampleData)).map((val:any, index:any)=>{
     let row:any[] = []
-    for(let key in val){
-      if(key=="id"||key=="parientId")
+    for (let key in val) {
+      if (key == "id" || key == "parientId")
         continue
       else
-      row.push(Number(val[key]))
+        row.push(Number(val[key]))
     }
     return row
   })
@@ -373,30 +373,30 @@ function CALCORRELATION(xCol1:string[],yCol1:string[],rho:number,kind:string){
   // console.log(coName)
   let cha_average = [] //计算列特征均值
   let colSum = 0;
-  for(let j = 0;j<coName.length;j++){
-  colSum = 0;
-  for(let i = 0;i<data.length;i++){
+  for (let j = 0;j < coName.length;j++) {
+    colSum = 0;
+    for (let i = 0;i < data.length;i++) {
       colSum += nt[i][j]
-  }
-  cha_average.push(colSum/data.length)
+    }
+    cha_average.push(colSum / data.length)
 
-  for(let i = 0;i<data.length;i++){
+    for (let i = 0;i < data.length;i++) {
       nt[i][j] /= cha_average[j]
-  }
+    }
   }
   let label_Col = <any>[];//提取y：参照列
-  for(let k = 0;k<yCol.length;k++){
+  for (let k = 0;k < yCol.length;k++) {
     label_Col.push([])
     label_Col[k] = [];
-    for(let i = 0;i<data.length;i++){
+    for (let i = 0;i < data.length;i++) {
       label_Col[k].push(nt[i][yCol[k]])
     }
   }
   let Character_Col = <any>[];//提取x：比较列
-  for(let k = 0;k<xCol.length;k++){
+  for (let k = 0;k < xCol.length;k++) {
     Character_Col.push([])
     Character_Col[k] = [];
-    for(let i = 0;i<data.length;i++){
+    for (let i = 0;i < data.length;i++) {
       Character_Col[k].push(nt[i][xCol[k]])
     }
   }
@@ -404,83 +404,83 @@ function CALCORRELATION(xCol1:string[],yCol1:string[],rho:number,kind:string){
 
 
 
-  let mmin=[],mmax=[];
-  for(let k = 0;k<yCol.length;k++){
-  mmin.push(1)
-  mmax.push(0)
+  let mmin = [], mmax = [];
+  for (let k = 0;k < yCol.length;k++) {
+    mmin.push(1)
+    mmax.push(0)
   }
   let hyperCol = <any>[];
-  for(let k = 0;k<yCol.length;k++){
+  for (let k = 0;k < yCol.length;k++) {
     hyperCol.push([])
-    hyperCol[k]=[];
-    for(let i = 0;i<data.length;i++){
+    hyperCol[k] = [];
+    for (let i = 0;i < data.length;i++) {
       hyperCol[k].push([])
-      hyperCol[k][i]=[];
-      for(let j = 0;j<xCol.length;j++){
-          hyperCol[k][i].push(Math.abs(Character_Col[j][i] - label_Col[k][i]))
-          if(hyperCol[k][i][j]>mmax[k])
-            mmax[k] = hyperCol[k][i][j]
-          if(hyperCol[k][i][j]<mmin[k])
-            mmin[k] = hyperCol[k][i][j]
+      hyperCol[k][i] = [];
+      for (let j = 0;j < xCol.length;j++) {
+        hyperCol[k][i].push(Math.abs(Character_Col[j][i] - label_Col[k][i]))
+        if (hyperCol[k][i][j] > mmax[k])
+          mmax[k] = hyperCol[k][i][j]
+        if (hyperCol[k][i][j] < mmin[k])
+          mmin[k] = hyperCol[k][i][j]
       }
     }
   }
   let ksi = <any>[];
-  for(let k = 0;k<yCol.length;k++){
+  for (let k = 0;k < yCol.length;k++) {
     ksi.push([])
     ksi[k] = []
-    for(let i = 0;i<data.length;i++){
+    for (let i = 0;i < data.length;i++) {
       ksi[k].push([])
       ksi[k][i] = []
-      for(let j = 0;j<xCol.length;j++){
-        ksi[k][i].push((mmin[k]+rho*mmax[k])/(  hyperCol[k][i][j]+rho*mmax[k]))
+      for (let j = 0;j < xCol.length;j++) {
+        ksi[k][i].push((mmin[k] + rho * mmax[k]) / (  hyperCol[k][i][j] + rho * mmax[k]))
       }
     }
   }
   
   let sum = [];
-  for(let k = 0;k<yCol.length;k++){
+  for (let k = 0;k < yCol.length;k++) {
     sum.push(0)
   }
   let corr = <any>[]
-  for(let k = 0;k<yCol.length;k++){
+  for (let k = 0;k < yCol.length;k++) {
     corr.push([])
     corr[k] = []
-    for(let j = 0;j<xCol.length;j++){
+    for (let j = 0;j < xCol.length;j++) {
       sum[k] = 0
-      for(let i = 0;i<data.length;i++){
+      for (let i = 0;i < data.length;i++) {
         sum[k] += ksi[k][i][j]
       }
-      corr[k].push(sum[k]/data.length)
+      corr[k].push(sum[k] / data.length)
     }                     
   }
   
   let SUM = 0;
   let max = 0;
   let min = 1;
-  for(let i = 0;i<yCol.length;i++){           
-  for(let j = 0;j<xCol.length;j++){
-    SUM+=corr[i][j]
-    if(corr[i][j]>max)
-      max = corr[i][j]
-    if(corr[i][j]<min)
-      min = corr[i][j]
+  for (let i = 0;i < yCol.length;i++) {           
+    for (let j = 0;j < xCol.length;j++) {
+      SUM += corr[i][j]
+      if (corr[i][j] > max)
+        max = corr[i][j]
+      if (corr[i][j] < min)
+        min = corr[i][j]
+    }
   }
-  }
-  let average = SUM/(yCol.length*xCol.length)
-  d.threshold = (kind=="方式1"?(max+min)/2:average)
+  let average = SUM / (yCol.length * xCol.length)
+  d.threshold = (kind == "方式1" ? (max + min) / 2 : average)
   tempData = []
-  for(let j = 0 ;j<corr[0].length;j++){//特征
+  for (let j = 0 ;j < corr[0].length;j++) {//特征
     let obj = <any>{}
     obj['对象'] = coName[xCol[j]]
-    for(let i = 0;i<corr.length;i++){//标签
-      obj[coName[yCol[i]]]=String(corr[i][j]).slice(0, 7)
+    for (let i = 0;i < corr.length;i++) {//标签
+      obj[coName[yCol[i]]] = String(corr[i][j]).slice(0, 7)
     } 
     tempData.push(obj)
   }
 
   d.correlationData = tempData
-  d.correlationDataColumns = Object.keys(tempData[0]).map((val:any,index:any) => ({
+  d.correlationDataColumns = Object.keys(tempData[0]).map((val:any, index:any) => ({
     key: `${index}`,
     dataKey: `${val}`,
     title: val,
@@ -489,58 +489,58 @@ function CALCORRELATION(xCol1:string[],yCol1:string[],rho:number,kind:string){
 
   let tempData1 = [], edges = [];
   console.log(max)
-  console.log(0.9*max)
-  for(let j = 0 ;j<corr[0].length;j++){//特征
-  for(let i = 0;i<corr.length;i++){//标签
-    let obj = <any>{}
-    let edge = (corr[i][j])>0.9*(max-d.threshold)+d.threshold?'strong_correlation':(corr[i][j])<0.9*(max-d.threshold)+d.threshold&& (corr[i][j])>d.threshold?'correlate':'non_corr'
-    obj['head']=coName[xCol[j]]
-    obj['relation'] = edge
-    obj['tail']=coName[yCol[i]]
-    edges.push(edge)
-    tempData1.push(obj)
-  }
+  console.log(0.9 * max)
+  for (let j = 0 ;j < corr[0].length;j++) {//特征
+    for (let i = 0;i < corr.length;i++) {//标签
+      let obj = <any>{}
+      let edge = (corr[i][j]) > 0.9 * (max - d.threshold) + d.threshold ? 'strong_correlation' : (corr[i][j]) < 0.9 * (max - d.threshold) + d.threshold && (corr[i][j]) > d.threshold ? 'correlate' : 'non_corr'
+      obj['head'] = coName[xCol[j]]
+      obj['relation'] = edge
+      obj['tail'] = coName[yCol[i]]
+      edges.push(edge)
+      tempData1.push(obj)
+    }
   }
   d.tripletData = tempData1
-  d.tripletDataColumns = Object.keys(tempData1[0]).map((val:any,index:any) => ({
+  d.tripletDataColumns = Object.keys(tempData1[0]).map((val:any, index:any) => ({
     key: `${index}`,
     dataKey: `${val}`,
     title: val,
     width: 120,
   }))
   setTimeout(() => {
-  d.sampleDataOnCalulated = true
-  d.sampleDataOnCalulating = false
+    d.sampleDataOnCalulated = true
+    d.sampleDataOnCalulating = false
     
   }, 100);
   return
 
 
-  let HEAD_ENITY = [],TAIL_ENITY = []
-  for(let j = 0 ;j<xCol.length;j++)
-  HEAD_ENITY.push(coName[xCol[j]])
-  for(let j = 0 ;j<yCol.length;j++)
-  TAIL_ENITY.push(coName[yCol[j]])
+  let HEAD_ENITY = [], TAIL_ENITY = []
+  for (let j = 0 ;j < xCol.length;j++)
+    HEAD_ENITY.push(coName[xCol[j]])
+  for (let j = 0 ;j < yCol.length;j++)
+    TAIL_ENITY.push(coName[yCol[j]])
   let ALL_ENITY = []
   for (let i = 0; i < HEAD_ENITY.length; i++) 
-  if (ALL_ENITY.indexOf(HEAD_ENITY[i]) == -1) 
+    if (ALL_ENITY.indexOf(HEAD_ENITY[i]) == -1) 
       ALL_ENITY.push(HEAD_ENITY[i])
   for (let i = 0; i < TAIL_ENITY.length; i++) 
-  if (ALL_ENITY.indexOf(TAIL_ENITY[i]) == -1) 
+    if (ALL_ENITY.indexOf(TAIL_ENITY[i]) == -1) 
       ALL_ENITY.push(TAIL_ENITY[i])            
   let ALL_EDGES = []
   for (let i = 0; i < edges.length; i++)
-  if (ALL_EDGES.indexOf(edges[i]) == -1) 
+    if (ALL_EDGES.indexOf(edges[i]) == -1) 
       ALL_EDGES.push(edges[i])          
   kgapi.nodes = ALL_ENITY,
   kgapi.edges = ALL_EDGES,
   kgapi.headE =  HEAD_ENITY,
   kgapi.tailE = TAIL_ENITY,
-  store.dispatch('setData_KG_api',kgapi)
+  store.dispatch('setData_KG_api', kgapi)
   pdd.isValid = true;
   loading = false;
 }
-function DOWNLOAD(){
+function DOWNLOAD() {
   const ws = XLSX.utils.json_to_sheet(d.tripletData)
   ws['!cols'] = [
     { wch: 20 },
@@ -554,15 +554,15 @@ function DOWNLOAD(){
   XLSX.writeFile(wb, 'triplet.xlsx')
 }
 
-function LOAD(){
-  if(d.loadNodeClassSelect==""){
+function LOAD() {
+  if (d.loadNodeClassSelect == "") {
     ElMessage.info("未选择目标类别。")
     return
   }
-  let g = ['1','2','3','4','5','6','7','8','9','0']
+  let g = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
   // console.log(d.loadNodeClassSelect[0])
   // console.log(typeof(d.loadNodeClassSelect[0]))
-  if(g.indexOf(d.loadNodeClassSelect[0])!=-1){
+  if (g.indexOf(d.loadNodeClassSelect[0]) != -1) {
     ElMessage.info("类别名首字符不能为数字。")
     return
 
@@ -570,14 +570,14 @@ function LOAD(){
 
   global.httpPost(
     store.state.server.address + "/kg/send/",
-    {target:d.loadNodeClassSelect,tripletList:d.tripletData},
-    (res)=>{
-      if(res.status==store.state.server.successResponse){
+    {target:d.loadNodeClassSelect, tripletList:d.tripletData},
+    res=>{
+      if (res.status == store.state.server.successResponse) {
         ElMessage.success("导入成功。")
         
         global.graphInit()
       }
-      else{
+      else {
         ElMessage.error("导入失败。")}
     },
     ()=>{},

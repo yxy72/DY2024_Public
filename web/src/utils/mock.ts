@@ -1,9 +1,9 @@
 import store from "@/store";
 
-function getMockQueryModelResponse(data:any){
+function getMockQueryModelResponse(data:any) {
   const type = data?.type;
 
-  if(type == "cnn"){
+  if (type == "cnn") {
     const modelInfo = store.state.optimization.modelInfo;
     const modelName = modelInfo?.[0]?.val || store.state.train.modelName || "mock_cnn_model.h5";
     return {
@@ -15,9 +15,9 @@ function getMockQueryModelResponse(data:any){
     };
   }
 
-  if(type == "crnn" || type == "lstm"){
+  if (type == "crnn" || type == "lstm") {
     const analyzeState = type == "crnn" ? store.state.analyze.crnn : store.state.analyze.lstm;
-    if(!analyzeState.hasModel)
+    if (!analyzeState.hasModel)
       return {
         status: store.state.server.failedResponse,
         reason: "no exist",
@@ -38,13 +38,13 @@ let mockUsersPromise:any = null;
 let mockLayersPromise:any = null;
 let mockKgInitPromise:any = null;
 
-function loadMockQualityData(){
-  if(mockQualityDataPromise != null)
+function loadMockQualityData() {
+  if (mockQualityDataPromise != null)
     return mockQualityDataPromise;
 
   mockQualityDataPromise = fetch("/mock/quality-analysis.json", { cache: "no-store" })
-    .then((res) => {
-      if(!res.ok)
+    .then(res => {
+      if (!res.ok)
         throw new Error("Failed to load mock quality data");
       return res.json();
     });
@@ -52,13 +52,13 @@ function loadMockQualityData(){
   return mockQualityDataPromise;
 }
 
-function loadMockUsers(){
-  if(mockUsersPromise != null)
+function loadMockUsers() {
+  if (mockUsersPromise != null)
     return mockUsersPromise;
 
   mockUsersPromise = fetch("/mock/users.json", { cache: "no-store" })
-    .then((res) => {
-      if(!res.ok)
+    .then(res => {
+      if (!res.ok)
         throw new Error("Failed to load mock users");
       return res.json();
     });
@@ -66,13 +66,13 @@ function loadMockUsers(){
   return mockUsersPromise;
 }
 
-function loadMockLayers(){
-  if(mockLayersPromise != null)
+function loadMockLayers() {
+  if (mockLayersPromise != null)
     return mockLayersPromise;
 
   mockLayersPromise = fetch("/mock/layers.json", { cache: "no-store" })
-    .then((res) => {
-      if(!res.ok)
+    .then(res => {
+      if (!res.ok)
         throw new Error("Failed to load mock layers");
       return res.json();
     });
@@ -80,13 +80,13 @@ function loadMockLayers(){
   return mockLayersPromise;
 }
 
-function loadMockKgInit(){
-  if(mockKgInitPromise != null)
+function loadMockKgInit() {
+  if (mockKgInitPromise != null)
     return mockKgInitPromise;
 
   mockKgInitPromise = fetch("/mock/kg-init.json", { cache: "no-store" })
-    .then((res) => {
-      if(!res.ok)
+    .then(res => {
+      if (!res.ok)
         throw new Error("Failed to load mock kg init");
       return res.json();
     });
@@ -94,31 +94,31 @@ function loadMockKgInit(){
   return mockKgInitPromise;
 }
 
-function getMockQualityResponse(url:string){
-  if(url.indexOf("/option/GraphTime/") != -1)
+function getMockQualityResponse(url:string) {
+  if (url.indexOf("/option/GraphTime/") != -1)
     return loadMockQualityData().then((data:any) => data.graphTime);
 
-  if(url.indexOf("/quality/getItems/") != -1)
+  if (url.indexOf("/quality/getItems/") != -1)
     return loadMockQualityData().then((data:any) => data.items);
 
-  if(url.indexOf("/quality/getChart/") != -1)
+  if (url.indexOf("/quality/getChart/") != -1)
     return loadMockQualityData().then((data:any) => data.chart);
 }
 
-export function getMockPostResponse(url:string,data:any){
-  if(url.indexOf("/querymodel/") != -1)
+export function getMockPostResponse(url:string, data:any) {
+  if (url.indexOf("/querymodel/") != -1)
     return getMockQueryModelResponse(data);
 
-  if(url.indexOf("/getalluser/") != -1)
+  if (url.indexOf("/getalluser/") != -1)
     return loadMockUsers();
 
-  if(url.indexOf("/layers/") != -1)
+  if (url.indexOf("/layers/") != -1)
     return loadMockLayers();
 
-  if(url.indexOf("/kg/init/") != -1)
+  if (url.indexOf("/kg/init/") != -1)
     return loadMockKgInit();
 
   const qualityResponse = getMockQualityResponse(url);
-  if(qualityResponse != undefined)
+  if (qualityResponse != undefined)
     return qualityResponse;
 }

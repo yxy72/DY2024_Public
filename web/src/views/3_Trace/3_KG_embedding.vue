@@ -8,12 +8,12 @@
           :on-change="handleChange"
           :show-file-list="false"
           :auto-upload="false">
-            <el-button size=""
-              :style='"padding:7px;border-radius:"+store.state.option.style.el_button_border_radius+";"'
+          <el-button size=""
+                     :style='"padding:7px;border-radius:"+store.state.option.style.el_button_border_radius+";"'
 
-              type="primary" ><el-icon size="21px" style="margin-Right:4px"><folder-add /></el-icon>
-              <div style="font-Size:16px">原型三元组</div>
-            </el-button>
+                     type="primary" ><el-icon size="21px" style="margin-Right:4px"><folder-add /></el-icon>
+            <div style="font-Size:16px">原型三元组</div>
+          </el-button>
         </el-upload>
       </div>
 
@@ -31,40 +31,40 @@
             >
 
                 
-            <el-descriptions-item width="120px">
-              <template #label>
-                <div class="cell-item">
-                  <i class="iconfont">&#xe613;</i>
+              <el-descriptions-item width="120px">
+                <template #label>
+                  <div class="cell-item">
+                    <i class="iconfont">&#xe613;</i>
 
-                  <!-- <img src="../../assets/icons/1.png"/> -->
-                  三元组
-                </div>
-              </template>
-              <div v-if="!d.sampleDataOnLoaded" style="color:gray;font-Size:11px">等待加载</div>
-              <div v-else>{{d.sampleTriplets.length}}</div>
-            </el-descriptions-item>
+                    <!-- <img src="../../assets/icons/1.png"/> -->
+                    三元组
+                  </div>
+                </template>
+                <div v-if="!d.sampleDataOnLoaded" style="color:gray;font-Size:11px">等待加载</div>
+                <div v-else>{{d.sampleTriplets.length}}</div>
+              </el-descriptions-item>
 
-            <el-descriptions-item width="120px">
-              <template #label>
-                <div class="cell-item">
-                  <i class="iconfont">&#xe62f;</i>
-                  实体数
-                </div>
-              </template>
-              <div v-if="!d.sampleDataOnLoaded" style="color:gray;font-Size:11px">等待加载</div>
-              <div v-else>{{d.sampleEntitis.length}}</div>
-            </el-descriptions-item>
+              <el-descriptions-item width="120px">
+                <template #label>
+                  <div class="cell-item">
+                    <i class="iconfont">&#xe62f;</i>
+                    实体数
+                  </div>
+                </template>
+                <div v-if="!d.sampleDataOnLoaded" style="color:gray;font-Size:11px">等待加载</div>
+                <div v-else>{{d.sampleEntitis.length}}</div>
+              </el-descriptions-item>
 
-            <el-descriptions-item width="120px">
-              <template #label>
-                <div class="cell-item">
-                  <i class="iconfont">&#xe65d;</i>
-                  关系数
-                </div>
-              </template>
-              <div v-if="!d.sampleDataOnLoaded" style="color:gray;font-Size:11px">等待加载</div>
-              <div v-else>{{d.sampleEdges.length}}</div>
-            </el-descriptions-item>
+              <el-descriptions-item width="120px">
+                <template #label>
+                  <div class="cell-item">
+                    <i class="iconfont">&#xe65d;</i>
+                    关系数
+                  </div>
+                </template>
+                <div v-if="!d.sampleDataOnLoaded" style="color:gray;font-Size:11px">等待加载</div>
+                <div v-else>{{d.sampleEdges.length}}</div>
+              </el-descriptions-item>
 
 
             </el-descriptions>
@@ -105,13 +105,13 @@
               <el-col :span="15" style="background:">
                 <el-radio-group v-model="d.embedKind" >
                   <el-radio  label="TransE" style="margin:15px">
-                      <div style="font-Size:15px">TransE</div>
+                    <div style="font-Size:15px">TransE</div>
                   </el-radio>
                   <el-radio label="TransH" style="margin:15px" >
-                      <div style="font-Size:15px">TransH</div>
+                    <div style="font-Size:15px">TransH</div>
                   </el-radio>
                   <el-radio disabled  label="TransR" style="margin:15px">
-                      <div style="font-Size:15px">TransR</div>
+                    <div style="font-Size:15px">TransR</div>
                   </el-radio>
                 </el-radio-group>
               </el-col>
@@ -217,17 +217,17 @@
 
       <div class="bottomRow">
         <el-button size='large' @click="RUN()"
-          :style='"padding:7px;border-radius:"+store.state.option.style.el_button_border_radius+";"'
+                   :style='"padding:7px;border-radius:"+store.state.option.style.el_button_border_radius+";"'
 
-          type="success" plain >
+                   type="success" plain >
           <div style="margin-Left:4px"><el-icon><video-play /></el-icon></div>
           <div style="margin-Left:4px;margin-Right:8px">Run</div>
         </el-button>
 
         <el-button size='large'
-          :style='"heigt:223px;border-radius:"+store.state.option.style.el_button_border_radius+";"'
+                   :style='"heigt:223px;border-radius:"+store.state.option.style.el_button_border_radius+";"'
 
-          :disabled='!d.sampleDataOnCalulated' :type="(!d.sampleDataOnCalulated)?'info':'primary'" plain>
+                   :disabled='!d.sampleDataOnCalulated' :type="(!d.sampleDataOnCalulated)?'info':'primary'" plain>
           <div @click="DOWNLOAD()"  style="margin-Left:8px;margin-Right:8px">下载嵌入结果</div>
         </el-button>
       </div>
@@ -236,7 +236,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref,reactive } from 'vue'
+import { ref, reactive } from 'vue'
 import { ElMessage, UploadProps } from 'element-plus'
 import { useRouter } from "vue-router"
 import { useStore } from 'vuex'
@@ -251,7 +251,7 @@ const store = useStore();
 let d = reactive(store.state.kg.embed)
 
 
-const handleChange: UploadProps['onChange'] = (file) => {
+const handleChange: UploadProps['onChange'] = file => {
   let fileContent = file.raw;
   const fileName = file.name;
   const fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -268,7 +268,7 @@ const handleChange: UploadProps['onChange'] = (file) => {
 function importfile(obj:any) {
   const reader = new FileReader();
   reader.readAsArrayBuffer(obj);
-  reader.onload = function () {
+  reader.onload = function() {
     const buffer:any = reader.result;
     const bytes = new Uint8Array(buffer);
     const length = bytes.byteLength;
@@ -281,12 +281,12 @@ function importfile(obj:any) {
     });
     const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
     
-    if(Object.keys(data[0]).length!=3){
-      ElMessage.error("样本维度："+Object.keys(data[0]).length+" 与期望维度：3不相符。")
+    if (Object.keys(data[0]).length != 3) {
+      ElMessage.error("样本维度：" + Object.keys(data[0]).length + " 与期望维度：3不相符。")
       return
     }
     
-    obj = global.getDataAndColumnsForTable(data,Object.keys(data[0]))
+    obj = global.getDataAndColumnsForTable(data, Object.keys(data[0]))
     d.sampleTripletCount = data.length;
     
     // console.log(data)
@@ -296,16 +296,16 @@ function importfile(obj:any) {
     let relationGroup:string[] = []
     let tripletsGroup:any[] = []
 
-    data.map((val:any,index:any)=>{
+    data.map((val:any, index:any)=>{
       let keys = Object.keys(val)
       tripletsGroup.push(Object.values(val))
-      if(!entityGroup.includes(val[keys[0]])){
+      if (!entityGroup.includes(val[keys[0]])) {
         entityGroup.push(val[keys[0]])
       }
-      if(!relationGroup.includes(val[keys[1]])){
+      if (!relationGroup.includes(val[keys[1]])) {
         relationGroup.push(val[keys[1]])
       }
-      if(!entityGroup.includes(val[keys[2]])){
+      if (!entityGroup.includes(val[keys[2]])) {
         entityGroup.push(val[keys[2]])
       }
 
@@ -326,12 +326,12 @@ function importfile(obj:any) {
 
 
 onMounted(()=>{
-    // tableSty.value = "width:"+document.querySelectorAll('.PagePanel_BoxCard')[0].offsetWidth+"px"
+  // tableSty.value = "width:"+document.querySelectorAll('.PagePanel_BoxCard')[0].offsetWidth+"px"
 });
 onUnmounted(() => {
   store.state.status.menu[2].route = store.state.router.page_kg_embed;
 })
-function RUN(){
+function RUN() {
 
 
 
@@ -343,26 +343,26 @@ function RUN(){
 
   global.httpPost(
     store.state.server.address + "/embed/",
-    {username:store.state.status.loginUserName,entities:d.sampleEntitis,edges:d.sampleEdges,triplets:d.sampleTriplets,dim:d.embedDim,kind:d.embedKind},
-    (res)=>{
-      if(res.status==store.state.server.successResponse){
-        d.embedEntityData = res.result.EmbedE.map((val:any,index:any)=>{
+    {username:store.state.status.loginUserName, entities:d.sampleEntitis, edges:d.sampleEdges, triplets:d.sampleTriplets, dim:d.embedDim, kind:d.embedKind},
+    res=>{
+      if (res.status == store.state.server.successResponse) {
+        d.embedEntityData = res.result.EmbedE.map((val:any, index:any)=>{
           let row = <any>{}
-          for(let i = 0 ; i < d.embedDim ; i++){
-            row["dim"+(i+1)] = val[i]
+          for (let i = 0 ; i < d.embedDim ; i++) {
+            row["dim" + (i + 1)] = val[i]
           }
           row["实体名"] = res.result.E_label[index]
           return row
         })
-        d.embedEntityDataColumns = Array.from({"length":d.embedDim + 1}).map((val:any,index:any)=>{
+        d.embedEntityDataColumns = Array.from({"length":d.embedDim + 1}).map((val:any, index:any)=>{
           let row = <any>{}
           row.key =  `${index}`;
-          if(index == 0){
+          if (index == 0) {
             row.dataKey =  "实体名";
             row.title = "实体名";
             row.width =  120;
             row.fixed = true
-          }else{
+          } else {
             row.dataKey =  `dim${index}`;
             row.title = `dim${index}`;
             row.width =  120;
@@ -371,23 +371,23 @@ function RUN(){
         })
         d.embedEntityDataOnLoading = false;
 
-        d.embedEdgeData = res.result.EmbedR.map((val:any,index:any)=>{
+        d.embedEdgeData = res.result.EmbedR.map((val:any, index:any)=>{
           let row = <any>{}
-          for(let i = 0 ; i < d.embedDim ; i++){
-            row["dim"+(i+1)] = val[i]
+          for (let i = 0 ; i < d.embedDim ; i++) {
+            row["dim" + (i + 1)] = val[i]
           }
           row["关系名"] = res.result.R_label[index]
           return row
         })
-        d.embedEdgeDataColumns = Array.from({"length":d.embedDim + 1}).map((val:any,index:any)=>{
+        d.embedEdgeDataColumns = Array.from({"length":d.embedDim + 1}).map((val:any, index:any)=>{
           let row = <any>{}
           row.key =  `${index}`;
-          if(index == 0){
+          if (index == 0) {
             row.dataKey =  "关系名";
             row.title = "关系名";
             row.width =  120;
             row.fixed = true
-          }else{
+          } else {
             row.dataKey =  `dim${index}`;
             row.title = `dim${index}`;
             row.width =  120;
@@ -396,7 +396,7 @@ function RUN(){
         })
         d.embedEdgeDataOnLoading = false;
         d.sampleDataOnCalulated = true;
-      }else{
+      } else {
         ElMessage.error("服务错误")
       }
     },
@@ -404,7 +404,7 @@ function RUN(){
 
 }
 
-function DOWNLOAD(){
+function DOWNLOAD() {
 
   let ws = XLSX.utils.json_to_sheet(d.embedEntityData)
   // 设置每列的列宽，10代表10个字符，注意中文占2个字符

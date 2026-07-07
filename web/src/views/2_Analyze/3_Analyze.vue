@@ -19,7 +19,7 @@
                   font-size: 13px;
                   margin-left: 10px;
                 "
-                >{{ ' # '+item.id}}</span>
+              >{{ ' # '+item.id}}</span>
             </el-option>
           </el-select>
 
@@ -44,7 +44,7 @@
           
         </div>
         <div class
-        ="textRow">
+          ="textRow">
           <el-descriptions
             :column="4"
             border>
@@ -57,17 +57,17 @@
               </template>
               {{ item.val }}
               <div v-if="item.name=='异常节点'">
-              <el-scrollbar height="150px">
-                <el-tag v-if="d.errorNodes.length!=0" type="danger" style="margin-right: 5px;" size="small" v-for="item,index in d.errorNodes"><div style="font-size: 14px;">{{item}}</div></el-tag>
-                <el-tag v-else type="success"><div style="font-size: 14px;">无异常</div></el-tag>
-              </el-scrollbar>
+                <el-scrollbar height="150px">
+                  <el-tag v-if="d.errorNodes.length!=0" type="danger" style="margin-right: 5px;" size="small" v-for="item,index in d.errorNodes"><div style="font-size: 14px;">{{item}}</div></el-tag>
+                  <el-tag v-else type="success"><div style="font-size: 14px;">无异常</div></el-tag>
+                </el-scrollbar>
                 
               </div>
               <div v-if="item.name=='关联知识节点'">
                 <div v-if="d.correlatedGraphItems.length!=0">
                   <el-scrollbar height="25px">
-                  <el-tag v-for="item in d.correlatedGraphItems" type="" @click="()=>{k.QM_QueryNode = item;$router.replace({path: store.state.router.page_kg_display})}" style="cursor: pointer;margin-right: 5px;" size="small" ><div style="font-size: 14px;">{{item.name}}</div></el-tag>
-                </el-scrollbar>
+                    <el-tag v-for="item in d.correlatedGraphItems" type="" @click="()=>{k.QM_QueryNode = item;$router.replace({path: store.state.router.page_kg_display})}" style="cursor: pointer;margin-right: 5px;" size="small" ><div style="font-size: 14px;">{{item.name}}</div></el-tag>
+                  </el-scrollbar>
                 </div>
                 <el-tag v-else type="info" ><div style="font-size: 14px;" >暂无关联</div></el-tag>
               </div>
@@ -94,19 +94,19 @@ let k = reactive(store.state.kg.graph);
 let chartRef = ref()
 let chart = <EChartsType>{};
 let pd = reactive({
-  selectItems:[{value:'均衡等级',id:'# 0001'}],
+  selectItems:[{value:'均衡等级', id:'# 0001'}],
   showTable:true,
 })
 let interval:any;
 const getAnalyzeData = () => {
   global.httpPost(
-    store.state.server.address + "/analyze/get/",{},
-    (res)=>{
-      if(res.status == store.state.server.failedResponse){
+    store.state.server.address + "/analyze/get/", {},
+    res=>{
+      if (res.status == store.state.server.failedResponse) {
         ElMessage.error("状态异常。")
         return
       }
-      if(res.status == "onPredicting"){
+      if (res.status == "onPredicting") {
         ElMessage.warning("后台数据正在计算中，请稍后重新访问。")
         return
       }
@@ -117,9 +117,9 @@ const getAnalyzeData = () => {
       let minThreshold = res.data.minThreshold
 
 
-      let Series = <any>[],XLabel = <any>[]
+      let Series = <any>[], XLabel = <any>[]
 
-      data.map((val:any,index:number)=>{
+      data.map((val:any, index:number)=>{
         Series.push({
           name: `${label[index]}`,
           type: 'line',
@@ -170,16 +170,16 @@ const getAnalyzeData = () => {
           //   color:'rgb(255, 70, 131)'
           // },
           // areaStyle: {
-            // color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            //   {
-            //     offset: 0,
-            //     color: 'rgb(255, 158, 68)'
-            //   },
-            //   {
-            //     offset: 1,
-            //     color: 'rgb(255, 70, 131)'
-            //   }
-            // ])
+          // color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          //   {
+          //     offset: 0,
+          //     color: 'rgb(255, 158, 68)'
+          //   },
+          //   {
+          //     offset: 1,
+          //     color: 'rgb(255, 70, 131)'
+          //   }
+          // ])
           // },
           data: val
         })
@@ -229,10 +229,10 @@ const getAnalyzeData = () => {
         },
       })*/
       
-      for(let i = 0 ; i < Number(data[0].length) - Number(predictLen) ; i++)
-        XLabel.push(`节点${i+1}`)
-      for(let i = 0 ; i < Number(predictLen) ; i++)
-        XLabel.push({value:`预测${i+1}`,textStyle: {
+      for (let i = 0 ; i < Number(data[0].length) - Number(predictLen) ; i++)
+        XLabel.push(`节点${i + 1}`)
+      for (let i = 0 ; i < Number(predictLen) ; i++)
+        XLabel.push({value:`预测${i + 1}`, textStyle: {
           color: 'darkred'
         }})
       
@@ -259,17 +259,17 @@ const SELECTCHANGE = (val:string) => {
   global.httpPost(
     store.state.server.address + '/quality/getChart/',
     {uid:val},
-    (res)=>{
-      if(res.status != store.state.server.successResponse){
+    res=>{
+      if (res.status != store.state.server.successResponse) {
         ElMessage.info(res.status)
         d.selectItem = d.lastSelectItem
         return
       }
       let data = JSON.parse(res.data)
-      if(data==null)
-        pd.showTable=false
+      if (data == null)
+        pd.showTable = false
       else
-        pd.showTable=true
+        pd.showTable = true
       let maxThreshold = Number(res.threshold.maxThreshold)
       let minThreshold = Number(res.threshold.minThreshold)
       let predictLen = Number(res.outputDim)
@@ -279,56 +279,56 @@ const SELECTCHANGE = (val:string) => {
       let label = res.label
       let maxOverflows = []
       let minOverflows = []
-      d.errorNodes= []
+      d.errorNodes = []
 
-      if(data!=null)
-        for(let i = 0;i<data.length;i++){
+      if (data != null)
+        for (let i = 0;i < data.length;i++) {
 
-          if(Number(data[i])>maxThreshold){
-            if(i>Number(data.length) - Number(predictLen)){
+          if (Number(data[i]) > maxThreshold) {
+            if (i > Number(data.length) - Number(predictLen)) {
               maxOverflows.push([
                 {
-                  xAxis: i==Number(data.length) - Number(predictLen)+1?`节点${i-1}`:`预测${i-Number(data.length)+Number(predictLen)}`
+                  xAxis: i == Number(data.length) - Number(predictLen) + 1 ? `节点${i - 1}` : `预测${i - Number(data.length) + Number(predictLen)}`
                 },
                 {
-                  xAxis: `预测${i-Number(data.length)+Number(predictLen)+1}`
+                  xAxis: `预测${i - Number(data.length) + Number(predictLen) + 1}`
                 }
               ])
-              d.errorNodes.push(i==Number(data.length) - Number(predictLen)+1?`预测1`:`预测${i-Number(data.length)+Number(predictLen)+1}`)
-            }else{
+              d.errorNodes.push(i == Number(data.length) - Number(predictLen) + 1 ? `预测1` : `预测${i - Number(data.length) + Number(predictLen) + 1}`)
+            } else {
               maxOverflows.push([
                 {
                   xAxis: `节点${i}`
                 },
                 {
-                  xAxis: `节点${i+1}`
+                  xAxis: `节点${i + 1}`
                 }
               ])
-              d.errorNodes.push(`节点${i+1}`)
+              d.errorNodes.push(`节点${i + 1}`)
             }
           }
 
-          if(Number(data[i])<minThreshold){
-            if(i>Number(data.length) - Number(predictLen)){
+          if (Number(data[i]) < minThreshold) {
+            if (i > Number(data.length) - Number(predictLen)) {
               minOverflows.push([
                 {
-                  xAxis: i==Number(data.length) - Number(predictLen)+1?`节点${i-1}`:`预测${i-Number(data.length)+Number(predictLen)}`
+                  xAxis: i == Number(data.length) - Number(predictLen) + 1 ? `节点${i - 1}` : `预测${i - Number(data.length) + Number(predictLen)}`
                 },
                 {
-                  xAxis: `预测${i-Number(data.length)+Number(predictLen)+1}`
+                  xAxis: `预测${i - Number(data.length) + Number(predictLen) + 1}`
                 }
               ])
-              d.errorNodes.push(i==Number(data.length) - Number(predictLen)+1?`预测1`:`预测${i-Number(data.length)+Number(predictLen)+1}`)
-            }else{
+              d.errorNodes.push(i == Number(data.length) - Number(predictLen) + 1 ? `预测1` : `预测${i - Number(data.length) + Number(predictLen) + 1}`)
+            } else {
               minOverflows.push([
                 {
                   xAxis: `节点${i}`
                 },
                 {
-                  xAxis: `节点${i+1}`
+                  xAxis: `节点${i + 1}`
                 }
               ])
-              d.errorNodes.push(`节点${i+1}`)
+              d.errorNodes.push(`节点${i + 1}`)
             }
           }
 
@@ -338,37 +338,37 @@ const SELECTCHANGE = (val:string) => {
       
       d.correlatedGraphItems = (res.neighbors)
       
-    //   switch(val){
-    //     case("0001"):
-    //       d.correlatedGraphItems = [
-    //         {label:"装配后筒、尾圈",class:"工艺参数属性"},
-    //         {label:"配置环氧胶",class:"工艺参数属性"},
-    //         {label:"整流罩装配",class:"工艺参数属性"},
-    //         {label:"拧入深度",class:"质量因素"},
-    //         {label:"产品长度",class:"质量因素"},
-    //       ]
-    //       break;
-    //     case("0002"):
-    //       d.correlatedGraphItems = [
-    //         {label:"固化湿度",class:"质量因素"},
-    //         {label:"点胶量",class:"质量因素"},
-    //         {label:"破甲火箭弹对接-预配摆差",class:"工艺参数属性"},
-    //         {label:"破甲火箭弹检验-摆差",class:"工艺参数属性"},
-    //         {label:"破甲火箭弹对接-夹具夹紧",class:"工艺参数属性"},
-    //       ]
-    //       break;
-    //     default:
-    //       d.correlatedGraphItems =[
-    //       ]
+      //   switch(val){
+      //     case("0001"):
+      //       d.correlatedGraphItems = [
+      //         {label:"装配后筒、尾圈",class:"工艺参数属性"},
+      //         {label:"配置环氧胶",class:"工艺参数属性"},
+      //         {label:"整流罩装配",class:"工艺参数属性"},
+      //         {label:"拧入深度",class:"质量因素"},
+      //         {label:"产品长度",class:"质量因素"},
+      //       ]
+      //       break;
+      //     case("0002"):
+      //       d.correlatedGraphItems = [
+      //         {label:"固化湿度",class:"质量因素"},
+      //         {label:"点胶量",class:"质量因素"},
+      //         {label:"破甲火箭弹对接-预配摆差",class:"工艺参数属性"},
+      //         {label:"破甲火箭弹检验-摆差",class:"工艺参数属性"},
+      //         {label:"破甲火箭弹对接-夹具夹紧",class:"工艺参数属性"},
+      //       ]
+      //       break;
+      //     default:
+      //       d.correlatedGraphItems =[
+      //       ]
 
-    //   }
+      //   }
 
 
    
 
 
 
-      let Series = <any>[],XLabel = <any>[]
+      let Series = <any>[], XLabel = <any>[]
 
       Series.push({
         type: 'line',
@@ -411,24 +411,24 @@ const SELECTCHANGE = (val:string) => {
       })
       
       
-      d.chartOption.yAxis.max = function(val:any){
-        let max = val.max > Number(maxThreshold)?val.max:Number(maxThreshold)
-        let xs = max<10?1:0
-        let abs = Math.abs(Number(maxThreshold)-val.max)
-        return ((max+abs)).toFixed(2)
+      d.chartOption.yAxis.max = function(val:any) {
+        let max = val.max > Number(maxThreshold) ? val.max : Number(maxThreshold)
+        let xs = max < 10 ? 1 : 0
+        let abs = Math.abs(Number(maxThreshold) - val.max)
+        return ((max + abs)).toFixed(2)
       }
-      d.chartOption.yAxis.min = function(val:any){
-        let min = val.min < Number(minThreshold)?val.min:Number(minThreshold)
-        let xs = min<10?1:0
-        let abs = Math.abs(Number(minThreshold)-val.min)
-        return (min-abs<0?0:min-abs).toFixed(2)
+      d.chartOption.yAxis.min = function(val:any) {
+        let min = val.min < Number(minThreshold) ? val.min : Number(minThreshold)
+        let xs = min < 10 ? 1 : 0
+        let abs = Math.abs(Number(minThreshold) - val.min)
+        return (min - abs < 0 ? 0 : min - abs).toFixed(2)
       }
 
-      if(data!=null){
-        for(let i = 0 ; i < Number(data.length) - Number(predictLen) ; i++)
-          XLabel.push(`节点${i+1}`)
-        for(let i = 0 ; i < Number(predictLen) ; i++)
-          XLabel.push({value:`预测${i+1}`,textStyle: {
+      if (data != null) {
+        for (let i = 0 ; i < Number(data.length) - Number(predictLen) ; i++)
+          XLabel.push(`节点${i + 1}`)
+        for (let i = 0 ; i < Number(predictLen) ; i++)
+          XLabel.push({value:`预测${i + 1}`, textStyle: {
             color: 'darkred'
           }})
       }
@@ -443,19 +443,19 @@ const SELECTCHANGE = (val:string) => {
       // chartOption.xAxis.data = XLabel
 
       chart.off();
-      chart.on('datazoom', function (params:any) {
-          d.chartZoomCustom[label] = {}
-          d.chartZoomCustom[label].start = params.start
-          d.chartZoomCustom[label].end = params.end
+      chart.on('datazoom', function(params:any) {
+        d.chartZoomCustom[label] = {}
+        d.chartZoomCustom[label].start = params.start
+        d.chartZoomCustom[label].end = params.end
       });
-      let s = d.chartZoomCustom[label]==undefined?graphLeft:d.chartZoomCustom[label].start;
-      let e = d.chartZoomCustom[label]==undefined?graphRight:d.chartZoomCustom[label].end;
+      let s = d.chartZoomCustom[label] == undefined ? graphLeft : d.chartZoomCustom[label].start;
+      let e = d.chartZoomCustom[label] == undefined ? graphRight : d.chartZoomCustom[label].end;
 
       d.chartOption.dataZoom =  [{
         type: 'inside',
         start: s,
         end: e,
-      },{
+      }, {
         start: s,
         end: e,
       }]
@@ -471,15 +471,15 @@ onBeforeMount(()=>{
   global.httpPost(
     store.state.server.address + '/option/GraphTime/',
     {type:"get"},
-    (res)=>{
-    if(res.time!=undefined)
-      interval = setInterval(() => {
-        SELECTCHANGE(d.selectItem)
-      }, Number(res.time)*1000);
-    else
-      interval = setInterval(() => {
-        SELECTCHANGE(d.selectItem)
-      }, 5000);
+    res=>{
+      if (res.time != undefined)
+        interval = setInterval(() => {
+          SELECTCHANGE(d.selectItem)
+        }, Number(res.time) * 1000);
+      else
+        interval = setInterval(() => {
+          SELECTCHANGE(d.selectItem)
+        }, 5000);
       
     },
     ()=>{
@@ -504,12 +504,12 @@ onMounted(()=>{
   global.httpPost(
     store.state.server.address + '/quality/getItems/',
     {},
-    (res)=>{
+    res=>{
       pd.selectItems = <any>[]
-      for(let i = 0 ;i<res.items.length;i++){
-        pd.selectItems.push({value:res.items[i].label,id:res.items[i].uid})
+      for (let i = 0 ;i < res.items.length;i++) {
+        pd.selectItems.push({value:res.items[i].label, id:res.items[i].uid})
       }
-      d.selectItem = d.selectItem == ""?pd.selectItems[0].id:d.selectItem
+      d.selectItem = d.selectItem == "" ? pd.selectItems[0].id : d.selectItem
       SELECTCHANGE(d.selectItem)
     }
   )

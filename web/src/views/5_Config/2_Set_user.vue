@@ -20,7 +20,7 @@
               :headers="getHeaders()"
               :on-change="handleAvatarChange"
               :on-success="handleAvatarSuccess"
-              >
+            >
               <template #trigger>
                 <el-button type="primary" link style="margin-top: px;;margin-left: 5px;"><div style="font-size: 14px;">上传</div></el-button>
               </template>
@@ -37,23 +37,23 @@
           ref="UserRef"
           hide-required-asterisk
         >
-        <el-form-item label="当前用户名" required>
-          <el-input v-model="userInfo.username" />
-        </el-form-item>
-        <el-form-item  label="密码" v-if="!userInfo.changingpwd">
-          <el-button @click="userInfo.changingpwd = true">
-            更改密码
-          </el-button>
-        </el-form-item>
-        <el-form-item prop="password_old" required label="当前密码" v-if="userInfo.changingpwd" :rules="{ required: true,message:'请输入当前密码',trigger:'change'}">
-          <el-input show-password v-model="userInfo.password_old" />
-        </el-form-item>
-        <el-form-item prop="password_new" label="新密码" v-if="userInfo.changingpwd" :rules="{ required: true,message:'请输入新密码',trigger:'change'}">
-          <el-input show-password v-model="userInfo.password_new" />
-        </el-form-item>
-        <el-form-item prop="password_confirm" label="确认密码" v-if="userInfo.changingpwd" :rules="{ required: true,validator:checkRegisterPassword,trigger:['change','blur']}">
-          <el-input show-password v-model="userInfo.password_confirm" />
-        </el-form-item>
+          <el-form-item label="当前用户名" required>
+            <el-input v-model="userInfo.username" />
+          </el-form-item>
+          <el-form-item  label="密码" v-if="!userInfo.changingpwd">
+            <el-button @click="userInfo.changingpwd = true">
+              更改密码
+            </el-button>
+          </el-form-item>
+          <el-form-item prop="password_old" required label="当前密码" v-if="userInfo.changingpwd" :rules="{ required: true,message:'请输入当前密码',trigger:'change'}">
+            <el-input show-password v-model="userInfo.password_old" />
+          </el-form-item>
+          <el-form-item prop="password_new" label="新密码" v-if="userInfo.changingpwd" :rules="{ required: true,message:'请输入新密码',trigger:'change'}">
+            <el-input show-password v-model="userInfo.password_new" />
+          </el-form-item>
+          <el-form-item prop="password_confirm" label="确认密码" v-if="userInfo.changingpwd" :rules="{ required: true,validator:checkRegisterPassword,trigger:['change','blur']}">
+            <el-input show-password v-model="userInfo.password_confirm" />
+          </el-form-item>
         </el-form>
         <div class="rowDivider"></div>
         <el-form-item>
@@ -91,7 +91,7 @@
               <el-tag
                 :type="scope.row.useradmin === '管理员' ? '' : 'info'"
                 disable-transitions
-                >
+              >
                 <div style="font-size: 13px;">
                   {{ scope.row.useradmin }}
                 </div>
@@ -147,7 +147,7 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { onMounted, onUnmounted, reactive,  } from 'vue';
 import { ref } from 'vue';
-import { ElMessage,ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import * as global from "@/utils/global"
 import type { FormInstance} from 'element-plus'
 import { ElNotification } from 'element-plus'
@@ -182,16 +182,16 @@ interface User {
   useradmin: string
   date_create: string
 }
-var tableData= ref([{
+var tableData = ref([{
   id:"0",
   username:"1",
   useradmin:"0",
   date_create:"2",
 }])
-function deleteRow(row:any){
+function deleteRow(row:any) {
 
   ElMessageBox.confirm(
-    row.username!=store.state.status.loginUserName?('确定要从数据库中删除用户'+row.username):"确定要删除自己的账户？（将会退出系统）",
+    row.username != store.state.status.loginUserName ? ('确定要从数据库中删除用户' + row.username) : "确定要删除自己的账户？（将会退出系统）",
     '删除',
     {
       confirmButtonText: '确认',
@@ -202,38 +202,38 @@ function deleteRow(row:any){
       global.httpPost(
         store.state.server.address + "/deleteuser/",
         {username:row.username},
-        (res)=>{
-          if(res.status==store.state.server.successResponse){
-            tableData.value.splice(tableData.value.indexOf(row),1)
-            ElMessage.info('用户'+row.username+'删除成功。')
-            if(row.username==store.state.status.loginUserName)
+        res=>{
+          if (res.status == store.state.server.successResponse) {
+            tableData.value.splice(tableData.value.indexOf(row), 1)
+            ElMessage.info('用户' + row.username + '删除成功。')
+            if (row.username == store.state.status.loginUserName)
               onLogout()
           }
         }
       )
     }).catch(() => {})
 }
-function onRegist(){
-  if(RegistRef.value==null)
-      return;
+function onRegist() {
+  if (RegistRef.value == null)
+    return;
   RegistRef.value.validate((valid:any)=>{
-    if(valid){
+    if (valid) {
 
       
   
 
       global.httpPost(
         store.state.server.address + "/regist/config/",
-        {username:registInfo.username,useradmin:registInfo.useradmin=="管理员"?true:false},
-        (res)=>{
-          if(res.status==store.state.server.successResponse){
+        {username:registInfo.username, useradmin:registInfo.useradmin == "管理员" ? true : false},
+        res=>{
+          if (res.status == store.state.server.successResponse) {
             ElNotification.success({
               title: '新增',
-              message: '已增加用户'+registInfo.username+', 默认密码123456',
+              message: '已增加用户' + registInfo.username + ', 默认密码123456',
               showClose: true,
             })
             tableData.value = res.userList
-          }else if(res.status=="username error"){
+          } else if (res.status == "username error") {
             ElMessage.error("用户名已存在。")
           }
         }
@@ -241,59 +241,59 @@ function onRegist(){
     }
   })
 }
-function checkRegisterPassword(rule:any,value:any,callback:any){
-    if (value === '') {
-        callback(new Error('请再次输入密码'));
-      } else if (value !== userInfo.password_new) {
-        callback(new Error('两次输入密码不一致!'));
-      } else {
-        callback();
-      }
+function checkRegisterPassword(rule:any, value:any, callback:any) {
+  if (value === '') {
+    callback(new Error('请再次输入密码'));
+  } else if (value !== userInfo.password_new) {
+    callback(new Error('两次输入密码不一致!'));
+  } else {
+    callback();
+  }
 }
-function onChangingUserInfo(){
+function onChangingUserInfo() {
 
   
-  if(!userInfo.changingpwd){
-    if(userInfo.username == store.state.status.loginUserName && !userInfo.changingavatar)
+  if (!userInfo.changingpwd) {
+    if (userInfo.username == store.state.status.loginUserName && !userInfo.changingavatar)
       return;
     let changeUsername = !(userInfo.username == store.state.status.loginUserName)
     global.httpPost(
       store.state.server.address + "/changeuser/",
-      {type:"username",username:userInfo.username,changeusername:changeUsername},
-      (res)=>{
-        if(res.status==store.state.server.successResponse){
+      {type:"username", username:userInfo.username, changeusername:changeUsername},
+      res=>{
+        if (res.status == store.state.server.successResponse) {
           ElMessage.success("修改成功。")
           store.state.status.loginUserName = userInfo.username
           global.setToken(res.token)
           //必须token改变之后再改变头像。
-          if(userInfo.changingavatar){
+          if (userInfo.changingavatar) {
             upload.value!.submit();
           }
-        }else if(res.status==store.state.server.failedResponse){
-          ElMessage.error("操作失败，原因："+res.reason)
+        } else if (res.status == store.state.server.failedResponse) {
+          ElMessage.error("操作失败，原因：" + res.reason)
         }
       }
     )
-  }else{
-    if(UserRef.value==null)
+  } else {
+    if (UserRef.value == null)
       return;
     UserRef.value.validate((valid:any)=>{
-      if(valid){
+      if (valid) {
         let changeUsername = !(userInfo.username == store.state.status.loginUserName)
         global.httpPost(
           store.state.server.address + "/changeuser/",
-          {type:"password",changeusername:changeUsername,username:userInfo.username,password:userInfo.password_old,password_new:userInfo.password_new},
-          (res)=>{
-            if(res.status==store.state.server.successResponse){
+          {type:"password", changeusername:changeUsername, username:userInfo.username, password:userInfo.password_old, password_new:userInfo.password_new},
+          res=>{
+            if (res.status == store.state.server.successResponse) {
               ElMessage.success("修改成功。")
               store.state.status.loginUserName = userInfo.username
               global.setToken(res.token)
               //必须token改变之后再改变头像。
-              if(userInfo.changingavatar){
+              if (userInfo.changingavatar) {
                 upload.value!.submit();
               }
-            }else if(res.status==store.state.server.failedResponse){
-              ElMessage.error("操作失败，原因："+res.reason)
+            } else if (res.status == store.state.server.failedResponse) {
+              ElMessage.error("操作失败，原因：" + res.reason)
             }
           }
         )
@@ -302,7 +302,7 @@ function onChangingUserInfo(){
     })
   }
 }
-function onLogout(){
+function onLogout() {
   global.removeToken()
   store.state.status.login = false
   store.state.status.loginUserName = ""
@@ -312,15 +312,15 @@ const filterTag = (value: string, row: User) => {
   return row.useradmin === value
 }
 //上传文件
-const handleExceed: UploadProps['onExceed'] = (files) => {
+const handleExceed: UploadProps['onExceed'] = files => {
   upload.value!.clearFiles()
   const file = files[0] as UploadRawFile
   file.uid = genFileId()
   upload.value!.handleStart(file)
 }
 var imageUrl = ref('')
-const handleAvatarChange: UploadProps['onChange'] = (uploadFile,uploadFiles) => {
-  if(uploadFile.raw == null)
+const handleAvatarChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
+  if (uploadFile.raw == null)
     return
   if (uploadFile.raw.type !== 'image/jpeg' && uploadFile.raw.type !== 'image/png') {
     ElMessage.error('图片格式只支持jpg/png')
@@ -332,20 +332,20 @@ const handleAvatarChange: UploadProps['onChange'] = (uploadFile,uploadFiles) => 
   userInfo.avatarUrl = URL.createObjectURL(uploadFile.raw!)
   userInfo.changingavatar = !userInfo.changingavatar
 }
-const handleAvatarSuccess: UploadProps['onSuccess'] = (response,uploadFile) => {
-  if(response.status == store.state.server.successResponse){
-    store.state.status.loginUserAvatarUrl = response.avatar+"?r="+Math.random()
+const handleAvatarSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+  if (response.status == store.state.server.successResponse) {
+    store.state.status.loginUserAvatarUrl = response.avatar + "?r=" + Math.random()
   }
 }
-var getHeaders = ()=>{return{ token:global.getToken()}}
+var getHeaders = ()=>{return { token:global.getToken()}}
 onMounted(()=>{
   userInfo.username = store.state.status.loginUserName
   // 显示用户列表
   global.httpPost(
     store.state.server.address + "/getalluser/",
     {},
-    (res)=>{
-      if(res.status==store.state.server.successResponse){
+    res=>{
+      if (res.status == store.state.server.successResponse) {
         tableData.value = res.userList
       }
     }
@@ -354,7 +354,7 @@ onMounted(()=>{
 onUnmounted(() => {
   store.state.status.menu[4].route = store.state.router.page_config_user;
 })
-function devFunc(){}
+function devFunc() {}
 </script>
 <style scoped lang="less">
 .page{

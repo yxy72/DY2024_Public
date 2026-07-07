@@ -28,8 +28,8 @@
               </el-form-item>
               <el-form-item>
                 <el-button
-                v-loading.fullscreen.lock="onloading"
-                type="primary" @click="onSubmit">登录</el-button>
+                  v-loading.fullscreen.lock="onloading"
+                  type="primary" @click="onSubmit">登录</el-button>
                 <el-button type="text" @click="registerWindowVisible=true">注册</el-button>
                 <el-button type="text" @click="about=true">关于</el-button>
 
@@ -43,15 +43,15 @@
 
 
             <el-dialog v-model="registerWindowVisible" @closed="registed=false"
-             align-center title="注册账号" width="30%" center
-             v-on:keyup.enter="onRegisterSubmit()">
+                       align-center title="注册账号" width="30%" center
+                       v-on:keyup.enter="onRegisterSubmit()">
               <el-result v-if="registed"  icon="success" title="注册成功" sub-title="点击任意处返回" >
               </el-result>
               <el-form v-if="!registed" 
-                label-position="left"
-                label-width="80px"
-                :model="registerData"
-                ref="registerValidation"
+                       label-position="left"
+                       label-width="80px"
+                       :model="registerData"
+                       ref="registerValidation"
               >
                 <el-form-item
                   label="注册码" 
@@ -66,7 +66,7 @@
                   prop="username"
                   label="用户名"
                   :rules="{ required: true, message: '请输入用户名'}"
-                  >
+                >
                   <el-input v-model="registerData.username"></el-input>
                 </el-form-item>
 
@@ -79,17 +79,17 @@
                 </el-form-item>
 
                 <el-form-item
-                    label="确认密码"
-                    prop="repassword"
-                    :rules="{ required: true,validator:checkRegisterPassword,trigger:'change'}"
-                    >
+                  label="确认密码"
+                  prop="repassword"
+                  :rules="{ required: true,validator:checkRegisterPassword,trigger:'change'}"
+                >
                   <el-input show-password v-model="registerData.repassword" ></el-input>
                 </el-form-item>
 
                 <el-form-item>
                   <el-button
-                  v-loading.fullscreen.lock="onloading"
-                  type="primary" @click="onRegisterSubmit()">确认</el-button>
+                    v-loading.fullscreen.lock="onloading"
+                    type="primary" @click="onRegisterSubmit()">确认</el-button>
                 </el-form-item>
 
               </el-form>
@@ -100,7 +100,7 @@
     </div>
     <div  class="titleBKG"></div>
 
- </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -125,22 +125,22 @@ let userinfo = reactive(store.state.status)
 let onloading = store.state.status.loginLoading
 
 let loginData = reactive({
-    username:"admin",
-    password:"123456"
+  username:"admin",
+  password:"123456"
 })
 let registerData = reactive({
-    serial:"",
-    username:"",
-    password:"",
-    repassword:"",
+  serial:"",
+  username:"",
+  password:"",
+  repassword:"",
   
 })
-function onSubmit(){
-  if(loginData.username=="")
+function onSubmit() {
+  if (loginData.username == "")
     ElMessage.error("请输入用户名")
-  if(loginData.password=="")
+  if (loginData.password == "")
     ElMessage.error("请输入密码")
-  if(loginData.username==""||loginData.password=="")
+  if (loginData.username == "" || loginData.password == "")
     return;
   userinfo.loginLoading = true
 
@@ -152,26 +152,26 @@ function onSubmit(){
 
   global.httpPost(
     store.state.server.address + "/login/",
-    {username:loginData.username,password:loginData.password},
-    (res)=>{
+    {username:loginData.username, password:loginData.password},
+    res=>{
       // console.log(res)
-      if((res.status=="username error")||(res.status=="password error"))
+      if ((res.status == "username error") || (res.status == "password error"))
         ElMessage.error("用户名或密码错误")
-      else if(res.status=="login error" ){
+      else if (res.status == "login error" ) {
         
         // ElMessage.info("用户"+loginData.username+"已在其他地方登录，请退出该用户后再尝试。")
         $router.replace({ path: store.state.router.page_start });
         userinfo.login = true
         userinfo.loginUserName =  res.data.username
-        userinfo.loginUserAvatarUrl = res.data.avatar+"?r="+Math.random();
+        userinfo.loginUserAvatarUrl = res.data.avatar + "?r=" + Math.random();
         userinfo.loginUserAdmin = res.data.admin
-        global.setToken(res.data.token,res.data.tokenExpires)
-      }else if(res.status=="success"){
+        global.setToken(res.data.token, res.data.tokenExpires)
+      } else if (res.status == "success") {
         $router.replace({ path: store.state.router.page_start });
         ElMessage.success("登陆成功")
         userinfo.login = true
         userinfo.loginUserName =  res.data.username
-        userinfo.loginUserAvatarUrl = res.data.avatar+"?r="+Math.random();
+        userinfo.loginUserAvatarUrl = res.data.avatar + "?r=" + Math.random();
         userinfo.loginUserAdmin = res.data.admin
         
         store.state.train.preProcess = res.data.preData.preProcess;
@@ -179,17 +179,17 @@ function onSubmit(){
         store.state.train.parameters = res.data.preData.parameters;
         store.state.train.serverDataOnLoaded = true;
 
-        global.setToken(res.data.token,res.data.tokenExpires)
+        global.setToken(res.data.token, res.data.tokenExpires)
 
         // 耗时操作
         global.graphInit()
         global.webSocketInit()
           
-      }else{
+      } else {
         ElMessage.error("未知的返回码，无法登陆")
         console.log(res.status)
       }},
-    (error)=>{
+    error=>{
       // ElMessage.success("登陆成损失功")
       // ElMessage({
       //   showClose: true,
@@ -202,32 +202,32 @@ function onSubmit(){
     ()=>{ store.state.status.loginLoading = false }
   )
 }
-function checkRegisterPassword(rule:any,value:any,callback:any){
+function checkRegisterPassword(rule:any, value:any, callback:any) {
   if (value === '') {
-      callback(new Error('请再次输入密码'));
-    } else if (value !== registerData.password) {
-      callback(new Error('两次输入密码不一致!'));
-    } else {
-      callback();
-    }
+    callback(new Error('请再次输入密码'));
+  } else if (value !== registerData.password) {
+    callback(new Error('两次输入密码不一致!'));
+  } else {
+    callback();
+  }
 }
-function onRegisterSubmit(){
-  if(registerValidation.value==null)
+function onRegisterSubmit() {
+  if (registerValidation.value == null)
     return;
   registerValidation.value.validate((valid:any)=>{
-    if(valid){
+    if (valid) {
       store.state.status.loginLoading = true
       global.httpPost(
         store.state.server.address + "/register/",
-        {serial:registerData.serial,username:registerData.username,password:registerData.password},
-        (res)=>{
-          if(res==("serial error"))
+        {serial:registerData.serial, username:registerData.username, password:registerData.password},
+        res=>{
+          if (res == ("serial error"))
             ElMessage.error("注册码无效")
-          else if(res=="username error")
+          else if (res == "username error")
             ElMessage.warning("该用户名已存在")
-          else if(res=="success"){
+          else if (res == "success") {
             registed.value = true
-          }else{
+          } else {
             ElMessage.error("未知错误，无法登陆")
           }},
         ()=>{},

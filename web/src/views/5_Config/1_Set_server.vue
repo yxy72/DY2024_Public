@@ -1,100 +1,100 @@
 <template>
-    <div class="page">
-      <div class="page_body">
-        <el-card class="main_card2">
-          <div class="titleRow">
-            <el-icon size="27px" style="color: #509cfe;margin-right: 5px;"><Platform /></el-icon>服务器
+  <div class="page">
+    <div class="page_body">
+      <el-card class="main_card2">
+        <div class="titleRow">
+          <el-icon size="27px" style="color: #509cfe;margin-right: 5px;"><Platform /></el-icon>服务器
+        </div>
+        <div class="rowDivider"></div>
+
+        <div v-if="!submiting">
+          <div class="contentRow">
+            <div> 服务器状态：{{"http://"+s.getIP()+":"+s.getPort()}}</div>
+            <div class="colDivider"></div>
+            <el-tag class="ml-2" type="success">已连接</el-tag>
           </div>
+          <div class="contentRow">
+            知识库状态：
+            <div v-loading="s.kg_onConnecting">
+              {{"bolt://"+s.getKGIP()+":"+s.getKGPort()}}
+            </div>
+            <div class="colDivider"></div>
+            <el-tag class="ml-2" :type="s.kg_onConnecting?'warning':s.kg_onConnected?'success':'danger'">{{ s.kg_onConnecting?"获取中":s.kg_onConnected?"已连接":"连接失败" }}</el-tag>
+          </div>
+        </div>
+        <el-form v-else style="margin-top: 20px;" ref="reset" :model="d" label-width="120px" >
+            
+          <el-form-item label="服务器地址">
+            <el-col :span="8">
+              <el-input :placeholder="s.getIP()" disabled >
+                <template #prepend>http://</template>
+              </el-input>
+            </el-col>
+            <el-col :span="2">
+              <div style="text-align:center">端口</div>
+            </el-col>
+            <el-col :span="3">
+              <el-form-item >
+                <el-input :placeholder="s.getPort()" disabled ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-form-item>    
+          <el-form-item
+            label="知识库地址">
+            <el-col :span="8">
+              <el-form-item prop="editKGIP"
+                            :rules="{required:true, validator:validateIP,trigger:'change'}">
+                <el-input v-model="d.editKGIP" >
+                  <template #prepend>bolt://</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2">
+              <div style="text-align:center">端口</div>
+            </el-col>
+            <el-col :span="3">
+              <el-form-item prop="editKGPort"
+                            :rules="{required:true, validator:validatePort,trigger:'change'}">
+                <el-input v-model="d.editKGPort" >
+                </el-input>
+              </el-form-item>
+            </el-col>
+
+          </el-form-item>
+
           <div class="rowDivider"></div>
 
-          <div v-if="!submiting">
-            <div class="contentRow">
-              <div> 服务器状态：{{"http://"+s.getIP()+":"+s.getPort()}}</div>
-              <div class="colDivider"></div>
-              <el-tag class="ml-2" type="success">已连接</el-tag>
+          <el-form-item>
+            <div style="margin-left: -100px;">
+              <el-button
+                type="primary"  plain @click="onSubmit()">{{submitingText}}
+              </el-button>
+
             </div>
-            <div class="contentRow">
-              知识库状态：
-              <div v-loading="s.kg_onConnecting">
-                {{"bolt://"+s.getKGIP()+":"+s.getKGPort()}}
-              </div>
-              <div class="colDivider"></div>
-              <el-tag class="ml-2" :type="s.kg_onConnecting?'warning':s.kg_onConnected?'success':'danger'">{{ s.kg_onConnecting?"获取中":s.kg_onConnected?"已连接":"连接失败" }}</el-tag>
-            </div>
-          </div>
-          <el-form v-else style="margin-top: 20px;" ref="reset" :model="d" label-width="120px" >
-            
-            <el-form-item label="服务器地址">
-              <el-col :span="8">
-                <el-input :placeholder="s.getIP()" disabled >
-                  <template #prepend>http://</template>
-                </el-input>
-              </el-col>
-              <el-col :span="2">
-                <div style="text-align:center">端口</div>
-              </el-col>
-              <el-col :span="3">
-                <el-form-item >
-                  <el-input :placeholder="s.getPort()" disabled ></el-input>
-                </el-form-item>
-              </el-col>
-            </el-form-item>    
-            <el-form-item
-              label="知识库地址">
-              <el-col :span="8">
-                <el-form-item prop="editKGIP"
-                  :rules="{required:true, validator:validateIP,trigger:'change'}">
-                  <el-input v-model="d.editKGIP" >
-                    <template #prepend>bolt://</template>
-                  </el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="2">
-                <div style="text-align:center">端口</div>
-              </el-col>
-              <el-col :span="3">
-                <el-form-item prop="editKGPort"
-                :rules="{required:true, validator:validatePort,trigger:'change'}">
-                  <el-input v-model="d.editKGPort" >
-                </el-input>
-                </el-form-item>
-              </el-col>
-
-            </el-form-item>
-
-            <div class="rowDivider"></div>
-
-            <el-form-item>
-              <div style="margin-left: -100px;">
-                <el-button
-                  type="primary"  plain @click="onSubmit()">{{submitingText}}
-                </el-button>
-
-              </div>
 
           </el-form-item>
 
 
-          </el-form>
+        </el-form>
 
-          <div class="rowDivider" v-if="submitingText=='修改'"></div>
+        <div class="rowDivider" v-if="submitingText=='修改'"></div>
 
-          <div class="contentRow" v-if="submitingText=='修改'">
-            <el-form-item>
-              <el-button
+        <div class="contentRow" v-if="submitingText=='修改'">
+          <el-form-item>
+            <el-button
               type="primary" :disabled="s.kg_onConnecting" plain @click="onSubmit()">{{submitingText}}
             </el-button>
-            </el-form-item>
+          </el-form-item>
             
-          </div>
+        </div>
 
 
 
             
 
-        </el-card>
-      </div>
+      </el-card>
     </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -127,7 +127,7 @@ let validateIP = (rule:any, value:any, callback:any) => {
 }; 
 let validatePort = (rule:any, value:any, callback:any) => {
   
-  let reg =/^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/
+  let reg = /^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/
 
   if (value == "") {
     callback(new Error("请输入端口号"));
@@ -139,49 +139,49 @@ let validatePort = (rule:any, value:any, callback:any) => {
   }
 
 }; 
-function onSubmit(){
+function onSubmit() {
   
-  if(submitingText.value=="修改"){
+  if (submitingText.value == "修改") {
     submiting.value = true;
     submitingText.value = "确认"
     return;
   }
-  if(reset.value==null)
+  if (reset.value == null)
     return;
-  reset.value.validate((valid)=>{
-    if(valid){
-      let newURL = "bolt://"+d.editKGIP+":"+d.editKGPort
-      if(newURL==s.kg_address){
+  reset.value.validate(valid=>{
+    if (valid) {
+      let newURL = "bolt://" + d.editKGIP + ":" + d.editKGPort
+      if (newURL == s.kg_address) {
         submiting.value = !submiting.value
-        submitingText.value = submitingText.value=="修改"?"确认":"修改"
-      }else{
+        submitingText.value = submitingText.value == "修改" ? "确认" : "修改"
+      } else {
 
         global.httpPost(
           store.state.server.address + '/config/setKGIP/',
           {new_url:newURL},
           (res:any)=>{
-            if(res.status == s.successResponse){
+            if (res.status == s.successResponse) {
               ElMessage.info("已重新修改知识图谱服务地址，正在载入。")
               s.kg_onConnecting = true
               s.onConnected = false
               global.graphInit(true)
             }
-            else{
+            else {
               ElMessage.error("设置失败。")
             }
           },
           ()=>{},
           ()=>{
             submiting.value = !submiting.value
-            submitingText.value = submitingText.value=="修改"?"确认":"修改"
+            submitingText.value = submitingText.value == "修改" ? "确认" : "修改"
           }
           
-          )
-      }
-        
+        )
       }
         
     }
+        
+  }
   
 
   )
@@ -189,9 +189,9 @@ function onSubmit(){
 }
 
 onMounted(()=>{
-    //d = reactive({"editKGIP":s.getKGIP(),"editKGPort":s.getKGPort()})
-    d.editKGIP = s.getKGIP()
-    d.editKGPort = s.getKGPort()
+  //d = reactive({"editKGIP":s.getKGIP(),"editKGPort":s.getKGPort()})
+  d.editKGIP = s.getKGIP()
+  d.editKGPort = s.getKGPort()
 })
 onUnmounted(() => {
   store.state.status.menu[4].route = store.state.router.page_config_server;

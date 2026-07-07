@@ -36,7 +36,7 @@
                 type="primary"
                 @click="SUBMIT()"
                 plain
-                >执行</el-button
+              >执行</el-button
               >
             </el-row>
           </div>
@@ -45,344 +45,344 @@
           <div class="subTitleRow" style="display: flex">
             <div class="subTitleIcon">
               <el-icon size="23px" style="margin-right: 4px"
-                ><position
+              ><position
               /></el-icon>
             </div>
             <div class="subTitleLabel">工艺质量知识图谱</div>
           </div>
           <el-descriptions
-              style="width: 95%; margin-left: 10px"
-              direction="vertical"
-              :column="4"
-              border
-            >
-              <el-descriptions-item  label="实例地址">
-                {{d.url}}<el-button @click="linkToChangeIP()" style="margin-top: -3px;margin-left: 5px;" link> <el-icon :size="16" color="#409EFF"><Edit /></el-icon> </el-button> 
+            style="width: 95%; margin-left: 10px"
+            direction="vertical"
+            :column="4"
+            border
+          >
+            <el-descriptions-item  label="实例地址">
+              {{d.url}}<el-button @click="linkToChangeIP()" style="margin-top: -3px;margin-left: 5px;" link> <el-icon :size="16" color="#409EFF"><Edit /></el-icon> </el-button> 
 
-                </el-descriptions-item>
-              <el-descriptions-item label="节点数">{{
-                d.allNodesNum
-              }}</el-descriptions-item>
-              <el-descriptions-item label="类别数">{{
-                d.nodeClasses.length
-              }}</el-descriptions-item>
-              <el-descriptions-item label="路径数">{{
-                d.relations.length
-              }}</el-descriptions-item>
-              <el-descriptions-item label="连接状态">
-                <el-tag :type="d.onConnecting?'warning':d.onConnected?'success':'danger'" size="small"
-                  ><div style="font-size: 10px">{{d.onConnecting?"连接中":d.onConnected?"已连接":"连接失败"}}</div></el-tag
-                >
-              </el-descriptions-item> 
-              <el-descriptions-item label="知识总数">{{
-                d.totalNums
-              }}</el-descriptions-item>
-              <el-descriptions-item label="操作">
-                <el-button   size="small" type="primary" plain
-                :loading = "d.onExporting"
-                :disabled = "!d.onConnected"
-                @click="kgExport()"
-                >
+            </el-descriptions-item>
+            <el-descriptions-item label="节点数">{{
+              d.allNodesNum
+            }}</el-descriptions-item>
+            <el-descriptions-item label="类别数">{{
+              d.nodeClasses.length
+            }}</el-descriptions-item>
+            <el-descriptions-item label="路径数">{{
+              d.relations.length
+            }}</el-descriptions-item>
+            <el-descriptions-item label="连接状态">
+              <el-tag :type="d.onConnecting?'warning':d.onConnected?'success':'danger'" size="small"
+              ><div style="font-size: 10px">{{d.onConnecting?"连接中":d.onConnected?"已连接":"连接失败"}}</div></el-tag
+              >
+            </el-descriptions-item> 
+            <el-descriptions-item label="知识总数">{{
+              d.totalNums
+            }}</el-descriptions-item>
+            <el-descriptions-item label="操作">
+              <el-button   size="small" type="primary" plain
+                           :loading = "d.onExporting"
+                           :disabled = "!d.onConnected"
+                           @click="kgExport()"
+              >
                   
-                  <div style="font-size: 12px;">
-                    <div v-if="d.onExporting">导出</div>
-                    <div v-else>导出</div>
-                  </div>
-                  </el-button>
-                <el-icon :size="20">
-                  <!-- <edit /> -->
-                </el-icon>
-              </el-descriptions-item>
+                <div style="font-size: 12px;">
+                  <div v-if="d.onExporting">导出</div>
+                  <div v-else>导出</div>
+                </div>
+              </el-button>
+              <el-icon :size="20">
+                <!-- <edit /> -->
+              </el-icon>
+            </el-descriptions-item>
           </el-descriptions>
 
           <el-divider style="margin-top: 15px;margin-bottom: 15px;"><div style="color:gray">操作面板</div></el-divider>
 
           <div class="scrollRow_option">
             <div  style="height: 100%;">
-                <div class="optionRow" >
+              <div class="optionRow" >
                 <div class="subTitleIcon">
-                    <el-icon size="21px" style="margin-right: 4px"
-                    ><search
-                    /></el-icon>
+                  <el-icon size="21px" style="margin-right: 4px"
+                  ><search
+                  /></el-icon>
                 </div>
                 <div class="subTitleLabel">节点查询</div>
-                </div>
-                <!-- <el-divider style="marginTop:0px;marginBottom:10px" /> -->
+              </div>
+              <!-- <el-divider style="marginTop:0px;marginBottom:10px" /> -->
                 
-                <div class="optionRow" >
+              <div class="optionRow" >
                 <div style="font-size: 15px;color: gray;
                     margin-left: 10px;margin-right: 10px; width: 110px">
-                    > 通过类别 
+                  > 通过类别 
                 </div>
                 <el-select
-                    filterable
-                    allow-create
-                    v-model="d.queryNodeClass"
-                    @change="queryNodeFromClasses"
-                    class="m-2"
-                    placeholder="查询某一类的全部特征 "
-                    size="large"
+                  filterable
+                  allow-create
+                  v-model="d.queryNodeClass"
+                  @change="queryNodeFromClasses"
+                  class="m-2"
+                  placeholder="查询某一类的全部特征 "
+                  size="large"
                 >
-                    <el-option
+                  <el-option
                     v-for="item in d.nodeClasses"
                     :key="item"
                     :label="item"
                     :value="item"
-                    />
+                  />
                 </el-select>
 
                 <el-button @click="QUERYNODECLASSES()" link type="primary">
-                    <div style="font-size: 15px; margin-left: 15px">查询</div>
+                  <div style="font-size: 15px; margin-left: 15px">查询</div>
                 </el-button>
-                </div>
+              </div>
 
-                <div class="optionRow">
+              <div class="optionRow">
                 <div style="font-size: 15px;color: gray;
                     margin-left: 10px;margin-right: 10px; width: 110px">
-                    > 通过名称 
+                  > 通过名称 
                 </div>
                 <el-select
-                    filterable
-                    allow-create
-                    v-model="d.queryNode"
-                    class="m-2"
-                    placeholder="查询特定类别下的实体节点 "
-                    size="large"
-                    no-data-text="请先选择节点类别"
+                  filterable
+                  allow-create
+                  v-model="d.queryNode"
+                  class="m-2"
+                  placeholder="查询特定类别下的实体节点 "
+                  size="large"
+                  no-data-text="请先选择节点类别"
                 >
-                    <el-option
+                  <el-option
                     v-for="item in d.nodes"
                     :key="item"
                     :label="item"
                     :value="item"
-                    />
+                  />
                 </el-select>
 
                 <el-button @click="QUERYNODES()" link type="primary">
-                    <div style="font-size: 15px; margin-left: 15px">查询</div>
+                  <div style="font-size: 15px; margin-left: 15px">查询</div>
                 </el-button>
-                </div>
+              </div>
 
-                <div class="optionRow" >
+              <div class="optionRow" >
                 <div
-                    style="font-size: 15px;color: gray;
+                  style="font-size: 15px;color: gray;
                     margin-left: 10px;margin-right: 10px; width: 110px">
-                    > 通过路径
+                  > 通过路径
                 </div>
                 <el-select
-                    filterable
-                    allow-create
-                    v-model="d.queryRelation"
-                    class="m-2"
-                    placeholder="选择关系节点"
-                    size="large"
+                  filterable
+                  allow-create
+                  v-model="d.queryRelation"
+                  class="m-2"
+                  placeholder="选择关系节点"
+                  size="large"
                 >
-                    <el-option
+                  <el-option
                     v-for="item in d.relations"
                     :key="item"
                     :label="item"
                     :value="item"
-                    />
+                  />
                 </el-select>
                 <el-button @click="QUERYRELATIONS()" link type="primary">
-                    <div style="font-size: 15px; margin-left: 15px">查询</div>
+                  <div style="font-size: 15px; margin-left: 15px">查询</div>
                 </el-button>
-                </div>
+              </div>
 
 
-                <div class="optionRow" >
+              <div class="optionRow" >
                 <div class="subTitleIcon">
-                    <el-icon size="21px" style="margin-right: 4px"
-                    ><circle-plus
-                    /></el-icon>
+                  <el-icon size="21px" style="margin-right: 4px"
+                  ><circle-plus
+                  /></el-icon>
                 </div>
                 <div class="subTitleLabel">新增自定义节点</div>
-                </div>
+              </div>
                 
-                <div class="optionRow">
+              <div class="optionRow">
                 <div class="optionLabel">所属类别</div>
                 <el-select
-                    filterable
-                    allow-create
-                    v-model="d.new.nodeClass"
-                    class="m-2"
-                    style="width: 120px"
-                    placeholder="选择或输入"
+                  filterable
+                  allow-create
+                  v-model="d.new.nodeClass"
+                  class="m-2"
+                  style="width: 120px"
+                  placeholder="选择或输入"
                 >
-                    <el-option
+                  <el-option
                     v-for="item in d.nodeClasses"
                     :key="item"
                     :label="item"
                     :value="item"
-                    />
+                  />
                 </el-select>
                 <!-- <el-button @click="setNode(1)" link type="primary">
                     <div style="font-size: 15px; margin-left: 15px">载入</div>
                 </el-button> -->
                 <div class="optionLabel">节点名称</div>
                 <el-input
-                    v-model="d.new.node"
-                    placeholder="输入"
-                    style="width: 80px"
+                  v-model="d.new.node"
+                  placeholder="输入"
+                  style="width: 80px"
                 />
                 <el-button
-                    :style='"border-radius:"+store.state.option.style.el_button_border_radius+";"'
-                    @click="NEWNODE()" type="primary" style="margin-left: 20px;" plain>新增</el-button>
-                </div>
-                <div class="optionRow">
+                  :style='"border-radius:"+store.state.option.style.el_button_border_radius+";"'
+                  @click="NEWNODE()" type="primary" style="margin-left: 20px;" plain>新增</el-button>
+              </div>
+              <div class="optionRow">
                 <div class="optionLabel">附加属性</div><el-input
-                    v-model="d.new.parameters"
-                    placeholder="（可选）节点的附加属性的JSON字符串"
-                    style="width: 280px"
+                  v-model="d.new.parameters"
+                  placeholder="（可选）节点的附加属性的JSON字符串"
+                  style="width: 280px"
                 />
 
-                </div>
+              </div>
 
 
 
-                <div class="optionRow" >
+              <div class="optionRow" >
                 <div class="subTitleIcon">
-                    <el-icon size="21px" style="margin-right: 4px"
-                    ><circle-plus
-                    /></el-icon>
+                  <el-icon size="21px" style="margin-right: 4px"
+                  ><circle-plus
+                  /></el-icon>
                 </div>
                 <div class="subTitleLabel">新增自定义路径</div>
-                </div>
-                <div class="optionRow">
+              </div>
+              <div class="optionRow">
                 <div class="optionLabel">头部类别</div>
                 <el-select
-                    filterable
-                    v-model="d.new.nodeClass_relation_head"
-                    @change="newRelation_HeadClassOnchange"
-                    class="m-2"
-                    style="width: 120px"
-                    placeholder="选择"
+                  filterable
+                  v-model="d.new.nodeClass_relation_head"
+                  @change="newRelation_HeadClassOnchange"
+                  class="m-2"
+                  style="width: 120px"
+                  placeholder="选择"
                 >
-                    <el-option
+                  <el-option
                     v-for="item in d.nodeClasses"
                     :key="item"
                     :label="item"
                     :value="item"
-                    />
+                  />
                 </el-select>
                 <div class="optionLabel">头部名称</div>
                 <el-select
-                    filterable
-                    v-model="d.new.node_relation_head"
-                    class="m-2"
-                    style="width: 120px"
-                    placeholder="选择"
-                    no-data-text="请先选择类别"
+                  filterable
+                  v-model="d.new.node_relation_head"
+                  class="m-2"
+                  style="width: 120px"
+                  placeholder="选择"
+                  no-data-text="请先选择类别"
                 >
-                    <el-option
+                  <el-option
                     v-for="item in d.new.nodes_relation_head"
                     :key="item"
                     :label="item"
                     :value="item"
-                    />
+                  />
                 </el-select>
 
-                </div>
-                <div class="optionRow">
+              </div>
+              <div class="optionRow">
                 <div class="optionLabel">尾部类别</div>
                 <el-select
-                    filterable
-                    v-model="d.new.nodeClass_relation_tail"
-                    @change="newRelation_TailClassOnchange"
-                    class="m-2"
-                    style="width: 120px"
-                    placeholder="选择"
+                  filterable
+                  v-model="d.new.nodeClass_relation_tail"
+                  @change="newRelation_TailClassOnchange"
+                  class="m-2"
+                  style="width: 120px"
+                  placeholder="选择"
                 >
-                    <el-option
+                  <el-option
                     v-for="item in d.nodeClasses"
                     :key="item"
                     :label="item"
                     :value="item"
-                    />
+                  />
                 </el-select>
                 <div class="optionLabel">尾部名称</div>
                 <el-select
-                    filterable
-                    v-model="d.new.node_relation_tail"
-                    class="m-2"
-                    style="width: 120px"
-                    placeholder="选择"
-                    no-data-text="请先选择类别"
+                  filterable
+                  v-model="d.new.node_relation_tail"
+                  class="m-2"
+                  style="width: 120px"
+                  placeholder="选择"
+                  no-data-text="请先选择类别"
                 >
-                    <el-option
+                  <el-option
                     v-for="item in d.new.nodes_relation_tail"
                     :key="item"
                     :label="item"
                     :value="item"
-                    />
+                  />
                 </el-select>
 
-                </div>
+              </div>
 
-                <div class="optionRow">
+              <div class="optionRow">
                 <div class="optionLabel">关系名称</div>
                 <el-input
-                    v-model="d.new.relation"
-                    placeholder="输入已选节点间的关系名称"
-                    style="width: 235px"
+                  v-model="d.new.relation"
+                  placeholder="输入已选节点间的关系名称"
+                  style="width: 235px"
                 />
                 <el-button
-                    :style='"border-radius:"+store.state.option.style.el_button_border_radius+";"'
-                    @click="NEWRELATION()" type="primary" style="margin-left: 20px;" plain>新增</el-button>
+                  :style='"border-radius:"+store.state.option.style.el_button_border_radius+";"'
+                  @click="NEWRELATION()" type="primary" style="margin-left: 20px;" plain>新增</el-button>
 
-                </div>
+              </div>
 
 
-                <div class="optionRow" >
+              <div class="optionRow" >
                 <div class="subTitleIcon">
-                    <el-icon size="21px" style="margin-right: 4px"
-                    ><CircleClose  /></el-icon>
+                  <el-icon size="21px" style="margin-right: 4px"
+                  ><CircleClose  /></el-icon>
                 </div>
                 <div class="subTitleLabel">删除节点</div>
-                </div>
-                <div class="optionRow">
+              </div>
+              <div class="optionRow">
                 <div class="optionLabel">所属类别</div>
                 <el-select
-                    filterable
-                    v-model="d.del.nodeClass"
-                    @change="delClassOnchange"
-                    class="m-2"
-                    style="width: 120px"
-                    placeholder="选择"
+                  filterable
+                  v-model="d.del.nodeClass"
+                  @change="delClassOnchange"
+                  class="m-2"
+                  style="width: 120px"
+                  placeholder="选择"
                 >
-                    <el-option
+                  <el-option
                     v-for="item in d.nodeClasses"
                     :key="item"
                     :label="item"
                     :value="item"
-                    />
+                  />
                 </el-select>
                 <!-- <el-button @click="setNode(1)" link type="primary">
                     <div style="font-size: 15px; margin-left: 15px">载入</div>
                 </el-button> -->
                 <div class="optionLabel">节点名称</div>
                 <el-select
-                    filterable
-                    v-model="d.del.node"
-                    class="m-2"
-                    style="width: 120px"
-                    placeholder="选择"
-                    no-data-text="请先选择节点类"
+                  filterable
+                  v-model="d.del.node"
+                  class="m-2"
+                  style="width: 120px"
+                  placeholder="选择"
+                  no-data-text="请先选择节点类"
                 >
-                    <el-option
+                  <el-option
                     v-for="item in d.del.nodes"
                     :key="item"
                     :label="item"
                     :value="item"
-                    />
+                  />
                 </el-select>
                 <el-button @click="DELETE()" link type="primary">
-                    <div style="font-size: 15px; margin-left: 10px">删除</div>
+                  <div style="font-size: 15px; margin-left: 10px">删除</div>
                 </el-button>
                 <el-button @click="DELETEALL()" link type="primary">
-                    <div style="font-size: 15px; margin-left: 1px">删除类</div>
+                  <div style="font-size: 15px; margin-left: 1px">删除类</div>
                 </el-button>
-                </div>
+              </div>
 
 
 
@@ -391,27 +391,27 @@
 
         
 
-                <div class="optionRow">
+              <div class="optionRow">
                 <div class="subTitleIcon">
-                    <el-icon size="21px" style="margin-right: 4px"
-                    ><tools
-                    /></el-icon>
+                  <el-icon size="21px" style="margin-right: 4px"
+                  ><tools
+                  /></el-icon>
                 </div>
                 <div class="subTitleLabel">其他设置</div>
-                </div>
-                <div class="optionRow" >
+              </div>
+              <div class="optionRow" >
                 <div style="font-size: 15px;color: gray;
                     margin-left: 10px;margin-right: 20px;">
-                    > 最大载入数
+                  > 最大载入数
                 </div>
                 <div style="width:200px;display:inline-block ;" >
-                    <el-slider :max="200" :min="1" :step="1" v-model="d.maxLoad" />
+                  <el-slider :max="200" :min="1" :step="1" v-model="d.maxLoad" />
                 </div>
                 <div  style="display:inline-block;width: 30px;margin-left: 20px;">{{d.maxLoad}}</div>
                 <el-button @click="MAXLOAD()" link type="primary">
-                    <div style="font-size: 15px; margin-left: 15px">刷新</div>
+                  <div style="font-size: 15px; margin-left: 15px">刷新</div>
                 </el-button>
-                </div>
+              </div>
             </div>
 
           </div>
@@ -423,13 +423,13 @@
 </template>
 <script setup lang="ts">
 import * as base64js from 'base64-js'
-import { reactive,watch } from "vue";
+import { reactive, watch } from "vue";
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useStore } from "vuex";
 import { onMounted, onUnmounted } from "@vue/runtime-core";
 import NeoVis from "neovis.js/dist/neovis.js";
 import * as neo4j from "neo4j-driver";
-import { useRouter,useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { httpPost } from "@/utils/global";
 import * as XLSX from "xlsx";
 import router from "@/router";
@@ -442,20 +442,20 @@ const route = useRoute();
 let viz = <any>{};
 let mockGraphData:any = null;
 
-async function loadMockGraphData(){
-  if(mockGraphData != null)
+async function loadMockGraphData() {
+  if (mockGraphData != null)
     return mockGraphData;
 
   const res = await fetch("/mock/kg-graph.json", { cache: "no-store" });
-  if(!res.ok)
+  if (!res.ok)
     throw new Error("Failed to load mock kg graph");
 
   mockGraphData = await res.json();
   return mockGraphData;
 }
 
-function getMockNodeNamesByClass(nodeClass:string){
-  if(mockGraphData == null)
+function getMockNodeNamesByClass(nodeClass:string) {
+  if (mockGraphData == null)
     return [];
 
   return mockGraphData.nodes
@@ -463,23 +463,23 @@ function getMockNodeNamesByClass(nodeClass:string){
     .map((node:any) => node.label);
 }
 
-function getMockGraphRows(filter:any = {}){
+function getMockGraphRows(filter:any = {}) {
   const graph = mockGraphData;
-  if(graph == null)
+  if (graph == null)
     return [];
 
   const nodeById = new Map(graph.nodes.map((node:any) => [node.id, node]));
   let edges = graph.edges.slice(0, d.maxLoad);
 
-  if(filter.relation != null && filter.relation != "")
+  if (filter.relation != null && filter.relation != "")
     edges = graph.edges.filter((edge:any) => edge.type == filter.relation || edge.label == filter.relation).slice(0, d.maxLoad);
 
-  if(filter.nodeClass != null && filter.nodeClass != ""){
+  if (filter.nodeClass != null && filter.nodeClass != "") {
     const classNodeIds = new Set(graph.nodes.filter((node:any) => node.group == filter.nodeClass).map((node:any) => node.id));
     edges = graph.edges.filter((edge:any) => classNodeIds.has(edge.from) || classNodeIds.has(edge.to)).slice(0, d.maxLoad);
   }
 
-  if(filter.nodeName != null && filter.nodeName != ""){
+  if (filter.nodeName != null && filter.nodeName != "") {
     const targetNodeIds = new Set(graph.nodes.filter((node:any) => node.label == filter.nodeName).map((node:any) => node.id));
     edges = graph.edges.filter((edge:any) => targetNodeIds.has(edge.from) || targetNodeIds.has(edge.to)).slice(0, d.maxLoad);
   }
@@ -493,9 +493,9 @@ function getMockGraphRows(filter:any = {}){
     .filter((row:any) => row.n != null && row.m != null);
 }
 
-function createMockNeo4jRecords(filter:any = {}){
+function createMockNeo4jRecords(filter:any = {}) {
   const graph = mockGraphData;
-  if(graph == null)
+  if (graph == null)
     return [];
 
   const nodeIdMap = new Map<string, number>(graph.nodes.map((node:any, index:number) => [node.id, index + 1]));
@@ -542,15 +542,15 @@ function createMockNeo4jRecords(filter:any = {}){
   });
 }
 
-async function renderMockGraph(filter:any = {}, append:boolean = false){
+async function renderMockGraph(filter:any = {}, append:boolean = false) {
   d.containerLoaded = false;
   await loadMockGraphData();
-  const renderer = async function*(){
-    for(const record of createMockNeo4jRecords(filter))
+  const renderer = async function*() {
+    for (const record of createMockNeo4jRecords(filter))
       yield record;
   };
 
-  if(append)
+  if (append)
     viz.updateWithFunction(renderer);
   else
     viz.renderWithFunction(renderer);
@@ -561,14 +561,14 @@ async function renderMockGraph(filter:any = {}, append:boolean = false){
 const graphInit = ()=>{
   viz = new NeoVis(d.config);
   //viz.render();
-  if(route.query.name!=null && route.query.label!=null ){
+  if (route.query.name != null && route.query.label != null ) {
     d.queryNodeClass = route.query.label
     d.queryNode = route.query.name
     setTimeout(() => {
       QUERYNODES()
       d.containerLoaded = true
     }, 200);
-  }else if(d.QM_QueryNode.length!=""){
+  } else if (d.QM_QueryNode.length != "") {
     d.queryNode = d.QM_QueryNode.name
     d.queryNodeClass = d.QM_QueryNode.label
     d.onConnecting = true
@@ -578,25 +578,25 @@ const graphInit = ()=>{
       d.QM_QueryNode = ""
       d.onConnecting = false
     }, 200);
-  }else{
-    if(store.state.mock.enabled){
+  } else {
+    if (store.state.mock.enabled) {
       renderMockGraph();
       return;
     }
-    viz.updateWithCypher('MATCH (n)-[r]->(m) RETURN n,r,m LIMIT '+d.maxLoad);
+    viz.updateWithCypher('MATCH (n)-[r]->(m) RETURN n,r,m LIMIT ' + d.maxLoad);
     d.containerLoaded = true
   }
 }
 onMounted(() => {
-  watch(()=>d.onConnected,(newV,oldV)=>{
-    if(newV)
+  watch(()=>d.onConnected, (newV, oldV)=>{
+    if (newV)
       graphInit();
   })
-  if(store.state.mock.enabled){
+  if (store.state.mock.enabled) {
     graphInit();
     return;
   }
-  if(d.onConnected){
+  if (d.onConnected) {
     graphInit();
   }
   
@@ -607,7 +607,7 @@ onUnmounted(() => {
 const queryNodeFromClasses = (val:any)=>{
   
   d.queryNode = ""
-  if(store.state.mock.enabled){
+  if (store.state.mock.enabled) {
     loadMockGraphData().then(() => {
       d.nodes = getMockNodeNamesByClass(val);
     })
@@ -616,14 +616,14 @@ const queryNodeFromClasses = (val:any)=>{
   httpPost(
     store.state.server.address + '/kg/query/',
     {"label":val},
-    (res)=>{
+    res=>{
       d.nodes = res.list  
     }
   )
 }
 const newRelation_HeadClassOnchange = (val:any)=>{
   d.new.node_relation_head = ""
-  if(store.state.mock.enabled){
+  if (store.state.mock.enabled) {
     loadMockGraphData().then(() => {
       d.new.nodes_relation_head = getMockNodeNamesByClass(val);
     })
@@ -632,14 +632,14 @@ const newRelation_HeadClassOnchange = (val:any)=>{
   httpPost(
     store.state.server.address + '/kg/query/',
     {"label":val},
-    (res)=>{
+    res=>{
       d.new.nodes_relation_head = res.list  
     }
   )
 }
 const newRelation_TailClassOnchange = (val:any)=>{
   d.new.node_relation_tail = ""
-  if(store.state.mock.enabled){
+  if (store.state.mock.enabled) {
     loadMockGraphData().then(() => {
       d.new.nodes_relation_tail = getMockNodeNamesByClass(val);
     })
@@ -648,14 +648,14 @@ const newRelation_TailClassOnchange = (val:any)=>{
   httpPost(
     store.state.server.address + '/kg/query/',
     {"label":val},
-    (res)=>{
+    res=>{
       d.new.nodes_relation_tail = res.list  
     }
   )
 }
 const delClassOnchange = (val:any)=>{
   d.del.node = ""
-  if(store.state.mock.enabled){
+  if (store.state.mock.enabled) {
     loadMockGraphData().then(() => {
       d.del.nodes = getMockNodeNamesByClass(val);
     })
@@ -664,7 +664,7 @@ const delClassOnchange = (val:any)=>{
   httpPost(
     store.state.server.address + '/kg/query/',
     {"label":val},
-    (res)=>{
+    res=>{
       d.del.nodes = res.list  
     }
   )
@@ -675,14 +675,14 @@ const kgExport = ()=>{
   httpPost(
     store.state.server.address + '/kg/export/',
     {},
-    (res)=>{
-      if(res.status){
+    res=>{
+      if (res.status) {
         ElMessage.success("数据读取成功，已开始下载。")
         const data = XLSX.utils.json_to_sheet(res.obj)
         const wb = XLSX.utils.book_new()
         XLSX.utils.book_append_sheet(wb, data, 'Sheet1')
-        XLSX.writeFile(wb,`知识图谱数据.xlsx`)
-      }else
+        XLSX.writeFile(wb, `知识图谱数据.xlsx`)
+      } else
         ElMessage.error("后台返回了错误代码。")
     },
     ()=>{},
@@ -691,12 +691,12 @@ const kgExport = ()=>{
 }
 
 
-function DELETE(){
-  if(d.del.node==""){
+function DELETE() {
+  if (d.del.node == "") {
     ElMessage.error("未选择要删除的节点。")
     return
   }
-  ElMessageBox.confirm('确定要删除节点'+d.del.node+"?",
+  ElMessageBox.confirm('确定要删除节点' + d.del.node + "?",
     '删除',
     {
       confirmButtonText: '确认',
@@ -704,9 +704,9 @@ function DELETE(){
       type: 'warning',
     })
     .then(() => {
-      viz.updateWithCypher('MATCH (n:'+d.del.nodeClass+'{name:"'+d.del.node+'"}) DETACH DELETE n');
-      d.nodes.splice(d.nodes.indexOf(d.del.node),1)
-      if(d.queryNode==d.del.node){
+      viz.updateWithCypher('MATCH (n:' + d.del.nodeClass + '{name:"' + d.del.node + '"}) DETACH DELETE n');
+      d.nodes.splice(d.nodes.indexOf(d.del.node), 1)
+      if (d.queryNode == d.del.node) {
         d.queryNode = ""
       }
       freshGraphInfo()
@@ -714,14 +714,14 @@ function DELETE(){
     })
     .catch(() => {
       return
-  })
+    })
 }
-function DELETEALL(){
-  if(d.del.nodeClass==""){
+function DELETEALL() {
+  if (d.del.nodeClass == "") {
     ElMessage.error("未选择要删除的节点类。")
     return
   }
-  ElMessageBox.confirm('确定要删除类 [ '+d.del.nodeClass+" ] 中的所有节点?",
+  ElMessageBox.confirm('确定要删除类 [ ' + d.del.nodeClass + " ] 中的所有节点?",
     '警告',
     {
       confirmButtonText: '确认',
@@ -729,9 +729,9 @@ function DELETEALL(){
       type: 'warning',
     })
     .then(() => {
-      viz.updateWithCypher('MATCH (n:'+d.del.nodeClass+') DETACH DELETE n');
-      d.nodeClasses.splice(d.nodeClasses.indexOf(d.del.nodeClass),1)
-      if(d.queryNodeClass==d.del.nodeClass){
+      viz.updateWithCypher('MATCH (n:' + d.del.nodeClass + ') DETACH DELETE n');
+      d.nodeClasses.splice(d.nodeClasses.indexOf(d.del.nodeClass), 1)
+      if (d.queryNodeClass == d.del.nodeClass) {
         d.queryNodeClass = ""
         d.queryNode = ""
       }
@@ -740,10 +740,10 @@ function DELETEALL(){
     })
     .catch(() => {
       return
-  })
+    })
 }
-function NEWNODE(){
-  if(d.new.nodeClass=="" || d.new.node == ""){
+function NEWNODE() {
+  if (d.new.nodeClass == "" || d.new.node == "") {
     ElMessage.error("未设置节点类别或节点名称")
     return
   }
@@ -754,41 +754,41 @@ function NEWNODE(){
 
   let obj = <any>{}
     
-  if(d.new.parameters==""){
+  if (d.new.parameters == "") {
     obj.name = d.new.node
     obj.color = "#D3D3D3"
     let str_ = "{"
-    for(let key in obj){
+    for (let key in obj) {
       str_ += key
       str_ += ':"'
       str_ += obj[key]
       str_ += '",'
     }
-    str_ = str_.slice(0,-1)
+    str_ = str_.slice(0, -1)
     str_ += "}"
-    if(d.nodeClasses.indexOf(d.new.nodeClass)==-1){
+    if (d.nodeClasses.indexOf(d.new.nodeClass) == -1) {
       d.nodeClasses.push(d.new.nodeClass)
       d.config.labels[d.new.nodeClass] = {
         label:"name",
         color:"color",
       }
     }
-    viz.updateWithCypher('MERGE(n:'+d.new.nodeClass+str_+')');
+    viz.updateWithCypher('MERGE(n:' + d.new.nodeClass + str_ + ')');
     d.nodes.push(d.new.node)
     ElMessage.success("成功。")
   }
-  else{
-    try{
+  else {
+    try {
       console.log(JSON.stringify(({"SD":2})))
       obj = JSON.parse(d.new.parameters)
       obj.name = d.new.node
       let str_ = "{"
-      for(let key in obj){
-        if(key[0].charCodeAt(0)>=48 && key[0].charCodeAt(0)<=57){
+      for (let key in obj) {
+        if (key[0].charCodeAt(0) >= 48 && key[0].charCodeAt(0) <= 57) {
           ElMessage.error('键名的第一个字符不能为数字。')
           return
         }
-        if(typeof(obj[key])!="string"){
+        if (typeof(obj[key]) != "string") {
           ElMessage.error('值只能为字符串。')
           return
         }
@@ -797,20 +797,20 @@ function NEWNODE(){
         str_ += obj[key]
         str_ += '",'
       }
-      str_ = str_.slice(0,-1)
+      str_ = str_.slice(0, -1)
       str_ += "}"
       // console.log(str_)
-      if(d.nodeClasses.indexOf(d.new.nodeClass)==-1){
+      if (d.nodeClasses.indexOf(d.new.nodeClass) == -1) {
         d.nodeClasses.push(d.new.nodeClass)
         d.config.labels[d.new.nodeClass] = {
           label:"name",
           color:"color",
         }
       }
-      viz.updateWithCypher('MERGE(n:'+d.new.nodeClass+str_+')');
+      viz.updateWithCypher('MERGE(n:' + d.new.nodeClass + str_ + ')');
       d.nodes.push(d.new.node)
       ElMessage.success("成功。")
-    }catch(e){
+    } catch(e) {
       console.log(e)
       ElMessage.error("JSON字串错误，新增失败")
       return
@@ -818,17 +818,17 @@ function NEWNODE(){
   }
   freshGraphInfo()
 }
-function NEWRELATION(){
-  if(d.new.nodeClass_relation_head=="" ||d.new.nodeClass_relation_tail=="" ||d.new.node_relation_head=="" ||d.new.nodeClass_relation_tail=="" ){
+function NEWRELATION() {
+  if (d.new.nodeClass_relation_head == "" || d.new.nodeClass_relation_tail == "" || d.new.node_relation_head == "" || d.new.nodeClass_relation_tail == "" ) {
     ElMessage.error("节点选择不完整。")
     return
   }
-  if(d.new.relation==""){
+  if (d.new.relation == "") {
     ElMessage.error("未填写关系名称。")
     return
   }
 
-  let str = 'MATCH(a:'+d.new.nodeClass_relation_head+'),(b:'+d.new.nodeClass_relation_tail+')WHERE a.name="'+d.new.node_relation_head+'"AND b.name="'+d.new.node_relation_tail+'"MERGE(a)-[r:'+d.new.relation+'{name:"'+d.new.relation+'"}]->(b)RETURN r'
+  let str = 'MATCH(a:' + d.new.nodeClass_relation_head + '),(b:' + d.new.nodeClass_relation_tail + ')WHERE a.name="' + d.new.node_relation_head + '"AND b.name="' + d.new.node_relation_tail + '"MERGE(a)-[r:' + d.new.relation + '{name:"' + d.new.relation + '"}]->(b)RETURN r'
   d.relations.push(d.new.relation)
   d.config.relationships[d.new.relation] = {
     label:"name"
@@ -838,65 +838,65 @@ function NEWRELATION(){
   ElMessage.success("创建成功。")
 }
 
-function QUERYNODES(){
-  if(d.queryNodeClass==""||d.queryNode==""){
+function QUERYNODES() {
+  if (d.queryNodeClass == "" || d.queryNode == "") {
     ElMessage.error("请输入节点名称。")
     return
   }
-  if(store.state.mock.enabled){
+  if (store.state.mock.enabled) {
     renderMockGraph({nodeClass: d.queryNodeClass, nodeName: d.queryNode});
     return;
   }
-  viz.renderWithCypher('MATCH(n:' + d.queryNodeClass + ')-[r]->(nn) WHERE n.name="'+d.queryNode+'" RETURN n,r,nn  LIMIT '+d.maxLoad);
-  viz.updateWithCypher('MATCH(n)-[r]->(nn:' + d.queryNodeClass + ') WHERE nn.name="'+d.queryNode+'" RETURN n,r,nn  LIMIT '+d.maxLoad);
+  viz.renderWithCypher('MATCH(n:' + d.queryNodeClass + ')-[r]->(nn) WHERE n.name="' + d.queryNode + '" RETURN n,r,nn  LIMIT ' + d.maxLoad);
+  viz.updateWithCypher('MATCH(n)-[r]->(nn:' + d.queryNodeClass + ') WHERE nn.name="' + d.queryNode + '" RETURN n,r,nn  LIMIT ' + d.maxLoad);
 
-  viz.updateWithCypher('MATCH(n:' + d.queryNodeClass + ') WHERE n.name="'+d.queryNode+'" RETURN n  LIMIT '+d.maxLoad);
+  viz.updateWithCypher('MATCH(n:' + d.queryNodeClass + ') WHERE n.name="' + d.queryNode + '" RETURN n  LIMIT ' + d.maxLoad);
 
 }
-function QUERYNODECLASSES(){
-  if(d.queryNodeClass==""){
+function QUERYNODECLASSES() {
+  if (d.queryNodeClass == "") {
     ElMessage.error("请输入节点类别。")
     return
   }
-  if(store.state.mock.enabled){
+  if (store.state.mock.enabled) {
     renderMockGraph({nodeClass: d.queryNodeClass});
     return;
   }
-  viz.renderWithCypher("MATCH(n:" + d.queryNodeClass + ")-[r]->(nn)  RETURN n,r,nn  LIMIT "+d.maxLoad);
-  viz.updateWithCypher("MATCH(n)-[r]->(nn:" + d.queryNodeClass + ")  RETURN n,r,nn  LIMIT "+d.maxLoad);
+  viz.renderWithCypher("MATCH(n:" + d.queryNodeClass + ")-[r]->(nn)  RETURN n,r,nn  LIMIT " + d.maxLoad);
+  viz.updateWithCypher("MATCH(n)-[r]->(nn:" + d.queryNodeClass + ")  RETURN n,r,nn  LIMIT " + d.maxLoad);
 
-  viz.updateWithCypher("MATCH(n:" + d.queryNodeClass + ")  RETURN n  LIMIT "+d.maxLoad);
+  viz.updateWithCypher("MATCH(n:" + d.queryNodeClass + ")  RETURN n  LIMIT " + d.maxLoad);
 }
-function QUERYRELATIONS(){
-  if(d.queryRelation==""){
+function QUERYRELATIONS() {
+  if (d.queryRelation == "") {
     ElMessage.error("请输入节点路径。")
     return
   }
-  if(store.state.mock.enabled){
+  if (store.state.mock.enabled) {
     renderMockGraph({relation: d.queryRelation});
     return;
   }
-  viz.renderWithCypher("MATCH(n)-[r:" + d.queryRelation + "]->(nn)  RETURN n,r,nn  LIMIT "+d.maxLoad);
+  viz.renderWithCypher("MATCH(n)-[r:" + d.queryRelation + "]->(nn)  RETURN n,r,nn  LIMIT " + d.maxLoad);
 }  
-function MAXLOAD(){
-  if(store.state.mock.enabled){
+function MAXLOAD() {
+  if (store.state.mock.enabled) {
     renderMockGraph();
     return;
   }
-  d.config.initialCypher =  'MATCH (n)-[r]->(m) RETURN n,r,m LIMIT '+d.maxLoad
+  d.config.initialCypher =  'MATCH (n)-[r]->(m) RETURN n,r,m LIMIT ' + d.maxLoad
   viz = new NeoVis(d.config);
   viz.render();
 }
-function linkToChangeIP(){
-    $router.replace({path: store.state.router.page_config_server})
+function linkToChangeIP() {
+  $router.replace({path: store.state.router.page_config_server})
 }
-function freshGraphInfo(){
+function freshGraphInfo() {
   httpPost(
     store.state.server.address + '/kg/init/',
     {},
-    (res)=>{
+    res=>{
       let s = store.state.server
-      if(res.status == store.state.server.successResponse){
+      if (res.status == store.state.server.successResponse) {
         d.url = res.obj.url;
         d.nodeClasses = res.obj.nodes;
         d.allNodesNum = res.obj.allNodesNum;
@@ -907,7 +907,7 @@ function freshGraphInfo(){
         d.onConnected = true;
         s.kg_address = res.obj.url
         store.state.server.kg_onConnected = true
-      }else{
+      } else {
         d.url = res.obj.url
         s.kg_address = res.obj.url
         d.onConnected = false;
@@ -929,14 +929,14 @@ let value_nodeSelect = reactive({
 });
 function SUBMIT() {
   var cypher = d.cypher;
-  if(store.state.mock.enabled){
-    if(cypher.indexOf("strong_correlation") != -1)
+  if (store.state.mock.enabled) {
+    if (cypher.indexOf("strong_correlation") != -1)
       renderMockGraph({relation: "strong_correlation"});
-    else if(cypher.indexOf("correlate") != -1)
+    else if (cypher.indexOf("correlate") != -1)
       renderMockGraph({relation: "correlate"});
-    else if(cypher.indexOf("质量因素") != -1)
+    else if (cypher.indexOf("质量因素") != -1)
       renderMockGraph({nodeClass: "质量因素"});
-    else if(cypher.indexOf("工艺参数") != -1)
+    else if (cypher.indexOf("工艺参数") != -1)
       renderMockGraph({nodeClass: "工艺参数"});
     else
       renderMockGraph();
@@ -947,7 +947,7 @@ function SUBMIT() {
     viz.renderWithCypher(cypher);
     // console.log(viz.nodes._data);
     // console.log(d.cypher)
-  freshGraphInfo()
+    freshGraphInfo()
 
   } else {
     // console.log("reload");

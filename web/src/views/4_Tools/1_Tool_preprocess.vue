@@ -42,7 +42,7 @@
               style="position: relative;height: 100%;display: flex;justify-content: center;"
             >
               <el-button plain size="small"   style="position: absolute;width: 100%;height: 100%;"
-                ><div style="font-size: 15px;">载入</div></el-button>
+              ><div style="font-size: 15px;">载入</div></el-button>
             </el-upload>
           </div>
 
@@ -83,8 +83,8 @@
           <div class="bottomRow">
 
             <el-button @click="DOWNLOAD()"
-              :disabled="!d.onProcessed" plain size="small" type="primary"  style="position: absolute;width: 100%;height: 100%;"
-                ><div style="font-size: 15px;">下载</div></el-button>
+                       :disabled="!d.onProcessed" plain size="small" type="primary"  style="position: absolute;width: 100%;height: 100%;"
+            ><div style="font-size: 15px;">下载</div></el-button>
           </div>
 
         </div>
@@ -131,7 +131,7 @@
 
         <div class="sliderArea">
           <div class="slider"  >
-              <el-slider :max="12" :min="1" :step="1" v-model="d.tofixedNum" />
+            <el-slider :max="12" :min="1" :step="1" v-model="d.tofixedNum" />
           </div>
           <div class="slidertext">{{d.tofixedNum}}</div>
         </div>
@@ -162,14 +162,14 @@
           <el-input
             v-model="item.text"
             :placeholder="'请输入各维度对应'+item.label+'，格式：[1,2,3,...]'"
-        />
+          />
         </el-col>
       </el-row>
 
       <div style="display: flex;justify-content: center;margin-top: 15px;">
-      <el-button type="primary" @click="checkParameters(pd.p)" >
-        确认
-      </el-button>
+        <el-button type="primary" @click="checkParameters(pd.p)" >
+          确认
+        </el-button>
       </div>
     </InfoDialog>
     <InfoDialog v-model="pd.onQueryingParams" title="过程参数">
@@ -177,20 +177,20 @@
       <div class="dialogRow2">使用模型预测时确保输入按照同样的方式进行了初始化。</div>
       <!-- <div class="dialogRow">参数:</div> -->
       <el-table :data="d.dialogTableData" style="width: 100%"
-      empty-text="-/-">
+                empty-text="-/-">
         <el-table-column fixed prop="parameters" label="参数名" />
         <el-table-column v-for="(item,index) in d.dialogTableCol" :prop="item.prop" :key="index" :label="item.label" />
         <el-table-column fixed="right" label="操作" >
           <template #default="scope">
-              <el-button
-                link
-                type="primary"
-                size="small"
-                @click.prevent="tableCopy(scope.row)"
-              >
-                <div style="color:#409EFF"><div style="font-size: 14px;">复制</div></div>
-              </el-button>
-            </template> 
+            <el-button
+              link
+              type="primary"
+              size="small"
+              @click.prevent="tableCopy(scope.row)"
+            >
+              <div style="color:#409EFF"><div style="font-size: 14px;">复制</div></div>
+            </el-button>
+          </template> 
         </el-table-column>
 
       </el-table>
@@ -201,7 +201,7 @@
 <script setup lang="ts"> 
 import * as XLSX from 'xlsx'
 import { ElMessage, ElMessageBox } from "element-plus";
-import {onMounted, onUnmounted, reactive,ref } from "vue";
+import {onMounted, onUnmounted, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import InfoDialog from '@/components/InfoDialog.vue'
 
@@ -231,13 +231,13 @@ function handleChange(file:any) {
       ElMessage.error("附件格式错误，请重新上传！")
     }
   } else {
-      ElMessage.error("请上传附件！")
+    ElMessage.error("请上传附件！")
   }
 }
 function importfile(obj:any) {
   const reader = new FileReader();
   reader.readAsArrayBuffer(obj);
-  reader.onload = function () {
+  reader.onload = function() {
     const buffer:any = reader.result;
     const bytes = new Uint8Array(buffer);
     const length = bytes.byteLength;
@@ -250,13 +250,13 @@ function importfile(obj:any) {
     });
     let outdata:any;
 
-    if(d.excelHasTitle){
+    if (d.excelHasTitle) {
       outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
       let data = [...outdata];
       const arr:any = [];
       let coName = Object.keys(data[0]);
 
-      data.map((v) => {
+      data.map(v => {
         const obj:any = {};
         for (let i = 0; i < coName.length; i++) {
           obj[coName[i]] = v[coName[i]];
@@ -265,27 +265,27 @@ function importfile(obj:any) {
       });      
       d.dataColumns = coName;
       d.data = arr
-      d.dataColumns_forTable = d.dataColumns.map((val:any,index:any) => ({
+      d.dataColumns_forTable = d.dataColumns.map((val:any, index:any) => ({
         key: `${index}`,
         dataKey: `${val}`,
         title: val,
         width: 150,
       }))
-    }else{
+    } else {
 
-      outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1});
+      outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1});
       d.data = outdata.map((val:any)=>{
         let row = <any>{};
-        for(let i = 0 ; i < val.length ; i++){
-          row[`col${i+1}`] =  val[i]
+        for (let i = 0 ; i < val.length ; i++) {
+          row[`col${i + 1}`] =  val[i]
         }
         return row
       })
       d.dataColumns = []
-      for(let i = 0 ; i < outdata[0].length ; i++){
-        d.dataColumns.push(`col${i+1}`)
+      for (let i = 0 ; i < outdata[0].length ; i++) {
+        d.dataColumns.push(`col${i + 1}`)
       }
-      d.dataColumns_forTable = d.dataColumns.map((val:any,index:any) => ({
+      d.dataColumns_forTable = d.dataColumns.map((val:any, index:any) => ({
         key: `${index}`,
         dataKey: `${val}`,
         title: `列${val.slice(3)}`,
@@ -303,19 +303,19 @@ const tableCopy = async(val:any) =>{
   await toClipboard(JSON.stringify(Object.values(val).slice(1).map(Number)))
 }
 
-function checkParameters(p:any){
+function checkParameters(p:any) {
   pd.parameter_onLoaded = false
   let obj = []
-  try{
-    for(let i = 0; i<p.length;i++){
+  try {
+    for (let i = 0; i < p.length;i++) {
       obj.push(JSON.parse(p[i].text))
     }
-  }catch(error){
+  } catch(error) {
     ElMessage.error("输入格式有误。")
     return
   }
-  if(obj[0].length != d.dataColumns.length){
-    ElMessage.error("参数数量："+obj[0].length+"与样本维度数："+d.dataColumns.length+"不匹配。")
+  if (obj[0].length != d.dataColumns.length) {
+    ElMessage.error("参数数量：" + obj[0].length + "与样本维度数：" + d.dataColumns.length + "不匹配。")
     return
   }
   pd.parameter_custom = obj;
@@ -323,21 +323,21 @@ function checkParameters(p:any){
   pd.parameter_onLoading = false
   ElMessage.success("载入成功。")
 }
-function loadParameters(){
-  if(d.dataColumns.length==0){
+function loadParameters() {
+  if (d.dataColumns.length == 0) {
     ElMessage.error("请先在左侧载入源样本。")
     return
 
   }
-  switch(pd.preProcessVal){
+  switch (pd.preProcessVal) {
     case pd.preProcess[2].val:
-      pd.p = [{label:"均值",text:""}];break;
+      pd.p = [{label:"均值", text:""}];break;
     case pd.preProcess[3].val:
-      pd.p = [{label:"初值",text:""}];break;
+      pd.p = [{label:"初值", text:""}];break;
     case pd.preProcess[4].val:
-      pd.p = [{label:"均值",text:""},{label:"标准差",text:""}];break;
+      pd.p = [{label:"均值", text:""}, {label:"标准差", text:""}];break;
     case pd.preProcess[5].val:
-      pd.p = [{label:"最小值",text:""},{label:"最大值",text:""}];break;
+      pd.p = [{label:"最小值", text:""}, {label:"最大值", text:""}];break;
   }
   pd.parameter_onLoading = true
 }
@@ -347,23 +347,23 @@ function loadParameters(){
 const QueryPreParameters = () => {
   pd.onQueryingParams = true;
 }
-function PREPROCESS(){
-  if(!d.onLoaded){
+function PREPROCESS() {
+  if (!d.onLoaded) {
     ElMessage.error('还没有载入样本数据。')
     return
   }
-  if(d.preprocessKind==1){
+  if (d.preprocessKind == 1) {
     let wrongFlag = false
-    if(pd.preProcessVal == pd.preProcess[0].val || pd.preProcessVal == pd.preProcess[1].val)
-      for(let i=0;i<d.data.length;i++){
-        for(let key in d.data[i]){
-          if(d.data[i][key]==0){
+    if (pd.preProcessVal == pd.preProcess[0].val || pd.preProcessVal == pd.preProcess[1].val)
+      for (let i = 0;i < d.data.length;i++) {
+        for (let key in d.data[i]) {
+          if (d.data[i][key] == 0) {
             wrongFlag = true;
             break;
           }
         }
       }
-    if(wrongFlag)
+    if (wrongFlag)
       ElMessageBox.confirm(
         '所选数据集含有0值，采用log初始化会导致数据异常，是否继续？',
         'Warning',
@@ -380,21 +380,21 @@ function PREPROCESS(){
     else
       func()
 
-    function func(){
+    function func() {
       d.onProcessing = true
       let rowNames :any[] = []
       // 特征列数据
-      let colData = Array.from({"length":d.dataColumns.length}).map((_,index)=>({
+      let colData = Array.from({"length":d.dataColumns.length}).map((_, index)=>({
         colName:d.dataColumns[index],
         val: <any>[],
       }))
-      for(let i = 0 ; i<d.data.length ; i++){
-        for(let j = 0 ; j<colData.length ; j++){
+      for (let i = 0 ; i < d.data.length ; i++) {
+        for (let j = 0 ; j < colData.length ; j++) {
           colData[j].val.push(d.data[i][colData[j].colName])
         }
       }
-      function calRes(type:string,data:number[]){
-        switch(type){
+      function calRes(type:string, data:number[]) {
+        switch (type) {
           case "0":
             return data[0]
           case "min":
@@ -402,15 +402,15 @@ function PREPROCESS(){
           case "max":
             return Math.max(...data)
           case "mean":
-            return (data.reduce((a,b)=>a+b,0)/data.length)
+            return (data.reduce((a, b)=>a + b, 0) / data.length)
           case "std":
-            let mean = data.reduce((a,b)=>a+b,0)/data.length
-            return (Math.sqrt(data.reduce((a,b)=>a+(b-mean)**2,0)/data.length))
+            let mean = data.reduce((a, b)=>a + b, 0) / data.length
+            return (Math.sqrt(data.reduce((a, b)=>a + (b - mean) ** 2, 0) / data.length))
           default:
             return 0;
         }
       }
-      switch(pd.preProcessVal){
+      switch (pd.preProcessVal) {
         case pd.preProcess[0].val:
           rowNames = ["映射"];
           break;
@@ -421,166 +421,166 @@ function PREPROCESS(){
         case pd.preProcess[3].val:
           rowNames = ["初值"]; break;
         case pd.preProcess[4].val:
-          rowNames = ["均值","标准差"]; break;
+          rowNames = ["均值", "标准差"]; break;
         case pd.preProcess[5].val:
-          rowNames = ["最小值","最大值"]; break;
+          rowNames = ["最小值", "最大值"]; break;
         case pd.preProcess[6].val:
           rowNames = []; break;
       }
       d.preprocessParameters = JSON.parse(JSON.stringify(rowNames)) 
-      .map((rowName:string,index:number)=>{
-        let row:any = {parameters:rowName,obj:{}};
-        switch(rowName){
-          case "映射":
-            for(let r = 0; r<d.dataColumns.length;r++){
-              row.obj[d.dataColumns[r]] = pd.preProcessVal==pd.preProcess[0].val?"log10":"ln"
-            }
-            break;
-          case "均值":
-            for(let r = 0; r<d.dataColumns.length;r++){
-              let data = colData[colData.findIndex((item)=>item.colName==d.dataColumns[r])].val
-              row.obj[d.dataColumns[r]] = calRes("mean",data)
-            }
-            break;
-          case "初值":
-            for(let r = 0; r<d.dataColumns.length;r++){
+        .map((rowName:string, index:number)=>{
+          let row:any = {parameters:rowName, obj:{}};
+          switch (rowName) {
+            case "映射":
+              for (let r = 0; r < d.dataColumns.length;r++) {
+                row.obj[d.dataColumns[r]] = pd.preProcessVal == pd.preProcess[0].val ? "log10" : "ln"
+              }
+              break;
+            case "均值":
+              for (let r = 0; r < d.dataColumns.length;r++) {
+                let data = colData[colData.findIndex(item=>item.colName == d.dataColumns[r])].val
+                row.obj[d.dataColumns[r]] = calRes("mean", data)
+              }
+              break;
+            case "初值":
+              for (let r = 0; r < d.dataColumns.length;r++) {
               // let data = colData[colData.findIndex((item)=>item.colName==d.dataColumns[r])].val
               // row[d.dataColumns[r]] = calRes("0",data)
-              row.obj[d.dataColumns[r]] = d.data[0][d.dataColumns[r]]
-            }
-            break;
-          case "标准差":
-            for(let r = 0; r<d.dataColumns.length;r++){
-              let data = colData[colData.findIndex((item)=>item.colName==d.dataColumns[r])].val
-              row.obj[d.dataColumns[r]] = calRes("std",data)
-            }
-            break;
-          case "最小值":
-            for(let r = 0; r<d.dataColumns.length;r++){
-              let data = colData[colData.findIndex((item)=>item.colName==d.dataColumns[r])].val
-              row.obj[d.dataColumns[r]] = calRes("min",data)
-            }
-            break;
-          case "最大值":
-            for(let r = 0; r<d.dataColumns.length;r++){
-              let data = colData[colData.findIndex((item)=>item.colName==d.dataColumns[r])].val
-              row.obj[d.dataColumns[r]] = calRes("max",data)
-            }
-            break;
-        }
-        return row
-      })
+                row.obj[d.dataColumns[r]] = d.data[0][d.dataColumns[r]]
+              }
+              break;
+            case "标准差":
+              for (let r = 0; r < d.dataColumns.length;r++) {
+                let data = colData[colData.findIndex(item=>item.colName == d.dataColumns[r])].val
+                row.obj[d.dataColumns[r]] = calRes("std", data)
+              }
+              break;
+            case "最小值":
+              for (let r = 0; r < d.dataColumns.length;r++) {
+                let data = colData[colData.findIndex(item=>item.colName == d.dataColumns[r])].val
+                row.obj[d.dataColumns[r]] = calRes("min", data)
+              }
+              break;
+            case "最大值":
+              for (let r = 0; r < d.dataColumns.length;r++) {
+                let data = colData[colData.findIndex(item=>item.colName == d.dataColumns[r])].val
+                row.obj[d.dataColumns[r]] = calRes("max", data)
+              }
+              break;
+          }
+          return row
+        })
       d.data_processed_forTable = JSON.parse(JSON.stringify(d.data)) 
-      .map((val:any,index:any)=>{
-        let raw = val;
-        switch(pd.preProcessVal){
+        .map((val:any, index:any)=>{
+          let raw = val;
+          switch (pd.preProcessVal) {
           //log10
-          case pd.preProcess[0].val:
-            for(let key in raw){
-              raw[key] = Math.log10(raw[key]).toFixed(d.tofixedNum)
-            }
-            break;
-          //loge
-          case pd.preProcess[1].val:
-            for(let key in raw){
-              raw[key] = Math.log(raw[key]).toFixed(d.tofixedNum)
-            }
-            break;
-          //均值和初值
-          case pd.preProcess[2].val:
-          case pd.preProcess[3].val:
-            for(let key in raw){
-              raw[key] = (raw[key]/d.preprocessParameters[0].obj[key]).toFixed(d.tofixedNum)
-            }
-            break;
-          //Z-Score
-          case pd.preProcess[4].val:
-            for(let key in raw){
-              raw[key] =((raw[key] - d.preprocessParameters[0].obj[key]) / d.preprocessParameters[1].obj[key]).toFixed(d.tofixedNum)
-            }
-            break;
-          //Min-max
-          case pd.preProcess[5].val:
-            for(let key in raw){
-              raw[key] = ((raw[key] - d.preprocessParameters[0].obj[key]) / (d.preprocessParameters[1].obj[key] - d.preprocessParameters[0].obj[key])).toFixed(d.tofixedNum)
-            }
+            case pd.preProcess[0].val:
+              for (let key in raw) {
+                raw[key] = Math.log10(raw[key]).toFixed(d.tofixedNum)
+              }
+              break;
+              //loge
+            case pd.preProcess[1].val:
+              for (let key in raw) {
+                raw[key] = Math.log(raw[key]).toFixed(d.tofixedNum)
+              }
+              break;
+              //均值和初值
+            case pd.preProcess[2].val:
+            case pd.preProcess[3].val:
+              for (let key in raw) {
+                raw[key] = (raw[key] / d.preprocessParameters[0].obj[key]).toFixed(d.tofixedNum)
+              }
+              break;
+              //Z-Score
+            case pd.preProcess[4].val:
+              for (let key in raw) {
+                raw[key] = ((raw[key] - d.preprocessParameters[0].obj[key]) / d.preprocessParameters[1].obj[key]).toFixed(d.tofixedNum)
+              }
+              break;
+              //Min-max
+            case pd.preProcess[5].val:
+              for (let key in raw) {
+                raw[key] = ((raw[key] - d.preprocessParameters[0].obj[key]) / (d.preprocessParameters[1].obj[key] - d.preprocessParameters[0].obj[key])).toFixed(d.tofixedNum)
+              }
             
-          break;
-          //none
-          case pd.preProcess[6].val:
-            for(let key in raw){
-              raw[key] = raw[key]
-            }
-          break;
-        }
-        return raw
-      })
+              break;
+              //none
+            case pd.preProcess[6].val:
+              for (let key in raw) {
+                raw[key] = raw[key]
+              }
+              break;
+          }
+          return raw
+        })
       
       d.dialogTableCol = Array.from({"length":d.dataColumns.length})
-      .map((_,index)=>({
-        prop:d.dataColumns[index],
-        label:d.dataColumns[index]
-      }))
+        .map((_, index)=>({
+          prop:d.dataColumns[index],
+          label:d.dataColumns[index]
+        }))
       d.dialogTableData = JSON.parse(JSON.stringify(rowNames)) 
-      .map((rowName:string)=>{
-        let row:any = {parameters:rowName};
-        switch(rowName){
-          case "映射":
-            for(let r = 0; r<d.dataColumns.length;r++){
-              row[d.dataColumns[r]] = pd.preProcessVal==pd.preProcess[0].val?"log10":"ln"
-            }
-            break;
-          case "均值":
-            for(let r = 0; r<d.dataColumns.length;r++){
-              let data = colData[colData.findIndex((item)=>item.colName==d.dataColumns[r])].val
-              row[d.dataColumns[r]] = calRes("mean",data).toFixed(4)
-            }
-            break;
-          case "初值":
-            for(let r = 0; r<d.dataColumns.length;r++){
-              row[d.dataColumns[r]] = d.data[0][d.dataColumns[r]]
-            }
-            break;
-          case "标准差":
-            for(let r = 0; r<d.dataColumns.length;r++){
-              let data = colData[colData.findIndex((item)=>item.colName==d.dataColumns[r])].val
-              row[d.dataColumns[r]] = calRes("std",data).toFixed(4)
-            }
-            break;
-          case "最小值":
-            for(let r = 0; r<d.dataColumns.length;r++){
-              let data = colData[colData.findIndex((item)=>item.colName==d.dataColumns[r])].val
-              row[d.dataColumns[r]] = calRes("min",data).toFixed(4)
-            }
-            break;
-          case "最大值":
-            for(let r = 0; r<d.dataColumns.length;r++){
-              let data = colData[colData.findIndex((item)=>item.colName==d.dataColumns[r])].val
-              row[d.dataColumns[r]] = calRes("max",data).toFixed(4)
-            }
-            break;
+        .map((rowName:string)=>{
+          let row:any = {parameters:rowName};
+          switch (rowName) {
+            case "映射":
+              for (let r = 0; r < d.dataColumns.length;r++) {
+                row[d.dataColumns[r]] = pd.preProcessVal == pd.preProcess[0].val ? "log10" : "ln"
+              }
+              break;
+            case "均值":
+              for (let r = 0; r < d.dataColumns.length;r++) {
+                let data = colData[colData.findIndex(item=>item.colName == d.dataColumns[r])].val
+                row[d.dataColumns[r]] = calRes("mean", data).toFixed(4)
+              }
+              break;
+            case "初值":
+              for (let r = 0; r < d.dataColumns.length;r++) {
+                row[d.dataColumns[r]] = d.data[0][d.dataColumns[r]]
+              }
+              break;
+            case "标准差":
+              for (let r = 0; r < d.dataColumns.length;r++) {
+                let data = colData[colData.findIndex(item=>item.colName == d.dataColumns[r])].val
+                row[d.dataColumns[r]] = calRes("std", data).toFixed(4)
+              }
+              break;
+            case "最小值":
+              for (let r = 0; r < d.dataColumns.length;r++) {
+                let data = colData[colData.findIndex(item=>item.colName == d.dataColumns[r])].val
+                row[d.dataColumns[r]] = calRes("min", data).toFixed(4)
+              }
+              break;
+            case "最大值":
+              for (let r = 0; r < d.dataColumns.length;r++) {
+                let data = colData[colData.findIndex(item=>item.colName == d.dataColumns[r])].val
+                row[d.dataColumns[r]] = calRes("max", data).toFixed(4)
+              }
+              break;
+          }
+          return row
         }
-        return row
-      }
-      )
+        )
 
       console.log(d.dialogTableData)
       d.preProcessValNow = pd.preProcess[pd.preProcess.map((e:any) => { return e.val; }).indexOf(pd.preProcessVal)].name
       d.onProcessed = true
       d.onProcessing = false
     }
-  }else if(d.preprocessKind==2){
+  } else if (d.preprocessKind == 2) {
 
-    if(!pd.parameter_onLoaded){
+    if (!pd.parameter_onLoaded) {
       ElMessage.error('还没有载入预处理参数。')
       return
     }
     d.onProcessing = true
     let valRaw:any[] = Array.from({"length":pd.parameter_custom.length})
-    for(let i = 0 ;i< pd.parameter_custom.length;i++){
+    for (let i = 0 ;i < pd.parameter_custom.length;i++) {
 
       valRaw[i] = <any>{}
-      for(let j = 0 ; j<d.dataColumns.length; j++){
+      for (let j = 0 ; j < d.dataColumns.length; j++) {
         valRaw[i][d.dataColumns[j]] = pd.parameter_custom[i][j]
       }
 
@@ -589,69 +589,69 @@ function PREPROCESS(){
     console.log(valRaw)
     let temp = JSON.parse(JSON.stringify(d.data)) 
     d.data_processed_forTable = temp
-    .map((val:any,index:any)=>{
-      let raw = val;
-      switch(pd.preProcessVal){
+      .map((val:any, index:any)=>{
+        let raw = val;
+        switch (pd.preProcessVal) {
         //均值和初值
-        case pd.preProcess[2].val:
-        case pd.preProcess[3].val:
-          for(let key in raw){
-            raw[key] = (raw[key]/valRaw[0][key]).toFixed(d.tofixedNum)
-          }
-          break;
-        //Z-Score
-        case pd.preProcess[4].val:
-          for(let key in raw){
-            raw[key] =((raw[key] - valRaw[0][key]) / valRaw[1][key]).toFixed(d.tofixedNum)
-          }
-          break;
-        //Min-max
-        case pd.preProcess[5].val:
-          for(let key in raw){
-            raw[key] = ((raw[key] - valRaw[0][key]) / (valRaw[1][key] - valRaw[0][key])).toFixed(d.tofixedNum)
-          }
+          case pd.preProcess[2].val:
+          case pd.preProcess[3].val:
+            for (let key in raw) {
+              raw[key] = (raw[key] / valRaw[0][key]).toFixed(d.tofixedNum)
+            }
+            break;
+            //Z-Score
+          case pd.preProcess[4].val:
+            for (let key in raw) {
+              raw[key] = ((raw[key] - valRaw[0][key]) / valRaw[1][key]).toFixed(d.tofixedNum)
+            }
+            break;
+            //Min-max
+          case pd.preProcess[5].val:
+            for (let key in raw) {
+              raw[key] = ((raw[key] - valRaw[0][key]) / (valRaw[1][key] - valRaw[0][key])).toFixed(d.tofixedNum)
+            }
           
-        break;
-        //none
-        case pd.preProcess[6].val:
-          for(let key in raw){
-            raw[key] = raw[key]
-          }
-        break;
-      }
-      return raw
-    })
+            break;
+            //none
+          case pd.preProcess[6].val:
+            for (let key in raw) {
+              raw[key] = raw[key]
+            }
+            break;
+        }
+        return raw
+      })
 
     d.dialogTableCol = Array.from({"length":d.dataColumns.length})
-    .map((_,index)=>({
-      prop:d.dataColumns[index],
-      label:d.dataColumns[index]
-    }))
+      .map((_, index)=>({
+        prop:d.dataColumns[index],
+        label:d.dataColumns[index]
+      }))
     
     let rowNames :string[] = []
-    switch(pd.preProcessVal){
-        case pd.preProcess[0].val:
-          rowNames = ["映射"];
-          break;
-        case pd.preProcess[1].val:
-          rowNames = ["映射"]; break;
-        case pd.preProcess[2].val:
-          rowNames = ["均值"]; break;
-        case pd.preProcess[3].val:
-          rowNames = ["初值"]; break;
-        case pd.preProcess[4].val:
-          rowNames = ["均值","标准差"]; break;
-        case pd.preProcess[5].val:
-          rowNames = ["最小值","最大值"]; break;
-        case pd.preProcess[6].val:
-          rowNames = []; break;
-      }
-    d.dialogTableData = JSON.parse(JSON.stringify(valRaw)) 
-    .map((row:any,index:number)=>{
-      row.parameters = rowNames[index]
-      return row
+    switch (pd.preProcessVal) {
+      case pd.preProcess[0].val:
+        rowNames = ["映射"];
+        break;
+      case pd.preProcess[1].val:
+        rowNames = ["映射"]; break;
+      case pd.preProcess[2].val:
+        rowNames = ["均值"]; break;
+      case pd.preProcess[3].val:
+        rowNames = ["初值"]; break;
+      case pd.preProcess[4].val:
+        rowNames = ["均值", "标准差"]; break;
+      case pd.preProcess[5].val:
+        rowNames = ["最小值", "最大值"]; break;
+      case pd.preProcess[6].val:
+        rowNames = []; break;
     }
-    )
+    d.dialogTableData = JSON.parse(JSON.stringify(valRaw)) 
+      .map((row:any, index:number)=>{
+        row.parameters = rowNames[index]
+        return row
+      }
+      )
 
     
     d.preProcessValNow = pd.preProcess[pd.preProcess.map((e:any) => { return e.val; }).indexOf(pd.preProcessVal)].name
@@ -664,17 +664,17 @@ function PREPROCESS(){
 
 
 }
-function DOWNLOAD(){
+function DOWNLOAD() {
 
 
   let data;
-  if(d.excelHasTitle)
+  if (d.excelHasTitle)
     data = XLSX.utils.json_to_sheet(d.data_processed_forTable)//此处tableData.value为表格的数据
   else
-    data = XLSX.utils.json_to_sheet(d.data_processed_forTable,{skipHeader: true,})//此处tableData.value为表格的数据
+    data = XLSX.utils.json_to_sheet(d.data_processed_forTable, {skipHeader: true,})//此处tableData.value为表格的数据
   const wb = XLSX.utils.book_new()
   XLSX.utils.book_append_sheet(wb, data, 'Sheet1')//test-data为自定义的sheet表名
-  XLSX.writeFile(wb,'data_'+pd.preProcessVal+'.xlsx')
+  XLSX.writeFile(wb, 'data_' + pd.preProcessVal + '.xlsx')
 
   // var wb = XLSX.utils.table_to_book(d.data_processed_forTable);
   // XLSX.writeFile(1, "123.xlsx");
@@ -685,7 +685,7 @@ onUnmounted(() => {
 })
 
 function onBeforeMount(arg0: () => void) {
-throw new Error("Function not implemented.");
+  throw new Error("Function not implemented.");
 }
 </script>
 
